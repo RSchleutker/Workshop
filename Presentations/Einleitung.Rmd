@@ -1,0 +1,17 @@
+---
+title: "Einleitung"
+author: "Raphael Schleutker und Hannah Schmitz"
+date: "25 Juli 2017"
+css: style.css
+output: 
+  ioslides_presentation: 
+    highlight: kate
+    logo: ./Figures/wwu.svg
+    widescreen: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+# RStudio, eine Integrierte Entwicklungsumgebung

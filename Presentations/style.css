@@ -1,0 +1,15 @@
+.gdbar img {
+  width: 180px !important;
+  height: 52px !important;
+  margin: auto;
+}
+
+slides > slide:not(.nobackground):before {
+  width: 150px;
+  height: 43.4px;
+  background-size: 150px 43.4px;
+}
+
+figcaption {
+  font-size: smaller;
+}

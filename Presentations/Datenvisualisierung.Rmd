@@ -1,0 +1,264 @@
+---
+title: "Datenvisualisierung"
+author: "Raphael Schleutker und Hannah Schmitz"
+date: "7. Oktober 2017"
+css: style.css
+output: 
+  ioslides_presentation: 
+    highlight: kate
+    logo: ./Figures/wwu.svg
+    widescreen: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = TRUE, error = TRUE)
+library(ggplot2)
+library(gridExtra)
+```
+
+
+# ggplot2 - Layered Grammar of Graphics
+
+<!-- Erklären, was tidy data ist und an Beispielen aufzeigen, wo Fehler liegen und wie man diese beheben kann (ohne darauf einzugehen, wie dies in R gemacht wird. Das kommt später). -->
+
+## Die Idee
+
+Die Idee ist, jedes Diagramm nach dem gleichen Schema aufzubauen und nach und nach die Komponenten hinzuzufügen.
+
+* [ggplot2: Elegant Graphics for Data Analysis](https://www.amazon.de/ggplot2-Elegant-Graphics-Data-Analysis/dp/331924275X/ref=sr_1_1?ie=UTF8&qid=1492538063&sr=8-1&keywords=ggplot2): Gibt ein tieferes Verständnis von **ggplot2**.
+
+***
+
+Konkret geht es um folgende Aspekte:
+
+>- **Data:** Welche Daten sollen dargestellt werden? Nicht so einfach, wie man denkt.
+>- **Aesthetic mapping:** Auf welcher Achse soll welche Variable dargestellt werden? Es gibt mehr als nur x- und y-Achse (Farbe, Größe, Transparenz, Form, ...).
+>- **Scales::** WIE soll die jeweilige Achse skaliert sein? Logarithmisch, Farbpalette, ...
+>- **Statistical transformation:** Sollen die Rohdaten dargestellt werden oder *prozessierte* Daten: Regressionslinien, Boxplots, Histogramme, ...
+>- **Geometric Objects:** In welche Form sollen die Daten dargestellt werden? Z.B. Linien, Punkte, Balken, ...
+>- **Positional adjustments:** Sollen Säulen z.B. über- oder nebeneinander dargestellt werden? Kartesisches oder Polarkoordinatensystem? Facetting?
+
+
+## Data
+
+```{r}
+head(iris)
+```
+
+
+## Statistical Transformation
+
+Wir haben Glück!
+
+>- In der Regel kümmert ggplot sich um diesen Aspekt, ohne dass wir das merken!
+>- Trotzdem lohnt es sich, sich der Tatsache bewusst zu sein, dass etwas passiert!
+
+```{r fig.align="center", echo=FALSE, fig.height=3}
+ggplot(iris, aes(Sepal.Length, Sepal.Width, colour = Species, group = Species)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  facet_wrap(~Species) +
+  theme(legend.position = "none")
+```
+
+
+
+## Aesthetic Mapping
+
+Dies ist einer der wichtigsten Punkte!
+
+* Datensätze bestehen meist aus mehreren Variablen. Welche Variable wird auf welcher Skala dargestellt!
+* Etwas klarer: Einen großen Wert kann man nicht nur dadurch darstellen, dass er sich sehr weit rechts (x-Achse) oder oben (y-Achse) auf einer räumlichen Skala befindet. Ein großer Wert kann auch
+    * rot sein, während kleine Werte blau sind.
+    * deckend sein, während kleine Werte transparent sind.
+    * ein großer Punkt sein, während kleine Werte kleinere Punkte sind.
+* Das gleiche funktioniert natürlich auch mit diskreten Variablen.
+
+
+## Aesthetic Mapping: Ein Beispiel
+
+```{r fig.align="center", echo=FALSE, fig.height=5}
+gridExtra::grid.arrange(ncol = 2,
+ggplot(iris, aes(Sepal.Length, Sepal.Width, colour = Species)) +
+  geom_point(),
+ggplot(iris, aes(Species, Sepal.Width, colour = Sepal.Length)) +
+  geom_jitter(width = .25) +
+  viridis::scale_colour_viridis(),
+ggplot(iris, aes(Species, Sepal.Width, size = Sepal.Length, alpha = Sepal.Length)) +
+  geom_jitter(width = .25) +
+  viridis::scale_colour_viridis()
+)
+```
+
+
+## Scales
+
+Wir wissen jetzt, dass man Variablen auf verschiedene Skalen *mappen* kann. Aber jede Skala kann man unterschiedlich formatieren:
+
+* Soll die x- oder y-Achse linear, logarithmisch oder exponentiell sein?
+* Soll die Farbpalette von blau nach gelb verlaufen oder doch lieber von schwarz zu weiß?
+
+
+## Scales: Ein Beispiel
+
+
+```{r fig.align="center", echo=FALSE, fig.height=5}
+gridExtra::grid.arrange(ncol = 2,
+ggplot(iris, aes(Sepal.Length, Sepal.Width, colour = Species)) +
+  geom_point(),
+ggplot(iris, aes(Sepal.Length, Sepal.Width, colour = Species)) +
+  geom_point() +
+  scale_y_continuous(trans = "exp") +
+  scale_color_brewer(palette = "Dark2"),
+ggplot(iris, aes(Sepal.Length, Sepal.Width, colour = Species)) +
+  geom_point() +
+  scale_color_brewer(palette = "Dark2",
+                     name = "Spezies",
+                     labels = c("Setosa", "Versicolor", "Virginica")) +
+  scale_y_continuous(name = "Sepalbreite") +
+  scale_x_continuous(name = "Sepallänge")
+)
+```
+
+
+## Geometric Objects
+
+Schließlich noch das (nicht ganz so) Offensichtliche:
+
+Mit welchem **geometrischen Objekt** stelle ich meine Daten dar?
+
+* Punkte
+* Linien
+* Balken
+* Boxplot
+* Konturen
+* Hexagone
+* ...
+
+
+## Geometric Objects: Ein Beispiel
+
+
+```{r fig.align="center", echo=FALSE, fig.height=5}
+gridExtra::grid.arrange(ncol = 2,
+ggplot(iris, aes(Sepal.Length, Sepal.Width, colour = Species)) +
+  geom_point(),
+ggplot(iris, aes(Sepal.Length, Sepal.Width, colour = Species)) +
+  geom_smooth(method = "lm"),
+ggplot(iris, aes(Sepal.Length, Sepal.Width, colour = Species)) +
+  geom_density2d()
+)
+```
+
+
+## Positional Adjustments
+
+> Die Frage nach dem Koordinatensystem, dem **Facetting** und der Positionierung überlappener Punkte/Säulen/...
+
+
+## Positional Adjustments: Ein Beispiel
+
+```{r fig.align="center", echo=FALSE, fig.height=5, message=FALSE, warning=FALSE}
+gridExtra::grid.arrange(ncol = 2,
+ggplot(iris, aes(Sepal.Length, Sepal.Width, colour = Species)) +
+  geom_point(),
+ggplot(iris, aes(Sepal.Length, Sepal.Width, colour = Species)) +
+  geom_point() +
+  coord_polar(),
+ggplot(iris, aes(Sepal.Length, Sepal.Width, colour = Species)) +
+  geom_point() +
+  facet_wrap(~Species),
+ggplot(iris, aes(Sepal.Length, fill = Species)) +
+  geom_histogram(position = position_stack())
+)
+```
+
+
+## Alles klar soweit?
+
+* Dann eine kurze Pause!
+
+
+# Euer erstes Diagramm mit R!
+
+## Der Datensatz
+
+```{r}
+head(iris)
+```
+
+
+## Nun kommt der Plot, Schritt für Schritt
+
+> Jedes Diagramm startet mit der Funktion **ggplot()**.
+
+> * Das erste Argument ist IMMER **data**.
+
+```{r, echo=TRUE, fig.align='center', fig.height=3}
+ggplot(data = iris)
+```
+
+## Der Plot: Die Mappings
+
+> Die Variablen werden über das Argument **mapping = aes()** auf die Achsen gemapped.
+
+> * Das zweite Argument ist IMMER **mapping**.
+
+```{r, echo=TRUE, fig.align='center', fig.height=3}
+ggplot(data = iris, mapping = aes(x = Sepal.Length, y = Sepal.Width, colour = Species))
+```
+
+
+## Der Plot: Die Geometric Objects
+
+Weitere Eigenschaften können über ein **+** hinter der letzten Zeile hinzugefügt werden!
+
+> Geometric objects fangen IMMER mit **geom_** an.
+
+```{r, echo=TRUE, fig.align='center', fig.height=3}
+ggplot(data = iris, mapping = aes(x = Sepal.Length, y = Sepal.Width, colour = Species)) +
+  geom_point()
+```
+
+## Der Plot: Statistical Transformations
+
+> Statistical Transformations kann man immer über **stat_** hinzufügen.
+
+```{r, echo=TRUE, fig.align='center', fig.height=3}
+ggplot(data = iris, mapping = aes(x = Sepal.Length, y = Sepal.Width, colour = Species)) +
+  geom_point() +
+  stat_smooth(method = "lm")
+```
+
+## Der Plot: Scales
+
+> Über Scales kann man alles ändern, was mit Achsen etc. zu tun hat. Sie werden immer über **scale_** aufgerufen!
+
+```{r, echo=TRUE, fig.align='center', fig.height=3}
+ggplot(data = iris, mapping = aes(x = Sepal.Length, y = Sepal.Width, colour = Species)) +
+  geom_point() +
+  stat_smooth(method = "lm") +
+  scale_x_continuous(name = "Sepallänge (cm)", limits = c(0,NA)) +
+  scale_y_continuous(name = "Sepalbreite (cm)", limits = c(0,NA)) +
+  scale_colour_discrete(name = "Spezies", labels = c("Spezies 1", "Spezies 2", "Spezies 3"))
+```
+
+
+## Positional Adjustments
+
+Hier schauen wir uns für den moment nur das **Facetting** an:
+
+```{r, echo=TRUE, fig.align='center', fig.height=3}
+ggplot(data = iris, mapping = aes(x = Sepal.Length, y = Sepal.Width, colour = Species)) +
+  geom_point() +
+  stat_smooth(method = "lm") +
+  scale_x_continuous(name = "Sepallänge (cm)", limits = c(0,NA)) +
+  scale_y_continuous(name = "Sepalbreite (cm)", limits = c(0,NA)) +
+  scale_colour_discrete(name = "Spezies", labels = c("Spezies 1", "Spezies 2", "Spezies 3")) +
+  facet_wrap(~ Species, ncol = 3)
+```
+
+
+## Alles klar soweit?
+
+Dann kommen nach einer kurzen Pause einige Übungsaufgaben!

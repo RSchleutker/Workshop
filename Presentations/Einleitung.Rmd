@@ -1,7 +1,7 @@
 ---
 title: "Einleitung"
 author: "Raphael Schleutker und Hannah Schmitz"
-date: "25 Juli 2017"
+date: "7. Oktober 2017"
 css: style.css
 output: 
   ioslides_presentation: 
@@ -11,7 +11,302 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(echo = TRUE, message = TRUE, error = TRUE)
 ```
 
-# RStudio, eine Integrierte Entwicklungsumgebung
+
+# Was ihr heute (nicht) lernen werdet
+
+***
+
+<!-- In kurzen Stichpunkten erklären, welche Themen in dem Workshop genau
+behandelt werden. Zusätzlich die allgemeine Struktur und Ablauf klären sowie auf
+die Übungsaufgaben hinweisen -->
+
+>- Kurze Einführung in die Nutzung von RStudio
+>- Einführung in die Programmiersprache R
+>- Prinzipien von Datenmanagement
+>- Datensätze strukturieren und aufbereiten
+>- Datensätze visualisieren
+>- Und zwischendurch immerwieder: Good Practice
+
+
+## Was ihr nicht lernen werdet!
+
+>- Programmieren.
+>- Zeitreihenanalysen.
+>- Wann man welche umfangreichen statistischen Tests durchführen muss.
+
+
+
+# RStudio, eine IDE
+
+<!-- Erklären, was RStudio eigentlich ist (Integrierte Entwicklungsumgebung),
+seine Vorteile vorstellen und die Benutzeroberfläche erklären. -->
+
+## ID... Was?
+
+RStudio ist ein Editor, der speziell für die Nutzung mit R entwickelt wurde und einige nützliche Features besitzt:
+
+>- Syntax-Highlighting
+>- Code-Vervollständigung
+>- Code-Faltung
+>- Installation von neuen Paketen
+>- Projektverwaltung
+>- KOSTENLOS
+
+
+## Die Oberfläche
+
+
+<!-- Oberfläche interaktiv am Beamer zeigen und erklären. -->
+
+Die Oberfläche von RStudio ist in 4 Panes unterteilt.
+
+
+# R, eine erste Einführung
+
+<!-- -->
+
+## Die Konsole
+
+In die Konsole können wir Befehle eintippen und mit Enter an R schicken. Wir bekommen dann das Ergebnis zurück.
+
+```{r}
+1 + 1
+```
+
+***
+
+Man kann selbstverständlich auch komplexere Ausdrücke eingeben.
+
+```{r}
+15 * 31 - 4^3
+```
+
+
+## Objekte
+
+Einen Taschenrechner hat aber schon jeder.
+
+```{r}
+a <- 15
+b <- 2
+
+a * b
+```
+
+***
+
+```{r}
+c <- a * b
+
+c
+```
+
+Das ist ein ziemlich interessantes Prinzip!
+
+
+## Vektore
+
+Datensätze bestehen aber selten aus nur einer Zahl!
+
+```{r}
+a <- c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+
+a
+```
+
+Dies nennt man in R einen Vektor. Jede Zahl stellt ein Element dieses Vektors dar.
+
+
+***
+
+Mit Vektoren kann man ebenfalls rechnen. Elementeweise:
+
+```{r}
+a + 1
+```
+
+
+***
+
+Oder man verrechnet zwei Vektoren miteinander. Der kürzere wird recycelt.
+
+```{r}
+b <- c(0, 2)
+
+a * b
+```
+
+
+## Datentypen
+
+Datensätze bestehen ja nicht immer nur aus numerischen Werten, sondern auch aus Wörtern.
+
+```{r}
+d <- c("Grün", "Blau", "Gelb", "Rot")
+```
+
+Text bezeichnet der Informatiker als **Character Strings**.
+
+## Character
+
+Character verhalten sich anders als numerische Werte.
+
+```{r}
+"1" + "2"
+```
+
+
+***
+
+Ein Vektor kann immer nur ganz genau **einen** Datentyp haben, also niemals Zahlen und Character gleichzeitig.
+
+```{r}
+c(1, "A")
+```
+
+
+Wir werden später sehen, wie man diese Einschränkung umgeht.
+
+
+## Numerische Datentypen
+
+<!-- Sollte man diese Auftrennung der Einfachheit lieber raushalten, weil in R sowieso fast alles nur mit Doubles gelöst wird? -->
+
+In R gibt es drei Datentypen, die numerische Werte darstellen:
+
+>- **Integer** sind ganzzahlige Werte.
+>- **Numeric** sind Dezimalzahlen mit 7 bis 8 Nachkommastellen.
+>- **Double** sind Dezimalzahlen mit 15 bis 16 Nachkommastellen.
+
+
+## Weitere Datentypen
+
+Neben numersichen Daten und Character Strings gibt es noch sog. **Booleans** oder auch **Logische Werte**.
+
+>- Diese nehmen einen der beiden Werte TRUE oder FALSE bzw. 1 oder 0 an.
+>- Diese logischen Werten sind später interessant, wenn man z.B. das Vorgehen an Bedingungen knüpft.
+
+
+## Datentypen
+
+Interessiert einen der Datentyp eines Objekts, kann man dies mit `typeof()` herausfinden:
+
+```{r}
+typeof(c(1, 2))
+
+typeof(c("A", "B"))
+
+typeof(c(TRUE, FALSE))
+```
+
+
+## Listen
+
+Und wenn ich zwei Datentypen in einem Datensatz habe?
+
+```{r}
+Liste <- list(c("A", "B", "C"), c(1, 2, 3))
+
+Liste
+
+typeof(Liste)
+```
+
+***
+
+Listen können Vektoren mit verschiedenen Datentypen beinhalten.
+
+Und sogar andere Listen!
+
+
+## Dataframes
+
+Aber es wäre ja viel intuitiver, wenn man Daten in Form einer Tabelle speichern könnte!
+
+```{r}
+Tabelle <- data.frame("Spalte 1" = c("A", "B", "C"),
+                      "Spalte 2" = c(1, 2, 3))
+
+Tabelle
+```
+
+
+***
+
+Dataframes sind Rs Art und Weise, Tabellen darzustellen!
+
+Im Grunde handelt es sich um eine Liste, in der die Vektoren als Spalten dargestellt werden!
+
+```{r}
+typeof(Tabelle)
+```
+
+
+## Kurzen Zusammenfassung
+
+>- Datenreihen werden in R durch Vektoren dargestellt.
+>- Jeder Vektor kann genau einen Datentyp haben.
+>- Mehrere Datentypen können in einer Liste untergebracht werden.
+>- Eine besondere Form der Liste ist der Dataframe.
+>- Dataframes stellen Datentabellen dar. Jede Spalte ist ein Vektor mit einem Datentyp.
+
+***
+
+**ALLES, was in R existiert, ist ein Objekt.**
+
+
+## Funktionen
+
+Wir haben nun ein Format, um Daten zu speichern. Aber was machen wir mit diesen Daten?
+
+```{r}
+a <- c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+
+mean(a)
+sd(a)
+```
+
+
+***
+
+Jede Funktion hat einen Namen und Argumente, die in Klammern dahinter stehen und durch Kommata getrennt sind.
+
+```{r eval=FALSE}
+function_name(argument_1 = value1, argument_2 = value2, ...)
+```
+
+## Die Argumente
+
+Jedes Argument hat einen Namen, eine Position und i.d.R. einen Standardwert.
+
+```{r eval=FALSE}
+help(t.test)
+```
+
+
+
+***
+
+**ALLES, was in R passiert, ist ein Funktionsaufruf.**
+
+***
+
+Funktionen können einfache Dinge tun, wie z.B. den Mittelwert berechnen.
+
+Man kann aber auch verschiedene Funktionen kombinieren, um beliebig komplexe Abläufe zu erstellen.
+
+***
+
+Funktionen müssen nicht zwangsweisen Text oder Zahlen zurückgeben. Grafiken sind ebenso möglich.
+
+```{r}
+plot(a)
+```
+
+
+## Die Idee
+
+Die Idee ist, dass wir ein oder mehrere Objekte (Daten) haben. Auf diese Objekte wenden wir sukzessive Funktionen an, bis wir das gewünschte Ergebnis haben.

@@ -261,4 +261,4 @@ ggplot(data = iris, mapping = aes(x = Sepal.Length, y = Sepal.Width, colour = Sp
 
 ## Alles klar soweit?
 
-Dann kommen nach einer kurzen Pause einige Übungsaufgaben!
+Dann kommen nach einer kurzen Pause einige Übungsaufgaben...

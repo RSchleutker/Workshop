@@ -1,0 +1,150 @@
+---
+title: "Datenaufbereitung"
+author: "Raphael Schleutker und Hannah Schmitz"
+date: "7. Oktober 2017"
+css: style.css
+output: 
+  ioslides_presentation: 
+    highlight: kate
+    logo: ./Figures/wwu.svg
+    widescreen: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = TRUE, error = TRUE)
+library(tidyverse)
+```
+
+
+# Welche Struktur sollten die Daten haben?
+
+<!-- Erklären, was tidy data ist und an Beispielen aufzeigen, wo Fehler liegen und wie man diese beheben kann (ohne darauf einzugehen, wie dies in R gemacht wird. Das kommt später). -->
+
+## Drei grundlegende Prinzipien
+
+Saubere Daten sind durch drei Merkmale gekennzeichnet:
+
+>- Jede Variable hat seine eigene Spalte.
+>- Jede Beobachtung hat seine eigene Zeile.
+>- Jeder Wert hat seine eigene Zelle.
+
+>- Jeder Datensatz hat seine eigene Datei/Tabelle.
+
+<!-- Hier sollten ein paar Beispiele kommen, was keine sauberen Daten sind. -->
+
+
+# tidyr - Wie man Daten sauber bekommt!
+
+<!-- In diesem Abschnitt auch magrittr und die Pipe erklären? -->
+
+## Funktionen, die wir aus diesem Paket besprechen
+
+>- `gather()` und `spread()`, um Tabellen aus einer weiten in eine lange Form zu bekommen und umgekehrt.
+>- `separate()` und `unite()`, um eine Spalte in mehrere Spalten aufzutrennen und umgekehrt.
+
+
+## Eine Spalte enthält mehrere Variablen - separate()
+
+Besonders beliebt unter Biologen ist es, Alter und Geschlecht in eine Spalte zu schreiben.
+
+```{r, include=FALSE}
+Tumor_Raw <- read_delim("../Exercises/Tumor/Tumor.csv",
+                        ";", trim_ws = TRUE)
+```
+
+```{r}
+head(Tumor_Raw)
+```
+
+
+***
+
+Die Funktion `separate()` trennt eine Spalte in zwei Spalten auf. Standardmäßig wird jedes nicht-alphanumerische Zeichen als Separator interpretiert.
+
+```{r}
+Tumor <- separate(Tumor_Raw, `Age/Gender`, c("Age", "Gender"), convert = TRUE)
+
+head(Tumor)
+```
+
+
+## Eine Variable ist über mehrere Spalten verstreut - unite()
+
+Dieser Fall ist deutlich seltener als der vorherige.
+
+```{r, include=FALSE}
+AirqualityDirty <- airquality %>%
+  mutate(Year = 1973)
+```
+
+```{r}
+head(AirqualityDirty)
+```
+
+***
+
+Variablen kann man mit der `unite()` Funktion miteinander verbinden.
+
+```{r}
+AirqualityTidy <- unite(AirqualityDirty, Date, Day, Month, Year, sep = "-")
+```
+
+
+
+## Spaltennamen sind eigentlich Werte - gather()
+
+Häufig findet man Datensätze, in denen Spaltennamen eigentlich Werte sind.
+
+```{r, include=FALSE}
+Leishmaniose_Raw <- read_csv("../Exercises/Leishmaniose/Leishmaniose.csv",
+                             col_types = cols(`2005` = col_double(),
+                                              `2006` = col_double(), `2007` = col_double(),
+                                              `2008` = col_double(), `2009` = col_double(),
+                                              `2010` = col_double(), `2011` = col_double(),
+                                              `2012` = col_double(), `2013` = col_double(),
+                                              `2014` = col_double(), `2015` = col_double(),
+                                              `2016` = col_double()),
+                             skip = 1)
+```
+
+```{r}
+head(Leishmaniose_Raw)
+```
+
+***
+
+Dies kann man mit der `gather()` Funktion erreichen.
+
+```{r}
+Leishmaniose <- gather(Leishmaniose_Raw, "Year", "Cases", 2:13)
+
+head(Leishmaniose)
+```
+
+
+
+## Eine Beobachtung ist über mehrere Zeilen verstreut - spread()
+
+```{r, include=FALSE}
+MyeloidSpread <- survival::myeloid %>%
+  gather("Type", "Days", txtime:rltime) %>%
+  arrange(id)
+```
+
+
+
+```{r}
+head(MyeloidSpread)
+```
+
+
+***
+
+Die `spread()` Funktion macht aus einer Variable mehrere Spalten.
+
+```{r}
+MyeloidTidy <- spread(MyeloidSpread, Type, Days, convert = TRUE)
+
+head(MyeloidTidy)
+```
+

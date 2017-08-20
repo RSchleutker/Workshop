@@ -1,0 +1,323 @@
+---
+title: "Datenverarbeitung und -analyse"
+author: "Raphael Schleutker und Hannah Schmitz"
+date: "7. Oktober 2017"
+css: style.css
+output: 
+  ioslides_presentation: 
+    highlight: kate
+    logo: ./Figures/wwu.svg
+    widescreen: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = TRUE, error = TRUE)
+library(tidyverse)
+library(scales)
+```
+
+# magrittr - Funktionen übersichtlich kombinieren
+
+***
+
+Wenn man mehrere Funktionen kombinieren muss, um einen Datensatz aufzubereiten, kann das schnell viel Tipperei und Unübersichtlichkeit bedeuten.
+
+```{r eval=FALSE}
+Data <- gather(RawData, key = "Type", value = "Wert", Spalte1, Spalte2, Spalte3)
+Data <- separate(Data, col = "Spalte", into = c("Teil 1", "Teil 2"))
+
+...
+```
+
+>- Dabei hat man viel Wiederholung.
+>- Es ist ein Muster zu erkennen.
+
+## Die Pipe
+
+Das Paket `magrittr` bietet einige Funktionen, um dies zu vereinfachen.
+
+```{r eval=FALSE}
+Data <- RawData %>%
+  gather("Type", "Wert", Spalte1, Spalte2, Spalte3) %>%
+  separate("Spalte", c("Teil 1", "Teil 2"))
+```
+
+> `%>%` ist eine sog. **Infix**-Funktion.
+
+## Infix-Funktionen
+
+Normalerweise besteht ein Funktionsaufruf aus dem Funktionsnamen gefolgt von den Argumenten in Klammern.
+
+```{r eval=FALSE}
+mean(1:19, na.rm = TRUE)
+```
+
+Diese Form nennt man **Präfix**-Funktionen.
+
+***
+
+Infix-Funktionen stehen zwischen ihren Argumenten.
+
+```{r}
+5 + 10
+```
+
+Man kann Infix-Funktionen auch als Präfix-Funktionen schreiben.
+
+```{r}
+`+`(5, 10)
+```
+
+> Aber die Infix-Variante ist doch deutlich übersichtlicher!
+
+
+## %>% und die Pipe
+
+`%>%` nimmt das Ergebnis des linken Terms und setzt es als erstes Argument in die rechte Funktion ein.
+
+>- `x %>% f` ist gleichbedeutend mit `f(x)`.
+>- `x %>% f(y)` ist gleichbedeutend mit `f(x, y)`.
+>- `x %>% f %>% g %>% h` ist gleichbedeutend mit `h(g(f(x)))`.
+
+
+## Der Platzhalter
+
+Viele Funktionen arbeiten mit der Pipe zusammen, da das erste Argument meist der Datensatz ist. Soll der linke Term an einer anderen als der ersten Stelle eingesetzt werden, kann man dies mit `.` erreichen.
+
+>- `x %>% f(y, .)` ist gleichbedeutend mit `f(y, x)`.
+>- `x %>% f(y, z = .)` ist gleichbedeutend mit `f(y, z = x)`.
+
+
+***
+
+```{r eval=FALSE}
+Data <- RawData %>%
+  gather("Type", "Wert", Spalte1, Spalte2, Spalte3) %>%
+  separate("Spalte", c("Teil 1", "Teil 2"))
+```
+
+
+
+# dplyr - Wie man mit seinen Daten rechnet und sie analysiert
+
+
+## Funktionen, die wir aus diesem Paket besprechen
+
+>- `mutate()` fügt einer Tabelle neue Spalten hinzu.
+>- `select()` reduziert eine Tabelle auf die ausgewählten Spalten.
+>- `rename()` benennt Variablen um.
+>- `filter()` entfernt Zeilen auf Grundlage ihrer Werte.
+>- `group_by()` und `ungroup()` gruppiert Beobachtungen aufgrund kategorischer Variablen bzw. löst die Gruppierung auf.
+>- `summarise()` fasst mehrere Werte zu einem zusammen. *(Im Statistik-Teil)*
+>- Verschiedene Funktionen, um mehrere Datensätze zusammenzufügen.
+
+
+## qPCR
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+qPCRAmplification <- read_csv("../Exercises/qPCR/Amplification.csv", trim_ws = TRUE)
+
+ggplot(qPCRAmplification, aes(Cycle, dRn, group = `Target Name`, colour = `Target Name`)) +
+  geom_line() +
+  geom_hline(yintercept = 0.15) +
+  scale_y_continuous(name = expression(Delta*"Rn"), trans = "log10", labels = comma) +
+  scale_color_discrete(labels = c("GAPDH (e2i2)", "GAPDH (e3i3)", "GAPDH (e4i4)", "p21 (e2i2)", "RPL3 (e9e10)"))
+```
+
+## qPCR: Die Schritte
+
+> 1. Datensatz aufbereiten.
+> 2. Jeden Wert anhand des Housekeeping-Gens korrigieren: $\Delta Ct = Ct_{Probe} - Ct_{Housekeeping}$
+> 3. Unterschied zwischen dem Startwert und den verschiedenen Zeitpunkten berechnen: $\Delta\Delta Ct = \Delta Ct_{Zeitpunkt} - \Delta Ct_{Startpunkt}$
+> 4. Relative Expressionsunterschiede berechnen: $RQ = 2^{- \Delta\Delta Ct}$
+> 5. Das Housekeeping-Gen aus dem Datensatz rausfiltern.
+
+
+
+## Den Datensatz einlesen
+
+```{r, message=FALSE, warning=FALSE}
+qPCRA_Raw <- read_delim("../Exercises/qPCR/PlateA.csv",
+                        ";", escape_double = FALSE,
+                        comment = "#", trim_ws = TRUE)
+
+head(qPCRA_Raw)
+```
+
+
+## Die relevanten Spalten auswählen - select()
+
+Wir benötigen die ersten drei Spalten sowie *Ct*.
+
+```{r}
+qPCRA <- qPCRA_Raw %>%
+  select(1:3, Ct)
+
+head(qPCRA)
+```
+
+
+## Eine Spalte umbenennen - rename()
+
+Die Variable *Target Name* ist ungünstig, da der Name ein Leerezeichen enthält.
+
+```{r}
+qPCRA <- qPCRA_Raw %>%
+  select(1:3, Ct) %>%
+  rename(Target = `Target Name`) %>%
+  separate(`Sample Name`, c("Duration", "Treatment"), sep = " ")
+
+head(qPCRA)
+```
+
+
+## Beobachtungen gruppieren - group_by()
+
+Einige Berechnungen müssen gruppenweise durchgeführt werden.
+
+```{r}
+qPCRA <- qPCRA_Raw %>%
+  select(1:3, Ct) %>%
+  rename(Target = `Target Name`) %>%
+  separate(`Sample Name`, c("Duration", "Treatment"), sep = " ") %>%
+  group_by(Duration, Treatment)
+```
+
+***
+
+```{r}
+head(qPCRA)
+```
+
+
+## Eine neue Variable berechnen und hinzufügen - mutate()
+
+Ausgehend von dem Ct-Wert können wir nun Berechnungen durchführen.
+
+```{r}
+qPCRA <- qPCRA_Raw %>%
+  select(1:3, Ct) %>%
+  rename(Target = `Target Name`) %>%
+  separate(`Sample Name`, c("Duration", "Treatment"), sep = " ") %>%
+  group_by(Duration, Treatment) %>%
+  mutate(dCt = Ct - Ct[Target == "RPL3"])
+```
+
+***
+
+```{r}
+head(qPCRA)
+```
+
+
+***
+
+```{r}
+qPCRA <- qPCRA_Raw %>%
+  select(1:3, Ct) %>%
+  rename(Target = `Target Name`) %>%
+  separate(`Sample Name`, c("Duration", "Treatment"), sep = " ") %>%
+  group_by(Duration, Treatment) %>%
+  mutate(dCt = Ct - Ct[Target == "RPL3"]) %>%
+  group_by(Target, Treatment) %>%
+  mutate(ddCt = dCt - dCt[Duration == "0h"]) %>%
+  ungroup() %>%
+  mutate(RQ = 2^(-ddCt))
+```
+
+***
+
+```{r}
+head(qPCRA)
+```
+
+
+## Beobachtungen entfernen - filter()
+
+RPL3 ist das Housekeeping-Gen. Es sollte daher zum Schluss herausgefiltert werden.
+
+```{r}
+qPCRA <- qPCRA_Raw %>%
+  select(1:3, Ct) %>%
+  rename(Target = `Target Name`) %>%
+  separate(`Sample Name`, c("Duration", "Treatment"), sep = " ") %>%
+  group_by(Duration, Treatment) %>%
+  mutate(dCt = Ct - Ct[Target == "RPL3"]) %>%
+  group_by(Target, Treatment) %>%
+  mutate(ddCt = dCt - dCt[Duration == "0h"]) %>%
+  ungroup() %>%
+  mutate(RQ = 2^(-ddCt)) %>%
+  dplyr::filter(Target != "RPL3")
+```
+
+***
+
+```{r}
+head(qPCRA)
+```
+
+Nun haben wir einen sauberen Datensatz mit allen berechneten Werten.
+> Allerdings ist der Datensatz auf mehrere Dateien aufgesplittet und jeder muss exakt gleich bearbeitet werden.
+
+
+# purrr - Eine Funktion auf jedes Element eines Vektors oder einer Liste anwenden
+
+## Die Idee
+
+Wir lesen jede Datei als Teil einer Liste ein und fügen anschließend die Datensätze zusammen.
+
+> 1. Eine Liste mit allen relevanten Dateinamen erstellen.
+> 2. Über die bekannte Funktion jede dieser Dateien einlesen.
+> 3. Die Datensätze zu einem Datensatz zusammenfügen.
+> 4. Den Datensatz wie zuvor bearbeiten.
+
+
+## Die Dateinamen auflisten
+
+```{r}
+qPCR <- list.files("../Exercises/qPCR/")
+
+str(qPCR)
+
+qPCR <- list.files("../Exercises/qPCR/", pattern = "^[Plate]")
+
+str(qPCR)
+```
+
+Mehr zu regulären Ausdrücken unter http://stringr.tidyverse.org/articles/regular-expressions.html.
+
+## Jede Datei einlesen
+
+`map()` nimmt einen Vektor und eine Funktion. Die Funktion wird auf jedes Vektor-Element angewandt. Zurück kommt eine Liste mit dem Ergebnis.
+
+```{r, message=FALSE}
+qPCR <- list.files("../Exercises/qPCR/", pattern = "^[Plate]") %>%
+  map(~ read_delim(paste("../Exercises/qPCR/", .x, sep = ""),
+                   ";", comment = "#", trim_ws = TRUE))
+
+str(qPCR)
+```
+
+
+## Die Datensätze zusammenfügen
+
+Mit der Funktion `bind_rows()` aus `dplyr` kann man Datensätze zeilenweise zusammenfügen.
+
+```{r}
+qPCR <- list.files("./Exercises/qPCR/", pattern = "^[Plate]") %>%
+  map(~ read_delim(paste("./Exercises/qPCR/", .x, sep = ""),
+                   ";", comment = "#", trim_ws = TRUE)) %>%
+  bind_rows()
+
+head(qPCR)
+```
+
+Und nun kann man weitermachen wie zuvor.
+
+
+## Weitere Anwendungen
+
+Eine Funktion auf jedes Element einer Liste oder eines Vektors anzuwenden hat viele nützliche Anwendungen, dir wir aus Zeitgründen leider nicht besprechen können.
+
+>- Daten von den Dateinamen verwenden.
+>- Für jede Spalte in einer Tabelle gleichzeitig Mittelwert und andere deskreptive Werte berechnen.

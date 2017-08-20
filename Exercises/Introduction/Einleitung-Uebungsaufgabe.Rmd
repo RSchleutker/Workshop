@@ -1,0 +1,71 @@
+---
+title: 'Übungsaufgaben: Einleitung'
+author: "Raphael Schleutker und Hannah Schmitz"
+date: "7. Oktober 2017"
+output: 
+  html_document: 
+    code_folding: hide
+    highlight: haddock
+    toc: yes
+    toc_float: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Vektoren
+
+### Aufgaben
+
+1. Weise einer Variable mit dem Namen **SomeData** einen Vektor mit den Werten von **1** bis **99** zu. Nutze dabei den RStudio-Shortcut für den Assignment-Operator. Außerdem solltest du versuchen, die Werte nicht einzeln und per Hand einzugeben.
+2. Multipliziere jeden Wert aus **SomeData** mit **6,25** und speichere das Ergebnis ebenfalls als **SomeData**.
+3. Lass dir  den **49.** Wert des Vektors ausgeben.
+4. Lass dir **jeden dritten** Wert ausgeben.
+5. Was erwartest du bei dem Ausdruck `TRUE + FALSE` als Antwort von R?
+6. Was erwartest du bei `c(TRUE, 1.23, "Wort")` als Antwort von R? Welchen Datentyp hat der Vektor? Welchen Datentyp hätte ein Vektor bei `c(TRUE, 1.23)`?
+
+
+### Lösungen
+
+```{r}
+# 1 Nutze die `:`-Funktion, um eine Datenreihe zu erstellen.
+SomeData <- 1:99
+```
+
+```{r}
+# 2 Achte darauf, dass Dezimalzahlen durch einen Punkt getrennt werden.
+SomeData <- SomeData * 6.25
+```
+
+```{r}
+# 3 Nutze eckige Klammern, um bestimmte Elemente zu bekommen.
+SomeData[49]
+```
+
+```{r}
+# 4 Man kann mit logischen Werten ein Muster erstellen, um sich Werte zurückgeben zu lassen. Der Vektor wird so oft wiederholt, bis alle Werte von **SomeData** abgehandelt wurden. Statt `TRUE` und `FALSE` kann man auch kurz `T` und `F` schreiben.
+SomeData[c(T, F, F)]
+```
+
+```{r}
+# 5 `TRUE` wird auch als 1 repräsentiert, `FALSE` hingegen als 0. Daher ist die Rechnung tatsächlich möglich und gibt `1` als Wert zurück.
+TRUE + FALSE
+```
+
+```{r}
+# 6 Der erste Vektor ist ein Character-Vektor, da dies der allgemeinste der drei vorliegenden Elemente ist und die beiden anderen umfasst.
+typeof(c(TRUE, 1.23, "Wort"))
+
+# Der zweite Vektor ist numerisch, da `TRUE` in eine `1` umgewandelt werden kann.
+c(TRUE, 1.23)
+typeof(c(TRUE, 1.23))
+```
+
+
+
+## Listen
+
+### Aufgaben
+
+1. Was ist der Unterschied zwischen Listen zu Vektoren?

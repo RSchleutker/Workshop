@@ -1,5 +1,5 @@
 ---
-title: 'Übungsaufgaben: Einleitung'
+title: 'Übungsaufgaben: Überlebenszeitanalyse'
 author: "Raphael Schleutker und Hannah Schmitz"
 date: "7. Oktober 2017"
 output: 
@@ -50,6 +50,7 @@ head(survival::lung)
 1. Stelle den `survival::lung`-Datensatz als Kaplan-Meier-Plot dar. Mappe dazu die Zeit-Variable auf die `time`-Achse und das Ereignis auf die `status`-Achse. Füge dann dem Diagramm die Überlebenswahrscheinlichkeit, die Kreuze für jedes Ereignis sowie das Konfidenzintervall hinzu.
 2. Tausche anschließend die Reihenfolge der Geome, sodass das Konfidenzintervall als erstes in das Diagramm eingefügt wird. Was fällt dir auf?
 3. Trenne den Plot in zwei Plots auf, indem du verschiedenen Farben für die Geschlechter verwendest.
+4. `cut_width(x, width)` ist eine Hilfsfunktion aus dem `ggplot2`-Paket und unterteilt eine kontinuierliche Variable `x` in Klassen mit der Länge `width`. Die Funktion wird statt der eigentlichen Variable auf eine Achse gemapped. Nutze dies, um ein altersabhängiges Überlebensdiagramm zu erstellen, wobei jeweils 10 Jahre in eine Kategorie zusammengefasst werden sollen. Lasse der Übersichtlichkeit halber die Konfidenzintervalle weg.
 
 
 
@@ -105,3 +106,20 @@ ggplot(lung, aes(time = time/365, status = status, colour = as.factor(sex))) +
   scale_x_continuous(name = "Time (Years)") +
   scale_y_continuous(name = "Survival")
 ```
+
+
+### Aufgabe 4
+
+```{r}
+library(ggplot2)
+library(ggkm)
+
+
+ggplot(lung, aes(time = time/365, status = status, colour = cut_width(age, width = 10))) +
+  geom_km() +
+  geom_kmticks() +
+  scale_color_discrete(name = "Age", labels = c("35 - 45", "45 - 55", "55 - 65", "65 - 75", "75 - 85")) +
+  scale_x_continuous(name = "Time (Years)") +
+  scale_y_continuous(name = "Survival")
+```
+

@@ -1,0 +1,107 @@
+---
+title: 'Übungsaufgaben: Einleitung'
+author: "Raphael Schleutker und Hannah Schmitz"
+date: "7. Oktober 2017"
+output: 
+  html_document: 
+    code_folding: hide
+    highlight: haddock
+    toc: yes
+    toc_float: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, collapse = TRUE)
+```
+
+## Einleitung
+
+### Kaplan-Meier-Plots: Überlebenszeitanalyse
+
+Kaplan-Meier-Plots sollen dem Betrachter einen Eindruck davon verschaffen, wie wahrscheinlich ein bestimmtes Ereignis innerhalb eines Zeitraums eintritt. Insbesondere in der medizinischen Forschung werden sie dazu verwendet, Überlebenswahrscheinlichkeiten bei einer bestimmter Erkrankung darzustellen. Dazu werden diagnostizierte Patienten beobachtet. Es gibt zwei mögliche Ereignisse. Entweder verlässt ein Patient die Studie, beispielsweise weil er umzieht. Man sagt, der Patient ist zensiert. Oder der Patient stirb an der Krankheit. Für den eigentlichen Plot relevant sind nur die verstorbenen Patienten. Dennoch werden die zensierten Patienten häufig als Kreuze in dem Plot markiert.
+
+
+### Das ggkm-Paket
+
+Das Paket `ggkm` baut auf `ggplot2` auf, muss zusätzlich installiert werden und bietet im wesentlichen drei neue Geome:
+
+* `geom_km()` fügt einem Diagramm einen Plot für die Überlebensrate hinzu.
+* `geom_kmband()` fügt dem Diagramm ein Konfidenzintervall hinzu.
+* `geom_kmticks()` fügt Kreuze für jedes Ereignis (Tod oder Zensur) hinzu.
+
+
+Damit diese Geome funktionieren, müssen auf die x- und y-Achse die folgenden Werte gemapped werden:
+
+* Auf die x-Achse kommt der Zeitraum (meist in Tagen) zwischen Diagnostik und Eintritt der Zensur oder des Todes. Dies passiert über `aes(time = ...)`.
+* Auf die y-Achse kommt das Ereignis. Zensur / Tod ist entweder als `0` / `1` oder als `1` / `2` kodiert.
+
+
+### Der Datensatz
+
+In dem Paket `survival` gibt es den Datensatz `lung`. Neben einigen weniger wichtigen Variablen besteht der Datensatz aus der Überlebenszeit der Personen sowie der Information, welches Ereignis nach der angegeben Zeit (Zensur oder Tod) bei ihnen eingetreten ist. Zusätzlich zeigen zwei Variablen das Alter und das Geschlecht an.
+
+```{r}
+head(survival::lung)
+```
+
+
+## Die Aufgabe
+
+1. Stelle den `survival::lung`-Datensatz als Kaplan-Meier-Plot dar. Mappe dazu die Zeit-Variable auf die `time`-Achse und das Ereignis auf die `status`-Achse. Füge dann dem Diagramm die Überlebenswahrscheinlichkeit, die Kreuze für jedes Ereignis sowie das Konfidenzintervall hinzu.
+2. Tausche anschließend die Reihenfolge der Geome, sodass das Konfidenzintervall als erstes in das Diagramm eingefügt wird. Was fällt dir auf?
+3. Trenne den Plot in zwei Plots auf, indem du verschiedenen Farben für die Geschlechter verwendest.
+
+
+
+## Lösung
+
+### Aufgabe 1
+
+```{r}
+library(ggplot2)
+library(ggkm)
+
+# Die Zeit wurde durch 365 geteilt, um die Zeit als Jahre anzuzeigen. Zusätzlich wurden die Achsen-Beschriftungen bearbeitet, um die verständlicher zu machen.
+
+ggplot(lung, aes(time = time/365, status = status)) +
+  geom_km() +
+  geom_kmticks() +
+  geom_kmband() +
+  scale_x_continuous(name = "Time (Years)") +
+  scale_y_continuous(name = "Survival")
+```
+
+
+### Aufgabe 2
+
+```{r}
+library(ggplot2)
+library(ggkm)
+
+# Fügt man zuerst das teiltransparente Konfidenzintervall hinzu, werden die nachfolgenden Geome darüber gelegt. So werden sie nicht durch das Konfidenzintervall 'ausgegraut'.
+
+ggplot(lung, aes(time = time/365, status = status)) +
+  geom_kmband() +
+  geom_km() +
+  geom_kmticks() +
+  scale_x_continuous(name = "Time (Years)") +
+  scale_y_continuous(name = "Survival")
+```
+
+
+### Aufgabe 3
+
+```{r}
+library(ggplot2)
+library(ggkm)
+
+# Das Geschlecht ist über 1 und 2 kodiert und als numerische Variable gespeichert. Daher hilft die Funktion `as.factor()`, um die Variable für den Plot als Faktor zu behandeln.
+
+ggplot(lung, aes(time = time/365, status = status, colour = as.factor(sex))) +
+  geom_kmband() +
+  geom_km() +
+  geom_kmticks() +
+  scale_color_discrete(name = "Sex", labels = c("Male", "Female")) +
+  scale_x_continuous(name = "Time (Years)") +
+  scale_y_continuous(name = "Survival")
+```

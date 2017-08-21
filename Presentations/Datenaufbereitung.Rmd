@@ -87,6 +87,8 @@ Variablen kann man mit der `unite()` Funktion miteinander verbinden.
 
 ```{r}
 AirqualityTidy <- unite(AirqualityDirty, Date, Day, Month, Year, sep = "-")
+
+head(AirqualityTidy)
 ```
 
 

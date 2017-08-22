@@ -45,7 +45,7 @@ head(survival::lung)
 ```
 
 
-## Die Aufgabe
+## Die Aufgaben
 
 1. Stelle den `survival::lung`-Datensatz als Kaplan-Meier-Plot dar. Mappe dazu die Zeit-Variable auf die `time`-Achse und das Ereignis auf die `status`-Achse. Füge dann dem Diagramm die Überlebenswahrscheinlichkeit, die Kreuze für jedes Ereignis sowie das Konfidenzintervall hinzu.
 2. Tausche anschließend die Reihenfolge der Geome, sodass das Konfidenzintervall als erstes in das Diagramm eingefügt wird. Was fällt dir auf?

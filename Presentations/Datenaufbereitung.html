@@ -117,7 +117,40 @@
           </hgroup>
   </slide>
 
-<slide class='segue dark nobackground level1'><hgroup class = 'auto-fadein'><h2>Welche Struktur sollten die Daten haben?</h2></hgroup><article  id="welche-struktur-sollten-die-daten-haben">
+<slide class='segue dark nobackground level1'><hgroup class = 'auto-fadein'><h2>Dateien und Projekte strukturieren</h2></hgroup><article  id="dateien-und-projekte-strukturieren">
+
+</article></slide><slide class=''><hgroup><h2>Projekte in RStudio</h2></hgroup><article  id="projekte-in-rstudio">
+
+<p>Mittlere und große Analysen sollte man als Projekte strukturieren. RStudio bietet dazu die Möglichkeit, ein neues Projekt zu erstellen.</p>
+
+<p><em>File&gt;New Project&#8230;</em></p>
+
+<p>Man kann sich nun entscheiden, einen neuen Ordner zu erstellen oder einen bereits existierenden zu nehmen.</p>
+
+<p>Für Versions-Kontrolle haben wir in diesem Workshop leider keine Zeit :(</p>
+
+</article></slide><slide class=''><hgroup><h2>Worauf man achten sollte.</h2></hgroup><article  id="worauf-man-achten-sollte.">
+
+<ul class = 'build'>
+<li>Projekte sollten in sich geschlossen sein.</li>
+<li>Der Projektordner mit der <em>.Rproj</em>-Datei ist der Root-Ordner und damit die höchste Ordner-Ebene die es in dem Projekt gibt.</li>
+<li>Auf den Root-Ordner verweist man mit <code>&quot;./&quot;</code>.</li>
+<li>Alle zusätzlichen Dateien wie Daten, Skripte und Ergebnisse sollten in Unterordnern abgelegt werden. Auf sie verweist man entsprechend mit <code>&quot;./Unterodner/Datei.data&quot;</code>.</li>
+</ul>
+
+</article></slide><slide class=''><hgroup><h2>CSV-Dateien</h2></hgroup><article  id="csv-dateien">
+
+<p>Lokale Datensätze sollte man als CSV-Dateien speichern:</p>
+
+<ul class = 'build'>
+<li>Einfaches Textformat, das jedes Programm lesen kann.</li>
+<li>Werte sind durch Kommata (oder Semikolons oder Tabs) getrennt. Kommentare können durch <em>#</em> hinzugefügt werden.</li>
+<li>Kein Binär-Format wie bei Excel, das nur von spezieller Software gelesen werden kann und sich in in verschiedenen Versionen unterscheidet.</li>
+<li>Gut geeignet, um einige wenige bis zu hundertausenden Werten zu speichern.</li>
+<li>Hilft, weil man gar nicht erst auf die Idee kommt, einige klassische Fehler zu machen.</li>
+</ul>
+
+</article></slide><slide class='segue dark nobackground level1'><hgroup class = 'auto-fadein'><h2>Welche Struktur sollten die Daten haben?</h2></hgroup><article  id="welche-struktur-sollten-die-daten-haben">
 
 <!-- Erklären, was tidy data ist und an Beispielen aufzeigen, wo Fehler liegen und wie man diese beheben kann (ohne darauf einzugehen, wie dies in R gemacht wird. Das kommt später). -->
 
@@ -136,6 +169,15 @@
 </ul>
 
 <!-- Hier sollten ein paar Beispiele kommen, was keine sauberen Daten sind. -->
+
+</article></slide><slide class=''><hgroup><h2>Häufige Fehler</h2></hgroup><article  id="haufige-fehler">
+
+<ul class = 'build'>
+<li>Eine Spalte enthält mehrere Variablen. Unter Biologen besonders beliebt: Alter und Geschlecht in eine Spalte schreiben.</li>
+<li>Eine Variable ist über mehrere Spalten verstreut. Vergleichsweise selten. Kommt z.B. bei Datumsangaben vor (Tag, Monat, Jahr).</li>
+<li>Spaltennamen sind eigentlich Werte. Häufig z.B. bei Jahren. Kann als Zusammenfassung für Menschen hilfreich sein, ist für die Analyse aber störend.</li>
+<li>Eine Beobachtung ist über mehrere Zeilen verstreut. Kommt z.B. vor, wenn man zwei Parameter von einem Objekt misst und dafür zwei Zeilen anlegt.</li>
+</ul>
 
 </article></slide><slide class='segue dark nobackground level1'><hgroup class = 'auto-fadein'><h2>tidyr - Wie man Daten sauber bekommt!</h2></hgroup><article  id="tidyr---wie-man-daten-sauber-bekommt">
 
@@ -200,7 +242,17 @@ head(Tumor)</pre>
 
 <p>Variablen kann man mit der <code>unite()</code> Funktion miteinander verbinden.</p>
 
-<pre class = 'prettyprint lang-r'>AirqualityTidy &lt;- unite(AirqualityDirty, Date, Day, Month, Year, sep = &quot;-&quot;)</pre>
+<pre class = 'prettyprint lang-r'>AirqualityTidy &lt;- unite(AirqualityDirty, Date, Day, Month, Year, sep = &quot;-&quot;)
+
+head(AirqualityTidy)</pre>
+
+<pre >##   Ozone Solar.R Wind Temp     Date
+## 1    41     190  7.4   67 1-5-1973
+## 2    36     118  8.0   72 2-5-1973
+## 3    12     149 12.6   74 3-5-1973
+## 4    18     313 11.5   62 4-5-1973
+## 5    NA      NA 14.3   56 5-5-1973
+## 6    28      NA 14.9   66 6-5-1973</pre>
 
 </article></slide><slide class=''><hgroup><h2>Spaltennamen sind eigentlich Werte - gather()</h2></hgroup><article  id="spaltennamen-sind-eigentlich-werte---gather">
 

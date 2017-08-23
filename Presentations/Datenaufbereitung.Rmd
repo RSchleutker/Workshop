@@ -15,6 +15,37 @@ knitr::opts_chunk$set(echo = TRUE, message = TRUE, error = TRUE)
 library(tidyverse)
 ```
 
+# Dateien und Projekte strukturieren
+
+## Projekte in RStudio
+
+Mittlere und große Analysen sollte man als Projekte strukturieren. RStudio bietet dazu die Möglichkeit, ein neues Projekt zu erstellen.
+
+*File>New Project...*
+
+Man kann sich nun entscheiden, einen neuen Ordner zu erstellen oder einen bereits existierenden zu nehmen.
+
+Für Versions-Kontrolle haben wir in diesem Workshop leider keine Zeit :(
+
+
+## Worauf man achten sollte.
+
+>- Projekte sollten in sich geschlossen sein.
+>- Der Projektordner mit der *.Rproj*-Datei ist der Root-Ordner und damit die höchste Ordner-Ebene die es in dem Projekt gibt.
+>- Auf den Root-Ordner verweist man mit `"./"`.
+>- Alle zusätzlichen Dateien wie Daten, Skripte und Ergebnisse sollten in Unterordnern abgelegt werden. Auf sie verweist man entsprechend mit `"./Unterodner/Datei.data"`.
+
+
+## CSV-Dateien
+
+Lokale Datensätze sollte man als CSV-Dateien speichern:
+
+>- Einfaches Textformat, das jedes Programm lesen kann.
+>- Werte sind durch Kommata (oder Semikolons oder Tabs) getrennt. Kommentare können durch *\#* hinzugefügt werden.
+>- Kein Binär-Format wie bei Excel, das nur von spezieller Software gelesen werden kann und sich in in verschiedenen Versionen unterscheidet.
+>- Gut geeignet, um einige wenige bis zu hundertausenden Werten zu speichern.
+>- Hilft, weil man gar nicht erst auf die Idee kommt, einige klassische Fehler zu machen.
+
 
 # Welche Struktur sollten die Daten haben?
 
@@ -31,6 +62,13 @@ Saubere Daten sind durch drei Merkmale gekennzeichnet:
 >- Jeder Datensatz hat seine eigene Datei/Tabelle.
 
 <!-- Hier sollten ein paar Beispiele kommen, was keine sauberen Daten sind. -->
+
+## Häufige Fehler
+
+>- Eine Spalte enthält mehrere Variablen. Unter Biologen besonders beliebt: Alter und Geschlecht in eine Spalte schreiben.
+>- Eine Variable ist über mehrere Spalten verstreut. Vergleichsweise selten. Kommt z.B. bei Datumsangaben vor (Tag, Monat, Jahr).
+>- Spaltennamen sind eigentlich Werte. Häufig z.B. bei Jahren. Kann als Zusammenfassung für Menschen hilfreich sein, ist für die Analyse aber störend.
+>- Eine Beobachtung ist über mehrere Zeilen verstreut. Kommt z.B. vor, wenn man zwei Parameter von einem Objekt misst und dafür zwei Zeilen anlegt.
 
 
 # tidyr - Wie man Daten sauber bekommt!

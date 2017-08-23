@@ -1,0 +1,97 @@
+---
+title: "Reproduzierbare Datenanalyse mit R"
+author: "Raphael Schleutker und Hannah Schmitz"
+date: "7. Oktober 2017"
+css: style.css
+output: 
+  ioslides_presentation: 
+    highlight: kate
+    logo: ./Figures/wwu.svg
+    widescreen: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = TRUE, error = TRUE)
+library(tidyverse)
+```
+
+
+# Motivation
+
+## Wer profitiert von Reproduzierbarkeit?
+
+
+>- Die Kollegen
+>- Die Forschergemeinschaft
+>- Aber vor allem Zukunfts-Du!
+
+
+***
+
+Reproduzierbarkeit bedeutet zweierlei:
+
+> 1. Die Ergebnisse, insbesondere großer Datenanalysen, können von anderen Forschern nachvollzogen, wiederholt und verifiziert werden.
+> 2. Du weißt auch in einigen Monaten noch, was du genau getan hast, und kannst es für neue Daten - ggfs. abgeändert - wiederholen.
+
+>- Beides verbessert eure Arbeit als Wissenschaftler!
+
+
+## Was wir ohne größere Mühen machen können
+
+Reproduzierbarkeit kann in umfangreichen Analysen aufwendig sein. Aber man kann vieles schon im Kleinen tun, um die eigene Arbeit reproduzierbarer zu machen.
+
+>- Ein sinnvolles, in sich geschlossenes Datenmanagement. (Wie bereits besprochen)
+>- R-Skripte inhaltlich nachvollziehbar strukturieren. (Wie bereits besprochen)
+>- Skripte umfangreich kommentieren. Im ernst: Nehmt euch die Zeit! (Wie bereits besprochen)
+>- Nach abgeschlossener Analyse oder zur Kommunikation mit anderen Wissenschaftler Reports erstellen.
+
+
+# RMarkdown
+
+## Markdown
+
+Markdown ist eine vereinfachte Auszeichnungssprache, die in andere Formate - insbesondere HTML - konvertiert werden kann.
+
+RMarkdown ist eine Implementierung, die viele weitere Features hinzufügt.
+
+>- Es können Präsentationen (wie diese) erstellt werden.
+>- Es können ganze Websites erstellt werden.
+>- Man kann Berichte schreiben (wie z.B. die Aufgaben-Dokumente).
+>- Man kann Dashboards erstellen.
+
+
+## Was ist der Vorteil?
+
+RMarkdown-Dokumente können R-Code enthalten. Dieser wird direkt ausgeführt und das Ergebnis wird in das Dokument integriert.
+
+In anderen Worten: Man verbindet die Analyse direkt mit dem Report - Daten und Abbildungen sind immer aktuell.
+
+
+## RMarkdown-Syntax
+
+Von RStudio gibt es einen Reference-Guide unter **Help>Cheatsheets>R Markdown ...**.
+
+
+# Ein Beispiel
+
+***
+
+Wir stellen uns vor, wir haben eine umfangreichere Analyse erfolgreich abgeschlossen und wollen für einen anderen Wissenschaftler sowie für uns selbst das Vorgehen dokumentieren.
+
+
+## Vorgehen
+
+> 1. Man geht durch die Source-Dateien und unterteilt diese in Sinnabschnitte.
+> 2. Vor jeden Sinnabschnitt - *Code-Chunk* - schreibt man `## @knitr Heading ----`. Hierrüber kann man später auf den Abschnitt referenzieren.
+> 3. Man erstellt eine neue RMarkdown-Datei mit *File>New File>R Markdown*. Wir benötigen ein *Document* mit *HTML* als Output.
+> 4. Man erklärt in dem Dokument, was man gemacht hat, und fügt an passender stelle die Code-Chunks ein.
+> 5. Man erstellt das Dokument mit einem Klick auf *Knit*.
+
+
+## Was man beachten muss
+
+>- Knittet man das Dokument, wird dazu eine neue Session erstellt, sodass der Ordner, in dem die RMarkdown-Datei liegt, der Root-Ordner wird. Daher sollte die RMarkdown-Datei immer im selben Ordner wie die *.Rproj*-Datei liegen, um fehlerhafte Pfad-Angaben zu vermeiden.
+>- Die Code-Chunks müssen in der Reihenfolge eingefügt werden, wie sie auch in den Source-Dateien vorkommen.
+>- Man kann auch andere Output-Formate wählen, aber HTML ist das vielfältigste und hat keine Voraussetzungen.
+>- Am Ende jedes Dokuments sollte man mit `sessionInfo()` die Session-Info erzeugen, um dem späteren Lesen zu zeigen, auf welchem Betriebssystem und mit welcher Version die Analyse durchgeführt wurde.
+

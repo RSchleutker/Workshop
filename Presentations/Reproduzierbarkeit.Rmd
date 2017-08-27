@@ -42,8 +42,73 @@ Reproduzierbarkeit kann in umfangreichen Analysen aufwendig sein. Aber man kann 
 
 >- Ein sinnvolles, in sich geschlossenes Datenmanagement. (Wie bereits besprochen)
 >- R-Skripte inhaltlich nachvollziehbar strukturieren. (Wie bereits besprochen)
->- Skripte umfangreich kommentieren. Im Ernst: Nehmt euch die Zeit! (Wie bereits besprochen)
+>- Skripte umfangreich kommentieren. Im Ernst: Nehmt euch die Zeit!
 >- Als Zwischenstand, nach abgeschlossener Analyse oder zur Kommunikation mit anderen Wissenschaftlern Reports erstellen.
+>- Sein eigenes Paket schreiben, um Funktionen mit anderen teilen zu können. (Leider keine Zeit)
+
+
+# Kommentieren
+
+***
+
+Wie bereits erwähnt sollten Dateien umfangreich kommentiert werden. In R beginnen Kommentare immer mit `#`.
+
+>- Alles, was in einer Zeile nach `#` steht, wird von R ignoriert.
+
+
+## Guideline
+
+Zu Beginn jeder Datei sollte in einem *Header* erklärt werden, ...
+
+* wofür die Datei ist bzw. was sie macht.
+* wer sie erstellt hat.
+* wann sie zuletzt geändert wurde.
+* u.U. welche Dateien sie voraussetzt.
+
+```{r eval=FALSE}
+##########
+## R Source Code file that analyzes the lines dataset previously tidied in Reading.R
+## Raphael Schleutker; Last modified: 24th August, 2017
+## Depends on Reading.R
+##########
+```
+
+***
+
+* Vor jedem Code-Block sollte ein kurzer Kommentar stehen, was dieser macht.
+* Jede nicht selbsterklärende Zeile sollte kommentiert werden.
+
+***
+
+```{r eval=FALSE}
+#' The following lines read in and process the lines data. For this, the 
+#' appropriate files are first listed as a character vector. Each element is 
+#' named with the file name and read in by mapping over the character vector. 
+#' The resulting named list of dataframes is processed. Since the names metadata
+#' is used for the processing, lmap() is used. The dataframes are then bound to
+#' one dataframe and splitted by the measured variable.
+
+library(readr)
+library(dplyr)
+library(purrr)
+
+Lines <- list.files("./Data/", pattern = "[^_]*_[^_]*_[^_]*_Lines.csv") %>%
+  setNames(make.names(.)) %>%
+  map(~ read_csv(paste("./Data/", .x, sep = ""), comment = "#", skip = 1)) %>%
+  lmap(~ Process_Line_Data(.x)) %>%     # Self-written helper function.
+  bind_rows() %>%
+  split(.$Measured)
+}
+```
+
+## \#'-Kommentare
+
+`#'`-Kommentare sind spezielle Kommentare, die aus dem `roxygen2`-Paket entstammen und eigentlich zur Dokumentation von Paketen verwendet werden.
+
+Allerdings sind sie zum normalen kommentieren auch ganz hilfreich.
+
+> 1. Beginne einen Kommentar-Block mit `#'` und schreibe anschließend den gesamten Kommentar.
+> 2. Drücke in RStudio **Strg + Shift + /**. Dadurch wird der Kommentar automatisch in 80 Zeichen lange Zeilen umgebrochen.
 
 
 # RMarkdown

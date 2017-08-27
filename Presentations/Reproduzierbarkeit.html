@@ -147,9 +147,76 @@
 <ul class = 'build'>
 <li>Ein sinnvolles, in sich geschlossenes Datenmanagement. (Wie bereits besprochen)</li>
 <li>R-Skripte inhaltlich nachvollziehbar strukturieren. (Wie bereits besprochen)</li>
-<li>Skripte umfangreich kommentieren. Im Ernst: Nehmt euch die Zeit! (Wie bereits besprochen)</li>
+<li>Skripte umfangreich kommentieren. Im Ernst: Nehmt euch die Zeit!</li>
 <li>Als Zwischenstand, nach abgeschlossener Analyse oder zur Kommunikation mit anderen Wissenschaftlern Reports erstellen.</li>
+<li>Sein eigenes Paket schreiben, um Funktionen mit anderen teilen zu können. (Leider keine Zeit)</li>
 </ul>
+
+</article></slide><slide class='segue dark nobackground level1'><hgroup class = 'auto-fadein'><h2>Kommentieren</h2></hgroup><article  id="kommentieren">
+
+</article></slide><slide class=''><hgroup><h2></h2></hgroup><article >
+
+<p>Wie bereits erwähnt sollten Dateien umfangreich kommentiert werden. In R beginnen Kommentare immer mit <code>#</code>.</p>
+
+<ul class = 'build'>
+<li>Alles, was in einer Zeile nach <code>#</code> steht, wird von R ignoriert.</li>
+</ul>
+
+</article></slide><slide class=''><hgroup><h2>Guideline</h2></hgroup><article  id="guideline">
+
+<p>Zu Beginn jeder Datei sollte in einem <em>Header</em> erklärt werden, &#8230;</p>
+
+<ul>
+<li>wofür die Datei ist bzw. was sie macht.</li>
+<li>wer sie erstellt hat.</li>
+<li>wann sie zuletzt geändert wurde.</li>
+<li>u.U. welche Dateien sie voraussetzt.</li>
+</ul>
+
+<pre class = 'prettyprint lang-r'>##########
+## R Source Code file that analyzes the lines dataset previously tidied in Reading.R
+## Raphael Schleutker; Last modified: 24th August, 2017
+## Depends on Reading.R
+##########</pre>
+
+</article></slide><slide class=''><hgroup><h2></h2></hgroup><article >
+
+<ul>
+<li>Vor jedem Code-Block sollte ein kurzer Kommentar stehen, was dieser macht.</li>
+<li>Jede nicht selbsterklärende Zeile sollte kommentiert werden.</li>
+</ul>
+
+</article></slide><slide class=''><hgroup><h2></h2></hgroup><article >
+
+<pre class = 'prettyprint lang-r'>#&#39; The following lines read in and process the lines data. For this, the 
+#&#39; appropriate files are first listed as a character vector. Each element is 
+#&#39; named with the file name and read in by mapping over the character vector. 
+#&#39; The resulting named list of dataframes is processed. Since the names metadata
+#&#39; is used for the processing, lmap() is used. The dataframes are then bound to
+#&#39; one dataframe and splitted by the measured variable.
+
+library(readr)
+library(dplyr)
+library(purrr)
+
+Lines &lt;- list.files(&quot;./Data/&quot;, pattern = &quot;[^_]*_[^_]*_[^_]*_Lines.csv&quot;) %&gt;%
+  setNames(make.names(.)) %&gt;%
+  map(~ read_csv(paste(&quot;./Data/&quot;, .x, sep = &quot;&quot;), comment = &quot;#&quot;, skip = 1)) %&gt;%
+  lmap(~ Process_Line_Data(.x)) %&gt;%     # Self-written helper function.
+  bind_rows() %&gt;%
+  split(.$Measured)
+}</pre>
+
+</article></slide><slide class=''><hgroup><h2>#&#39;-Kommentare</h2></hgroup><article  id="kommentare">
+
+<p><code>#&#39;</code>-Kommentare sind spezielle Kommentare, die aus dem <code>roxygen2</code>-Paket entstammen und eigentlich zur Dokumentation von Paketen verwendet werden.</p>
+
+<p>Allerdings sind sie zum normalen kommentieren auch ganz hilfreich.</p>
+
+<ol class = 'build'>
+<li>Beginne einen Kommentar-Block mit <code>#&#39;</code> und schreibe anschließend den gesamten Kommentar.</li>
+<li>Drücke in RStudio <strong>Strg + Shift + /</strong>. Dadurch wird der Kommentar automatisch in 80 Zeichen lange Zeilen umgebrochen.</li>
+</ol>
 
 </article></slide><slide class='segue dark nobackground level1'><hgroup class = 'auto-fadein'><h2>RMarkdown</h2></hgroup><article  id="rmarkdown">
 

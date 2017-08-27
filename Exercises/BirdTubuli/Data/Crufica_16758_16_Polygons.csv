@@ -1,0 +1,34 @@
+# Type: Polygons
+# Measurement: 16
+# Bird: C. rufica
+# Staining: PAS
+# Section Thickness: 5um
+# Number of Section on Slide: 1
+# Magnification: 60x
+# Date: 030717
+#
+Name,Area [um],Perimeter [um]
+Polygon 1,139104.80,1341.10
+Polygon 2,10708.99,402.51
+Polygon 3,121210.94,1271.08
+Polygon 4,5149.10,314.34
+Polygon 5,102569.43,1162.90
+Polygon 6,4526.51,309.34
+Polygon 7,91487.58,1107.70
+Polygon 8,2685.42,231.09
+Polygon 9,93719.50,1104.69
+Polygon 10,4019.32,316.56
+Polygon 11,106139.17,1173.90
+Polygon 12,6154.85,381.67
+Polygon 13,131301.23,1295.00
+Polygon 14,13661.00,449.37
+Polygon 15,138271.94,1366.96
+Polygon 16,9213.51,385.57
+Polygon 17,132007.44,1308.58
+Polygon 18,12261.47,437.24
+Polygon 19,97287.22,1133.88
+Polygon 20,3173.68,284.55
+Polygon 21,104804.33,1165.10
+Polygon 22,5238.31,277.41
+Polygon 23,129746.47,1308.32
+Polygon 24,6396.21,448.11

@@ -21,6 +21,7 @@ qPCR <- list.files("./Exercises/qPCR/", pattern = "^[Plate]") %>%
   dplyr::filter(Target != "RPL3") %>%
   arrange(Target, Treatment)
 
+write.csv(qPCR, "./Exercises/qPCR/qPCR_Processed.csv", row.names = FALSE)
 
 #' Visualize the previously calculated values with a simple bar chart.
 

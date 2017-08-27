@@ -35,6 +35,9 @@ die Übungsaufgaben hinweisen -->
 
 >- Programmieren.
 >- Zeitreihenanalysen.
+>- Relationales Datenmanagement.
+>- Netzwerke.
+>- Räumliche Daten und Karten.
 >- Wann man welche umfangreichen statistischen Tests durchführen muss.
 
 

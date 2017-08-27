@@ -318,6 +318,3 @@ Und nun kann man weitermachen wie zuvor.
 ## Weitere Anwendungen
 
 Eine Funktion auf jedes Element einer Liste oder eines Vektors anzuwenden hat viele nützliche Anwendungen, dir wir aus Zeitgründen leider nicht besprechen können.
-
->- Daten von den Dateinamen verwenden.
->- Für jede Spalte in einer Tabelle gleichzeitig Mittelwert und andere deskreptive Werte berechnen.

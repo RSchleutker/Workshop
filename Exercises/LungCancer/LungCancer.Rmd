@@ -18,7 +18,12 @@ knitr::opts_chunk$set(echo = TRUE, collapse = TRUE)
 
 ### Kaplan-Meier-Plots: Überlebenszeitanalyse
 
-Kaplan-Meier-Plots sollen dem Betrachter einen Eindruck davon verschaffen, wie wahrscheinlich ein bestimmtes Ereignis innerhalb eines Zeitraums eintritt. Insbesondere in der medizinischen Forschung werden sie dazu verwendet, Überlebenswahrscheinlichkeiten bei einer bestimmter Erkrankung darzustellen. Dazu werden diagnostizierte Patienten beobachtet. Es gibt zwei mögliche Ereignisse. Entweder verlässt ein Patient die Studie, beispielsweise weil er umzieht. Man sagt, der Patient ist zensiert. Oder der Patient stirb an der Krankheit. Für den eigentlichen Plot relevant sind nur die verstorbenen Patienten. Dennoch werden die zensierten Patienten häufig als Kreuze in dem Plot markiert.
+Kaplan-Meier-Plots sollen dem Betrachter einen Eindruck davon verschaffen, wie wahrscheinlich ein bestimmtes Ereignis innerhalb eines Zeitraums eintritt. Insbesondere in der medizinischen Forschung werden sie dazu verwendet, Überlebenswahrscheinlichkeiten bei einer bestimmter Erkrankung darzustellen. Dazu werden diagnostizierte Patienten beobachtet. Es gibt zwei mögliche Ereignisse. Entweder verlässt ein Patient die Studie, beispielsweise weil er umzieht. Man sagt, der Patient ist zensiert. Oder der Patient stirb an der Krankheit. Für den eigentlichen Plot relevant sind nur die verstorbenen Patienten. Dennoch werden die zensierten Patienten häufig als Kreuze in dem Plot markiert. Die Überlebenswahrscheinlichkeit $\hat S(t)$ ist gegeben durch folgende Gleichung:
+
+$$\hat S(t)=\prod_{t_i} \left( 1-\frac{d_i}{n_i}\right)$$
+
+* $d_i =$ Patienten, die zum Zeitpunkt $t_i$ verstorben sind.
+* $n_i =$ Patienten, die zum Zeitpunkt $t_i$ beobachtet werden.
 
 
 ### Das ggkm-Paket
@@ -51,6 +56,7 @@ head(survival::lung)
 2. Tausche anschließend die Reihenfolge der Geome, sodass das Konfidenzintervall als erstes in das Diagramm eingefügt wird. Was fällt dir auf?
 3. Trenne den Plot in zwei Plots auf, indem du verschiedenen Farben für die Geschlechter verwendest.
 4. `cut_width(x, width)` ist eine Hilfsfunktion aus dem `ggplot2`-Paket und unterteilt eine kontinuierliche Variable `x` in Klassen mit der Länge `width`. Die Funktion wird statt der eigentlichen Variable auf eine Achse gemapped. Nutze dies, um ein altersabhängiges Überlebensdiagramm zu erstellen, wobei jeweils 10 Jahre in eine Kategorie zusammengefasst werden sollen. Lasse der Übersichtlichkeit halber die Konfidenzintervalle weg.
+5. Ein weiterer Datensatz aus dem `survival`-Paket ist `myeloid`, welches simulierte Daten zur Überlebenswahrscheinlichkeit zu myeloider Leukämie enthält. Nutze diesen ebenfalls, um das Prinzip von Überlebensplots zu üben.
 
 
 

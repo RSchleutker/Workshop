@@ -270,7 +270,12 @@ div.tocify {
 <h2>Einleitung</h2>
 <div id="kaplan-meier-plots-uberlebenszeitanalyse" class="section level3">
 <h3>Kaplan-Meier-Plots: Überlebenszeitanalyse</h3>
-<p>Kaplan-Meier-Plots sollen dem Betrachter einen Eindruck davon verschaffen, wie wahrscheinlich ein bestimmtes Ereignis innerhalb eines Zeitraums eintritt. Insbesondere in der medizinischen Forschung werden sie dazu verwendet, Überlebenswahrscheinlichkeiten bei einer bestimmter Erkrankung darzustellen. Dazu werden diagnostizierte Patienten beobachtet. Es gibt zwei mögliche Ereignisse. Entweder verlässt ein Patient die Studie, beispielsweise weil er umzieht. Man sagt, der Patient ist zensiert. Oder der Patient stirb an der Krankheit. Für den eigentlichen Plot relevant sind nur die verstorbenen Patienten. Dennoch werden die zensierten Patienten häufig als Kreuze in dem Plot markiert.</p>
+<p>Kaplan-Meier-Plots sollen dem Betrachter einen Eindruck davon verschaffen, wie wahrscheinlich ein bestimmtes Ereignis innerhalb eines Zeitraums eintritt. Insbesondere in der medizinischen Forschung werden sie dazu verwendet, Überlebenswahrscheinlichkeiten bei einer bestimmter Erkrankung darzustellen. Dazu werden diagnostizierte Patienten beobachtet. Es gibt zwei mögliche Ereignisse. Entweder verlässt ein Patient die Studie, beispielsweise weil er umzieht. Man sagt, der Patient ist zensiert. Oder der Patient stirb an der Krankheit. Für den eigentlichen Plot relevant sind nur die verstorbenen Patienten. Dennoch werden die zensierten Patienten häufig als Kreuze in dem Plot markiert. Die Überlebenswahrscheinlichkeit <span class="math inline">\(\hat S(t)\)</span> ist gegeben durch folgende Gleichung:</p>
+<p><span class="math display">\[\hat S(t)=\prod_{t_i} \left( 1-\frac{d_i}{n_i}\right)\]</span></p>
+<ul>
+<li><span class="math inline">\(d_i =\)</span> Patienten, die zum Zeitpunkt <span class="math inline">\(t_i\)</span> verstorben sind.</li>
+<li><span class="math inline">\(n_i =\)</span> Patienten, die zum Zeitpunkt <span class="math inline">\(t_i\)</span> beobachtet werden.</li>
+</ul>
 </div>
 <div id="das-ggkm-paket" class="section level3">
 <h3>Das ggkm-Paket</h3>
@@ -306,6 +311,7 @@ div.tocify {
 <li>Tausche anschließend die Reihenfolge der Geome, sodass das Konfidenzintervall als erstes in das Diagramm eingefügt wird. Was fällt dir auf?</li>
 <li>Trenne den Plot in zwei Plots auf, indem du verschiedenen Farben für die Geschlechter verwendest.</li>
 <li><code>cut_width(x, width)</code> ist eine Hilfsfunktion aus dem <code>ggplot2</code>-Paket und unterteilt eine kontinuierliche Variable <code>x</code> in Klassen mit der Länge <code>width</code>. Die Funktion wird statt der eigentlichen Variable auf eine Achse gemapped. Nutze dies, um ein altersabhängiges Überlebensdiagramm zu erstellen, wobei jeweils 10 Jahre in eine Kategorie zusammengefasst werden sollen. Lasse der Übersichtlichkeit halber die Konfidenzintervalle weg.</li>
+<li>Ein weiterer Datensatz aus dem <code>survival</code>-Paket ist <code>myeloid</code>, welches simulierte Daten zur Überlebenswahrscheinlichkeit zu myeloider Leukämie enthält. Nutze diesen ebenfalls, um das Prinzip von Überlebensplots zu üben.</li>
 </ol>
 </div>
 <div id="losung" class="section level2">

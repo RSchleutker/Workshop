@@ -38,6 +38,8 @@ die Übungsaufgaben hinweisen -->
 >- Relationales Datenmanagement.
 >- Netzwerke.
 >- Räumliche Daten und Karten.
+>- Reguläre Ausdrücke.
+>- Animierte Diagramme.
 >- Wann man welche umfangreichen statistischen Tests durchführen muss.
 
 

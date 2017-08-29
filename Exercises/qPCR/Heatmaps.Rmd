@@ -1,0 +1,89 @@
+---
+title: 'Übungsaufgaben: Heatmap'
+author: "Raphael Schleutker und Hannah Schmitz"
+date: "7. Oktober 2017"
+output: 
+  html_document: 
+    code_folding: hide
+    highlight: haddock
+    toc: yes
+    toc_float: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, collapse = TRUE, message = FALSE, warning = FALSE, fig.height = 3)
+```
+
+## Einleitung
+
+### Heatmaps
+
+In manchen Bereichen ist es üblich, oder zumindest möglich, Daten als Heatmap zu visualisieren. Dabei hat man im einfachsten Fall ein oder zwei kategorische Variablen, die man auf die x- und y-Achse mapped. Eine dritte, numerische Variable wird über die Farbe dargestellt. Diese Heatmaps findet man z.B. für Expressionsdaten von qPCR-Experimenten.
+
+Heatmaps haben Vor- und Nachteile. Sie erlauben eine erste schnelle, visuelle Einschätzung. Allerdings können Menschen feine Farbunterschiede nur schlecht auflösen und quantifizieren. Dies ist insbesondere dann ein Problem, wenn es einzelne Ausreißer gibt, sodass ein Großteil der Daten durch einen kleinen Bereich der Farbpalette dargestellt wird.
+
+
+
+## Aufgaben
+
+1. Lies den Datensatz *qPCR_Processed.csv* ein. Nutze außerdem die Funktion `mutate_at()` aus dem Paket `dplyr`, um die Variablen `Duration`, `Treatment` und `Target` zu Faktoren zu ändern. Beachte hierbei, dass man die Variablennamen für `mutate_at()` in die Hilfsfunktion `vars()` und die Funktion in die Hilfsfunktion `funs()` packen muss: `mutate_at(vars(Duration, Treatment, Target), funs(factor(., levels = unique(.))))`.
+2. Stelle die Expressionsdaten der Variable `RQ` als Heatmap dar. Mappe dazu die Variable `Duration` auf die x-Achse und `Target` auf die y-Achse. `RQ` wird auf die `fill`-Achse gemapped. Das Geom, um Kacheln darzustellen, heißt `geom_tile()`. Erstelle anhand der Variable `Treatment` zwei Facetten (**Tipp:** Probiere hierfür das Argument `labeller = label_both` aus und schaue, was passiert). Nutze außerdem `scale_fill_viridis()` aus dem Paket `viridis`, um die Palette der Füllfarbe aussagekräftiger zu machen.
+3. Es könnte ja interessant sein, zu jedem Zeitpunkt den Expressionswert mit Treatment mit dem Expressionswert ohne Treatment zu vergleichen. Füge dem Datensatz zu diesem Zweck eine weitere Spalte hinzu, in der der Quotient von `RQ` mit Treatment durch den `RQ` ohne Treatment erstellt wird. **Tipp:** Gruppiere nach `Target` und `Duration`. `RQ[Treatment == "+"] / RQ[Treatment == "-"`. Erstelle anschließend die Heatmap.
+4. Die Funktion `rescale()` aus dem Paket `scales` skaliert numerische Werte so, dass der kleinste Wert **0** wird und der größte Wert **1**. Gruppiere die Daten nach `Target` und erstelle eine weitere Spalte, in der die `RQ`-Werte zwischen **0** und **1** skaliert wird. Erstelle dann ein Diagramm wie in Aufgabe 2 mit den skalierten Werten anstatt `RQ`. Nutze `theme(legend.position = "bottom")`, um die Legende unterhalb des Diagramms darzustellen. Welche Vor- und Nachteile hat dieses Diagramm?
+
+
+## Lösungen
+
+### Aufgabe 1
+
+```{r}
+library(readr)
+library(dplyr)
+
+qPCR <- read_csv("./qPCR_Processed.csv") %>%
+  mutate_at(vars(Duration, Treatment, Target), funs(factor(., levels = unique(.))))
+
+head(qPCR)
+```
+
+
+### Aufgabe 2
+
+```{r}
+library(ggplot2)
+
+ggplot(qPCR, aes(Duration, Target, fill = RQ)) +
+  geom_tile() +
+  facet_wrap(~ Treatment, ncol = 2, labeller = label_both) +
+  viridis::scale_fill_viridis()
+```
+
+
+### Aufgabe 3
+
+```{r}
+qPCR <- qPCR %>%
+  group_by(Target, Duration) %>%
+  mutate(RQ_Quotient = RQ[Treatment == "+"] / RQ[Treatment == "-"])
+
+ggplot(qPCR, aes(Duration, Target, fill = RQ_Quotient)) +
+  geom_tile() +
+  viridis::scale_fill_viridis()
+```
+
+
+### Aufgabe 4
+
+```{r}
+qPCR <- qPCR %>%
+  group_by(Target) %>%
+  mutate(RQ_Rescale = scales::rescale(RQ)) %>%
+  ungroup()
+
+ggplot(qPCR, aes(Duration, Target, fill = RQ_Rescale)) +
+  geom_tile() +
+  facet_wrap(~ Treatment, ncol = 2, labeller = label_both) +
+  viridis::scale_fill_viridis() +
+  theme(legend.position = "bottom")
+```
+

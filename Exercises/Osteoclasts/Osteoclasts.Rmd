@@ -45,7 +45,7 @@ Zusätzlich zu den angegeben Stimulanzien wurden alle Zellen mit Myostatin behan
 10. Du hast nun viele verschiedene Diagrammtypen ausprobiert, allerdings nicht einen besonders Beliebten unter Biologen: Ein Säulendiagramm mit Fehlerbalken? Warum macht dieser Diagrammtyp bei den vorliegenden Daten keinen Sinn?
 
 
-## Lösung
+## Lösungen
 
 ### Aufgabe 1
 

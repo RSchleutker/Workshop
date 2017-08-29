@@ -259,6 +259,37 @@ ggplot(data = iris, mapping = aes(x = Sepal.Length, y = Sepal.Width, colour = Sp
 ```
 
 
-## Alles klar soweit?
+## Das Theme
 
-Dann kommen nach einer kurzen Pause einige Übungsaufgaben!
+Zuletzt kann man dem Plot noch ein anderes Standard-Theme geben und gleichzeitig die Textgröße anpassen:
+
+```{r, echo=TRUE, fig.align='center', fig.height=3}
+ggplot(data = iris, mapping = aes(x = Sepal.Length, y = Sepal.Width, colour = Species)) +
+  geom_point() +
+  stat_smooth(method = "lm") +
+  scale_x_continuous(name = "Sepallänge (cm)", limits = c(0,NA)) +
+  scale_y_continuous(name = "Sepalbreite (cm)", limits = c(0,NA)) +
+  scale_colour_discrete(name = "Spezies", labels = c("Spezies 1", "Spezies 2", "Spezies 3")) +
+  facet_wrap(~ Species, ncol = 3) +
+  theme_bw(base_size = 9)
+```
+
+
+## Den Plot speichern
+
+Den Plot kann man anschließend mit der `ggsave()`-Funktion speichern:
+
+```{r, eval=FALSE}
+ggsave(filename = "./Results/Plot.png",
+       plot = last_plot(),
+       width = 80, height = 60,
+       units = "mm",
+       dpi = 600)
+```
+
+## Was es beim speichern zu beachten gibt
+
+>- Wenn möglich, den Plot als Vektorgrafik speichern: `filename = ".../Plot.pdf"` oder `filename = ".../Plot.svg"`.
+>- Soll die Auflösung bei Rastergrafiken erhöht werden, wird dies über das Argument `dpi` gemacht. **NIEMALS** über `width` und/oder `height`.
+>- Messt in euren Dokumenten mal nach, wie breit der Textbereich ist und orientiert die Größe des Plots daran. So ist die Schrift in allen Diagrammen im späteren Protokoll gleich groß.
+

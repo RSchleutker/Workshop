@@ -40,6 +40,10 @@ Damit diese Geome funktionieren, müssen auf die x- und y-Achse die folgenden We
 * Auf die x-Achse kommt der Zeitraum (meist in Tagen) zwischen Diagnostik und Eintritt der Zensur oder des Todes. Dies passiert über `aes(time = ...)`.
 * Auf die y-Achse kommt das Ereignis. Zensur / Tod ist entweder als `0` / `1` oder als `1` / `2` kodiert.
 
+#### Installation
+
+Das zentrale Archiv für R-Pakete ist CRAN (*Comprehensive R Archive Network*). Aus diesem lädt R die Pakete automatisch herunter. Manche Pakete sind allerdings nicht über CRAN installbierbar, sondern müssen aus anderen Quellen bezogen werden. Häufig ist dies [Github](https://github.com/). Github ist eine Seite, die es Entwicklern mithilfe des Versionsverwaltungsprogramms Git erleichtert, Software zu entwickeln. Die Stärke liegt hierbei vor allem darin, dass mehrere Personen gleichzeitig an einem Projekt arbeiten können (auch wir haben Git und Github genutzt, um diesen Workshop zu entwickeln). Um Pakete von Github zu installieren, kann man das Paket `devtools` benutzen. Hat man dieses installiert, kann man mit `devtools::install_github("sachsmc/ggkm")` das Paket `ggkm` installieren. **sachsmc** ist hierbei der Account-Name des Entwicklers. 
+
 
 ### Der Datensatz
 
@@ -55,7 +59,7 @@ head(survival::lung)
 1. Stelle den `survival::lung`-Datensatz als Kaplan-Meier-Plot dar. Mappe dazu die Zeit-Variable auf die `time`-Achse und das Ereignis auf die `status`-Achse. Füge dann dem Diagramm die Überlebenswahrscheinlichkeit, die Kreuze für jedes Ereignis sowie das Konfidenzintervall hinzu.
 2. Tausche anschließend die Reihenfolge der Geome, sodass das Konfidenzintervall als erstes in das Diagramm eingefügt wird. Was fällt dir auf?
 3. Trenne den Plot in zwei Plots auf, indem du verschiedenen Farben für die Geschlechter verwendest.
-4. `cut_width(x, width)` ist eine Hilfsfunktion aus dem `ggplot2`-Paket und unterteilt eine kontinuierliche Variable `x` in Klassen mit der Länge `width`. Die Funktion wird statt der eigentlichen Variable auf eine Achse gemapped. Nutze dies, um ein altersabhängiges Überlebensdiagramm zu erstellen, wobei jeweils 10 Jahre in eine Kategorie zusammengefasst werden sollen. Lasse der Übersichtlichkeit halber die Konfidenzintervalle weg.
+4. `cut_width(x, width)` ist eine Hilfsfunktion aus dem `ggplot2`-Paket und unterteilt eine kontinuierliche Variable `x` in Kategorien mit der Länge `width`. Die Funktion wird statt der eigentlichen Variable auf eine Achse gemapped. Nutze dies, um ein altersabhängiges Überlebensdiagramm zu erstellen, wobei jeweils 10 Jahre in eine Kategorie zusammengefasst werden sollen. Lasse der Übersichtlichkeit halber die Konfidenzintervalle weg.
 5. Ein weiterer Datensatz aus dem `survival`-Paket ist `myeloid`, welches simulierte Daten zur Überlebenswahrscheinlichkeit zu myeloider Leukämie enthält. Nutze diesen ebenfalls, um das Prinzip von Überlebensplots zu üben.
 
 

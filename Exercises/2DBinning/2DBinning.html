@@ -266,12 +266,16 @@ div.tocify {
 </div>
 
 
+<style>
+body {
+text-align: justify}
+</style>
 <div id="einleitung" class="section level2">
 <h2>Einleitung</h2>
 <div id="d-binning" class="section level3">
 <h3>2D-Binning</h3>
 <p>In der Aufgabe zu den Osteoklasten haben wir bereits Binning kennengelernt, um die Daten in Form eines Histogramms oder eines Frequenzplots darzustellen. Hierbei wurde eine Variable in sog. Bins unterteilt, und für die Anzahl an Beobachtungen in jedem Bin ein Balken mit der entsprechenden Höhe gezeichnet. Eine darauf aufbauende Möglichkeit ist das 2D-Binning. Hierbei wird nicht eine Variable unterteilt, sondern zwei. Diese werden auf der x- und y-Achse dargestellt. Um die Anzahl an Beobachtungen pro Bin darzustellen, wird in aller Regel eine sequenzielle Farbpalette verwendet, also eine bei der optisch klar erkennbar ist, welche Farbe wenige bzw. viele Beobachtungen darstellt. Theoretisch ist aber auch eine andere Darstellungsweise wie die Transparenz denkbar. Dies geht allerdings mit optischen Problemen einher.</p>
-<p>Grundsätzlich können die Bins zwei Formen annehmen: Entweder sind sie schlicht quadratisch, was die einfachere Form darstellt, aber zu optischen Artefakten führen kann. Oder sie sind hexagonal, was unter bestimmten Bedingungen zu einem optisch gefälligeren Ergebnis führt. Beide Varianten sind aber gleichermaßen geeignet, 2D-Bins darzustellen.</p>
+<p>Grundsätzlich können die Bins zwei Formen annehmen: Entweder sind sie schlicht quadratisch, was die einfachere Form darstellt, aber zu optischen Artefakten führen kann. Oder sie sind hexagonal, was unter bestimmten Bedingungen zu einem optisch gefälligeren Ergebnis führt. Beide Varianten sind aber gleichermaßen geeignet, 2D-Bins darzustellen. Um hexagonale Bins nutzen zu können, muss zunächst noch das Paket <code>hexbin</code> installiert werden.</p>
 </div>
 <div id="der-datensatz" class="section level3">
 <h3>Der Datensatz</h3>

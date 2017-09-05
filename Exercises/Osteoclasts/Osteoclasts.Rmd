@@ -10,6 +10,11 @@ output:
     toc_float: yes
 ---
 
+<style>
+body {
+text-align: justify}
+</style>
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, collapse = TRUE, message = FALSE, warning = FALSE)
 ```
@@ -34,7 +39,7 @@ Zusätzlich zu den angegeben Stimulanzien wurden alle Zellen mit Myostatin behan
 ## Die Aufgaben
 
 1. Lies den Datensatz zunächst mit dem `readr`-Paket bzw. dem grafischen Interface von RStudio ein.
-2. `dplyr` bietet neben der Funktion `mutate()` noch Derivate dieser Funktion: `mutate_at(.vars, .funs)` erlaubt es, mehrere Spalten gleichzeitig zu bearbeiten. Dies kann man z.B. nutzen um gleichzeitig mehrere Variablen in Faktoren umzuwandeln. Die Funktion dazu lautet `factor()`. Das erste Argument von `factor()` ist ein Character-Vektor, der umgewandelt werden soll. In diesem Fall ist das die jeweilige Spalte, auf die mit `.` verwiesen werden kann. Das zweite Argument sind die Levels, welche der Faktor binhalten soll. Hier kann `unique(.)` eingesetzt werden, um die vorherigen Character-Strings unverändert als Level zu übernehmen. Nutze `mutate_at()` und `factor()`, um die Spalten `Genotype`, `Stimulant_1` und `Stimulant_2` in Faktoren umzuwandeln.
+2. `dplyr` bietet neben der Funktion `mutate()` noch Derivate dieser Funktion: `mutate_at(.vars, .funs)` erlaubt es, mehrere Spalten gleichzeitig zu bearbeiten. Dies kann man z.B. nutzen um gleichzeitig mehrere Variablen in Faktoren umzuwandeln. Die Funktion dazu lautet `factor`. Nutze `mutate_at()` und `factor`, um die Spalten `Genotype`, `Stimulant_1` und `Stimulant_2` in Faktoren umzuwandeln. Beachte hierbei, dass die Variablen-Namen innerhalb der Hilfsfunktion `vars()` übergeben werden müssen: `.vars = vars(Genotype, Stimulant_1, Stimulant_2)`.
 3. Erstelle ein Dotplot, der einen Punkt für jede gemessene Zelle anzeigt. Mappe dazu die beiden Stimulanzien auf die x-Achse (**Tipp:** Um alle Kombinationen zweier oder mehrerer Faktoren zu erzeugen, kann man die Funktion `interaction()` nutzen.) und `Area` auf die y-Achse. Erzeuge außerdem eine Facette für jeden Genotyp. Was stört dich an dem Plot?
 4. Es gibt verschiedenen Probleme mit dem Diagramm. Zum einen gibt es nach oben extreme Ausreißer. Außerdem ist es unmgölich zu erkennen, wie viele Punkte es gibt, da diese sich überlappen. Zuletzt überschneiden sich die Beschriftungen für die x-Achse. Begrenze die y-Achse auf den Bereich von **0** bis **25000**. Erzeuge statt eines einfachen Dotplots einen Jitter-Plot (jeder Punkt wird um einen zufälligen Betrag nach links oder rechts verschoben), indem du `geom_jitter()` verwendest. Setze außerdem die Deckkraft mit `alpha` für jeden Punkt auf **0.15**. Zuletzt, drehe den Text auf der x-Achse um 45°. Solche optischen Änderungen werden immer über `theme()` getätigt. Der zu setzende Parameter heißt `axis.text.x = element_text(angle = 45, hjust = 1)`.
 5. Eine andere Möglichkeit, die Daten darzustellen, wäre ein Boxplot. Zu diesem Diagrammtyp zu wechseln ist nun sehr einfach, da nur das Geom von `geom_jitter()` zu `geom_boxplot()` gewechselt werden muss. `geom_boxplot()` ist ein Shortcut, der bereits die richtigen Einstellungen für die *Statistical Transformations* setzt, sodass man sich darüber keine Gedanken machen muss.
@@ -64,9 +69,11 @@ head(Osteoclasts)
 library(dplyr)
 
 Osteoclasts <- Osteoclasts %>%
-  mutate_at(vars(Genotype, Stimulant_1, Stimulant_2), funs(factor(., levels = unique(.))))
+  mutate_at(vars(Genotype, Stimulant_1, Stimulant_2), factor)
 
 head(Osteoclasts)
+
+# Beachte, dass `factor` in diesem Fall kein Funktionsaufruf ist (da die Klammern fehlen), sondern die Funktion selbst, also das Objekt.
 ```
 
 
@@ -165,4 +172,3 @@ ggplot(Osteoclasts, aes(x = Area, colour = interaction(Stimulant_1, Stimulant_2,
 ```{r}
 # Säulendiagramme mit Fehlerbalken stellen im Grunde nur das arithmetische Mittel und die Standardabweichung dar. Diese Kennwerte sind aber nur für normalverteilte Daten aussagekräftig und die Verteilung der Osteoklastengröße ist definitiv nicht normalverteilt. Außerdem geht bei diesem Diagrammtyp zu viel Information verloren, insbesondere, da eine Kernfrage bei dem Experiment auch sein kann, wie viele Zellen zu Osteoklasten differenziert sind.
 ```
-

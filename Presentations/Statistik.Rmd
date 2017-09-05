@@ -294,7 +294,7 @@ ContingencyTable
 
 ***
 
-```{r}
+```{r, fig.height=5}
 mosaicplot(ContingencyTable)
 ```
 
@@ -382,8 +382,14 @@ Alternativ kann man testen, ob der Beobachtete Mittelwert höher oder geringer i
 
 ```{r}
 t.test(NHANES$BMI_Log, mu = 4.69, alternative = "less")
+```
+
+***
+
+```{r}
 t.test(NHANES$BMI_Log, mu = 4.69, alternative = "greater")
 ```
+
 
 ## Two-Sample T-Test
 
@@ -482,3 +488,22 @@ plot(Comparison)
 ## Achtung
 
 Ist eine der Gruppen eine Kontroll-Gruppe, macht es Sinn, die anderen Gruppen nur mit dieser zu vergleichen, nicht aber untereinander.
+
+
+## Kruskal-Wallis-Test
+
+Als Alternative zu einer einfaktoriellen Varianzanalyse kann man den Kruskal-Wallis-Test nutzen, falls die Daten deutlich nicht-normal sind.
+
+```{r}
+kruskal.test(BMI ~ Education, NHANES)
+```
+
+
+## Dunn-Test
+
+Ist der Kruskal-Wallis-Test signifikant, führt man einen Dunn-Test für multiple Vergleiche als Post-Hoc-Test durch.
+
+```{r}
+FSA::dunnTest(BMI ~ Education, NHANES, method = "bh")
+```
+

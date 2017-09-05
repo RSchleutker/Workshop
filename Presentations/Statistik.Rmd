@@ -1,0 +1,484 @@
+---
+title: "Statistik mit R"
+author: "Raphael Schleutker und Hannah Schmitz"
+date: "7. Oktober 2017"
+css: style.css
+output: 
+  ioslides_presentation: 
+    highlight: kate
+    logo: ./Figures/wwu.svg
+    widescreen: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = TRUE, error = TRUE, fig.height = 3)
+library(tidyverse)
+```
+
+
+# Deskriptive Statistik
+
+## summarise()
+
+`summarise()` nimmt (einen gruppierten) Datensatz und berechnet daraus zusammenfassende Werte:
+
+>- Zentrale Tendenzen (Arithmetisches Mittel, Median, Modus).
+>- Verteilungsmaße (Standardfehler, Varianz).
+>- Konfidenzintervalle
+>- ...
+
+***
+
+```{r, message=FALSE, warning=FALSE}
+Diameter <- read_csv("../Exercises/Diameter/Diameter.csv")
+
+head(Diameter)
+```
+
+
+## Zentrale Tendenz
+
+Gegebenenfalls gruppiert man seine Daten und fasst diese dann zusammen.
+
+```{r}
+DiameterAnalysis <- Diameter %>%
+  group_by(Species, BirdID, Group) %>%
+  summarise(Count = n(),
+            Mean_Diameter = mean(`Length [um]`))
+```
+
+
+***
+
+```{r}
+head(DiameterAnalysis)
+```
+
+***
+
+Außerdem möglich:
+
+>- `median()`: Der Median.
+>- `DescTools::Mode()`: Der häufigste Wert (sinnvoll für kategorische Werte).
+>- `DescTools::Gmean()`: Der geometrische Mittelwert.
+>- `DescTools::Hmean()`: Der harmonische Mittelwert.
+
+
+## Variation
+
+```{r}
+DiameterAnalysis <- Diameter %>%
+  group_by(Species, BirdID, Group) %>%
+  summarise(Count = n(),
+            Mean_Diameter = mean(`Length [um]`),
+            SD_Diameter = sd(`Length [um]`))
+```
+
+`var()` geht natürlich auch.
+
+***
+
+```{r}
+head(DiameterAnalysis)
+```
+
+
+# Statistische Tests
+
+## Doch zuvor etwas Grundsätzliches
+
+Die Statistik sollte nicht erst **nach** einem Experiment beginnen, sondern bereits **davor**.
+
+## Stelle eine biologische Fragestellung auf!
+
+> Hat der Polymorphimus im *Pgm*-Locus einen Einfluss auf den Glycogen-Haushalt?
+
+
+## Formuliere eine biologische Nullhypothese!
+
+> Verschiedene Aminosäuren-Sequenzen beeinflussen **nicht** die biochemischen Eigenschaften der Phosphoglyceratmutase, sodass der Glycogen-Gehalt nicht beeinflusst wird.
+
+**Biologische Alternativ-Hypothese:**
+
+> Verschiedene Aminosäure-Sequenzen beeinflussen die biochemischen Eigenschaften der Phosphoglyceratmutase, sodass der Glycogen-Gehalt beeinflusst wird.
+
+Im Mittelpunkt steht ein **biologische Prozess**.
+
+
+## Formuliere eine statistische Nullhypothese
+
+> Fliegen mit unterschiedlichen Aminosäure-Sequenzen in der Phosphoglyceratmutase haben den gleichen mittleren Glycogen-Gehalt.
+
+**Statistische Alternativ-Hypothese:**
+
+> Fliegen mit unterschiedlichen Aminosäure-Sequenzen in der Phosphoglyceratmutase haben unterschiedliche mittlere Glycogen-Gehalte.
+
+Im Mittelpunkt stehen hier die **Zahlen**.
+
+
+## Stelle heraus, welche Variablen für das Experiment von Bedeutung sind
+
+In unserem Fall gibt es zwei Variablen:
+
+>1. Der Glycogen-Gehalt
+>2. Die Aminosäure-Sequenz.
+
+
+## Welchen Typus haben die Variablen?
+
+>1. Der Glycogen-Gehalt ist **metrisch**.
+>2. Die Aminosäure-Sequenz ist **nominal**.
+
+
+## Designe das Experiment!
+
+>- Sollen alle Fliegen das gleiche Alter haben?
+>- Sollen alle Fliegen das gleiche Geschlecht haben?
+>- Ergeben sich hierdurch weitere gruppierende Variablen?
+>- Mehr Variablen machen die statistische Auswertung komplizierter und die biologische Aussagekraft i.d.R. schwächer.
+
+
+## Wähle einen statistischen Test
+
+Basierend auf der Anzahl an Variablen, dem Typus der Variablen, der Erfüllung parametrischer Annahmen (gleiche Gruppengrößen, Normalität, homoskedastisch), sollte der bestmögliche Test ausgesucht werden.
+
+**One-Way Anova**
+
+
+## Wenn möglich, führe eine Power-Analyse durch!
+
+Eine Power-Analyse berechnet, wie groß die untersuchten Gruppen mindestens sein müssen, um ein aussagekräftiges Ergebnis zu erhalten.
+
+
+## Führe das Experiment durch
+
+
+
+## Überprüfe deine Messergebnisse
+
+Nachdem die Werte gemessen wurde, sollte man überprüfen, ob sie die Annahmen des gewählten statistischen Tests tatsächlich erfüllen.
+
+Möglicherweise muss man einen anderen, passenderen Test wählen.
+
+
+## Führe den statistischen Test durch
+
+Erst im letzten Schritt geht es darum, den statistischen Test auf seine Daten anzuwenden und die Ergebnisse zu interpretieren.
+
+>- Unterscheiden sich die Glycogen-Gehalte?
+>- Wenn ja, wie stark unterscheiden sie sich?
+>- Ist der Unterschied überhaupt biologisch relevant?
+
+
+
+## Den richtigen statistischen Test finden
+
+
+## Was gilt es zu beachten?
+
+>- Welcher Variablentyp soll getestet werden? **Nominal**, **Ordinal** oder **Metrisch**
+>- Wie viele Gruppen sollen miteinander verglichen werden?
+>- Sind die Beobachtungen unabhängig voneinander?
+>- Falls die Variablen metrisch sind: Sind die Daten **normalverteilt**? Sind die Daten **homoskedastisch** (gleiche SD)? Sind die zu vergleichenden Gruppen **gleich groß**?
+
+
+
+
+
+# Nominale Variablen testen
+
+## Die Idee
+
+Nominale Datenreihen bestehen nicht aus Zahlen, deren Mittelwert und Variation man testen kann. Stattdessen kann man nur die Häufigkeit jedes Werts mit einer erwarteten Häufigkeit vergleichen. Es wird unterschieden zwischen **Goodness-of-Fit-Tests** und **Independence-Tests**.
+
+
+## Goodness-of-Fit Tests
+
+Testen eine beobachtete Häufigkeitsverteilung mit einer theoretischen.
+
+>- Exact Test for Goodness-of-Fit (<1000 Beobachtungen)
+>- G-Test (>1000 Beobachtungen)
+>- $\chi^2$-Test (>1000 Beobachtungen)
+
+## Zunächst muss eine Kontingenztabelle erstellt werden
+
+```{r}
+library(NHANES)
+
+ContingencyTable <- xtabs(~ Gender, NHANES)
+ContingencyTable
+
+prop.table(ContingencyTable)
+```
+
+## Excact Binomial Test for Goodness-of-Fit
+
+Gut geeignet für Datensätze mit weniger als 1000 Beobachtungen und nur zwei Ausprägungen.
+
+```{r}
+binom.test(ContingencyTable, p = 0.5)
+```
+
+## G-Test und $\chi^2$-Test for Goodness-of-Fit
+
+Für viele Beobachtungen und zwei oder mehr Ausprägungen.
+
+```{r}
+chisq.test(ContingencyTable, p = c(0.5, 0.5))
+
+library(DescTools)
+GTest(ContingencyTable, p = c(0.5, 0.5))
+```
+
+***
+
+```{r}
+ContingencyTable <- xtabs(~ Education, NHANES)
+ContingencyTable
+```
+
+***
+
+```{r}
+chisq.test(ContingencyTable)
+GTest(ContingencyTable, p = c(0.06, 0.12, 0.21, 0.31, 0.30))
+```
+
+
+
+## Independence-Tests
+
+Tested ob die Häufigkeiten einer Variable von einer zweiten Variable abhängt.
+
+>- Fisher's exact Test für 2x2 Tabellen
+>- G-Test for Independence
+>- $\chi^2$-Test for Independence
+
+
+## Kontingenztabelle erstellen
+
+```{r}
+ContingencyTable <- xtabs(~ Gender + Diabetes, NHANES)
+ContingencyTable
+prop.table(ContingencyTable)
+```
+
+## Independence-Test durchführen
+
+```{r}
+fisher.test(ContingencyTable)
+```
+
+***
+
+```{r}
+chisq.test(ContingencyTable)
+chisq.test(ContingencyTable, correct = FALSE)
+```
+
+***
+
+```{r}
+GTest(ContingencyTable, correct = "williams")
+GTest(ContingencyTable, correct = "yates")
+```
+
+## Mosaikplots
+
+Kontingenztabellen kann man in Mosaikplots darstellen. Allerdings verlieren diese schnell ihre Übersichtlichkeit.
+
+```{r}
+ContingencyTable <- xtabs(~ Gender + Education + Diabetes, NHANES)
+ContingencyTable
+```
+
+***
+
+```{r}
+mosaicplot(ContingencyTable)
+```
+
+## Mosaikplots in ggplot2
+
+Auch `ggplot2` bietet durch das Erweiterungspaket `ggmosaic` die Möglichkeit, Mosaikplots zu erstellen.
+
+Wenn es interessiert: [ggmosaic](https://cran.r-project.org/web/packages/ggmosaic/vignettes/ggmosaic.html)
+
+
+# Metrische Variablen testen
+
+## Die Idee
+
+Die meisten Tests für metrische Variablen sind parametrisch und stellen daher Anforderungen an die zu untersuchenden Daten:
+
+>- Die Daten müssen **normalverteilt** sein.
+>- Die Daten müssen **homoskedastisch** sein, also die gleiche Standardabweichung besitzen.
+>- Die zu vergleichenden Gruppen müssen gleich groß sein.
+
+
+
+## Abweichungen
+
+Daten weichen häufig von diesen Vorgaben ab, allerdings sind die meisten Tests auch relativ robust dagegen, insbesondere wenn der Stichprobenumfang groß genug ist.
+
+>- Leichte Asymmetrie in der Verteilung werden gut toleriert.
+>- Die Standardabweichungen sollten um nicht mehr als den Faktor 2 voneinander abweichen.
+
+## Was tun, wenn die Daten nicht passen?
+
+Man hat zwei Möglichkeiten, wenn die Daten den Vorgaben absolut nicht entsprechen.
+
+>- Man wählt einen nicht-parametrischen Test.
+>- Man transformiert seine Daten, z.B. logarithmisch (meist besser als nicht-parametrische Tests).
+
+
+## Normalität
+
+Durch Histogramm zu erkennen oder mit einem Test wie dem Shapiro-Wilk-Test.
+
+```{r}
+library(ggplot2)
+
+ggplot(NHANES, aes(BMI)) +
+  geom_histogram(bins = 50, aes(y = ..density..))
+```
+
+***
+
+```{r}
+shapiro.test(sample(NHANES$BMI, 5000))
+```
+
+## BMI transformieren
+
+```{r}
+NHANES <- NHANES %>%
+  mutate(BMI_Log = log2(BMI))
+
+ggplot(NHANES, aes(BMI_Log)) +
+  geom_histogram(bins = 50, aes(y = ..density..))
+```
+
+***
+
+```{r}
+shapiro.test(sample(NHANES$BMI_Log, 5000))
+```
+
+Test ist zwar negativ, aber die Daten können wir dennoch nehmen.
+
+
+## One-Sample T-Test
+
+Man hat eine metrische Variable und möchte sie mit einem vorgegebenen Wert testen.
+
+```{r}
+t.test(NHANES$BMI_Log, mu = 4.69)
+```
+
+## Alternativen
+
+Alternativ kann man testen, ob der Beobachtete Mittelwert höher oder geringer ist als der vorgegebene.
+
+```{r}
+t.test(NHANES$BMI_Log, mu = 4.69, alternative = "less")
+t.test(NHANES$BMI_Log, mu = 4.69, alternative = "greater")
+```
+
+## Two-Sample T-Test
+
+Häufiger möchte man aber eine metrische Variable zwischen zwei Gruppen miteinander vergleichen.
+
+```{r}
+ggplot(NHANES, aes(BMI_Log)) +
+  geom_histogram(bins = 50, aes(y = ..density..)) +
+  facet_wrap(~ Gender)
+```
+
+***
+
+Für den Two-Sample T-Test wählt man ebenfalls `t.test`, benutzt allerdings das formula-Interface der Funktion.
+
+```{r}
+t.test(BMI_Log ~ Gender, NHANES)
+```
+
+
+## One-Way ANOVA
+
+Eine einfaktorielle Varianzanalyse führt man durch, wenn man einen Mittelwert zwischen verschiedenen Gruppen vergleichen möchte. Sogesehen, ist der Two-Sample T-Test eine Sonderform des One-Way ANOVA mit nur zwei Gruppen.
+
+## Grundlegende Statistik
+
+Mit der `summary`-Funktion kann man eine grundlegende Statistik erhalten.
+
+```{r}
+FSA::Summarize(BMI_Log ~ Education, NHANES)
+```
+
+***
+
+```{r}
+ggplot(NHANES, aes(BMI_Log)) +
+  geom_histogram(bins = 50, aes(y = ..density..)) +
+  facet_grid(~ Education)
+```
+
+## Den Test durchführen
+
+```{r}
+oneway.test(BMI_Log ~ Education, NHANES)
+```
+
+## Alternative
+
+Alternativ kann man die Funktion `aov` nutzen und diese mit `summary` zusammenfassen.
+
+```{r}
+summary(aov(BMI_Log ~ Education, NHANES))
+```
+
+
+### Post-Hoc-Test
+
+Eine einfaktorielle Varianzanalyse gibt nur Auskunft darüber, **OB** Unterschiede vorliegen, aber nicht zwischen welchen Gruppen.
+
+Hierzu ist eine Post-Hoc-Analyse notwendig.
+
+## Varianzanalyse durchführen
+
+Man führt zunächst die einfaktorielle Varianzanalyse mit `aov` durch.
+
+```{r}
+Test <- aov(BMI_Log ~ Education, NHANES)
+Test
+```
+
+
+## Man führt eine Post-Hoc-Analyse durch
+
+Anschließend nutzt man das Ergebnis, um einen multiplen Vergleich zwischen den Gruppen durchzuführen. Hierbei nutzen wir die *honest significant differences*-Methode von Tukey.
+
+```{r}
+Comparison <- TukeyHSD(Test)
+```
+
+***
+
+```{r}
+Comparison
+```
+
+
+## Das Ergebnis visualisieren
+
+Das Ergebnis dieses Vergleichs kann man grafisch darstellen.
+
+```{r}
+plot(Comparison)
+```
+
+
+## Achtung
+
+Ist eine der Gruppen eine Kontroll-Gruppe, macht es Sinn, die anderen Gruppen nur mit dieser zu vergleichen, nicht aber untereinander.

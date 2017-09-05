@@ -120,6 +120,17 @@ ggplot(iris, aes(Sepal.Length, Sepal.Width, colour = Species)) +
 )
 ```
 
+## Scales: Farbe
+
+Welche Kriterien sollte man bei der Farbwahl beachten?
+
+>- Farbpaletten sollten eine große Spannweite haben, um feine Unterschiede auflösen zu können.
+>- Farben sollten auch von Personen mit Farbenfehlsichtigkeit unterschieden werden können.
+>- Farben sollten auch im Graustufen-Druck unterscheidbar sein.
+>- Die Farben sollten hübsch sein! :) Im Ernst: Es geht darum, den Leser auf seine Seite zu ziehen, und hübsche Farben wirken professioneller.
+
+>- Diese Kriterien werden von den Farbpaletten aus dem `viridis`-Paket erfüllt!
+
 
 ## Geometric Objects
 

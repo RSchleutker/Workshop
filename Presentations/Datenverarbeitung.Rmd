@@ -26,7 +26,7 @@ Wenn man mehrere Funktionen kombinieren muss, um einen Datensatz aufzubereiten, 
 Data <- gather(RawData, key = "Type", value = "Wert", Spalte1, Spalte2, Spalte3)
 Data <- separate(Data, col = "Spalte", into = c("Teil 1", "Teil 2"))
 
-...
+# ...
 ```
 
 >- Dabei hat man viel Wiederholung.
@@ -114,14 +114,16 @@ Data <- RawData %>%
 
 ## qPCR
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE}
-qPCRAmplification <- read_csv("../Exercises/qPCR/Amplification.csv", trim_ws = TRUE)
+```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.width=10}
+qPCRAmplification <- read_csv("../Exercises/qPCR/Amplification_2.csv", trim_ws = TRUE) %>%
+  mutate_at(vars(Target, Treatment, Minutes), funs(factor(., levels = unique(.)))) %>%
+  dplyr::filter(Replica == 2)
 
-ggplot(qPCRAmplification, aes(Cycle, dRn, group = `Target Name`, colour = `Target Name`)) +
+ggplot(qPCRAmplification, aes(Cycle, dRn, group = Target, colour = Target)) +
   geom_line() +
   geom_hline(yintercept = 0.15) +
-  scale_y_continuous(name = expression(Delta*"Rn"), trans = "log10", labels = comma) +
-  scale_color_discrete(labels = c("GAPDH (e2i2)", "GAPDH (e3i3)", "GAPDH (e4i4)", "p21 (e2i2)", "RPL3 (e9e10)"))
+  facet_grid(. ~ Minutes+Treatment, labeller = label_both) +
+  scale_y_continuous(name = expression(Delta*"Rn"), trans = "log10", labels = comma)
 ```
 
 ## qPCR: Die Schritte
@@ -257,7 +259,9 @@ head(qPCRA)
 ```
 
 Nun haben wir einen sauberen Datensatz mit allen berechneten Werten.
-> Allerdings ist der Datensatz auf mehrere Dateien aufgesplittet und jeder muss exakt gleich bearbeitet werden.
+Allerdings ist der Datensatz auf mehrere Dateien aufgesplittet und jeder muss exakt gleich bearbeitet werden.
+
+NEVER EVER bearbeiten wir jede Datei einzeln per Hand!
 
 
 # purrr - Eine Funktion auf jedes Element eines Vektors oder einer Liste anwenden
@@ -303,14 +307,16 @@ str(qPCR)
 
 Mit der Funktion `bind_rows()` aus `dplyr` kann man Datensätze zeilenweise zusammenfügen.
 
-```{r}
-qPCR <- list.files("./Exercises/qPCR/", pattern = "^[Plate]") %>%
-  map(~ read_delim(paste("./Exercises/qPCR/", .x, sep = ""),
+```{r, message=FALSE}
+qPCR <- list.files("../Exercises/qPCR/", pattern = "^[Plate]") %>%
+  map(~ read_delim(paste("../Exercises/qPCR/", .x, sep = ""),
                    ";", comment = "#", trim_ws = TRUE)) %>%
   bind_rows()
 
 head(qPCR)
 ```
+
+***
 
 Und nun kann man weitermachen wie zuvor.
 

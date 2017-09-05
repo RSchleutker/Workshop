@@ -23,6 +23,8 @@ knitr::opts_chunk$set(echo = TRUE, message = TRUE, error = TRUE)
 behandelt werden. Zusätzlich die allgemeine Struktur und Ablauf klären sowie auf
 die Übungsaufgaben hinweisen -->
 
+## Was ihr lernen werdet!
+
 >- Kurze Einführung in die Nutzung von RStudio
 >- Einführung in die Programmiersprache R
 >- Prinzipien von Datenmanagement
@@ -39,6 +41,7 @@ die Übungsaufgaben hinweisen -->
 >- Netzwerke.
 >- Räumliche Daten und Karten.
 >- Reguläre Ausdrücke.
+>- Modellierung.
 >- Animierte Diagramme.
 >- Wann man welche umfangreichen statistischen Tests durchführen muss.
 
@@ -208,6 +211,54 @@ typeof(c(TRUE, FALSE))
 ```
 
 
+## factors - Kategorische Variablen
+
+Nicht-numerische Variablen in der Datenanalyse sind i.d.R. kategorische Variablen mit einer begrenzten Anzahl an möglichen Ausprägungen. Diese werden in R durch `factors` dargestellt.
+
+>- `factors` sind in R als Integer repräsentiert, welche zusätzlich ein *Label*, also einen Namen haben.
+>- Die Kategorien, die ein `factor` haben kann, werden `levels` genannt. Dies ist also im Prinzip ein anderes Wort für **Kategorie**.
+
+
+## Vorteile von factors
+
+`factors` haben in einigen Situationen Vorteile gegenüber *Character-Strings*:
+
+>- Da `factors` in R als Zahlen repräsentiert werden, haben sie eine Reihenfolge und werden nicht zwangsläufig alphabetisch sortiert.
+>- Eine Kategorische Variable hat mehrere mögliche Ausprägungen (`levels`). Allerdings kommen in einer realen Messung nicht zwangsläufig auch alle Kategorien vor. Dennoch möchte man manchmal auch fehlende Kategorien in einem Diagramm darstellen.
+
+***
+
+`factors` werden durch `factor(x, levels)` erstellt.
+
+```{r}
+BodyColours <- c("Wildtype", "Yellow", "Ebony")
+
+Measurement <- c("Wildtype", "Unknown", "Ebony", "Wildtype", "Ebony", "Ebony", "Ebony")
+Measurement
+
+Measurement <- factor(x = Measurement, levels = BodyColours)
+Measurement
+```
+
+Übergibt man keinen Parameter für `levels`, wird der Wert für `x` hierfür genommen.
+
+***
+
+```{r}
+table(Measurement, useNA = "always")
+
+typeof(Measurement)
+```
+
+```{r, echo=FALSE, fig.height=2.5}
+library(ggplot2)
+
+ggplot(mapping = aes(Measurement)) +
+  geom_bar() +
+  scale_x_discrete(drop = FALSE)
+```
+
+
 ## Listen
 
 Und wenn ich zwei Datentypen in einem Datensatz habe?
@@ -290,7 +341,6 @@ Jedes Argument hat einen Namen, eine Position und i.d.R. einen Standardwert.
 ```{r eval=FALSE}
 help(t.test)
 ```
-
 
 
 ***

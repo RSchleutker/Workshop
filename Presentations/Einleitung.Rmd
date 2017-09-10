@@ -69,7 +69,7 @@ RStudio ist ein Editor, der speziell für die Nutzung mit R entwickelt wurde und
 
 <!-- Oberfläche interaktiv am Beamer zeigen und erklären. -->
 
-Die Oberfläche von RStudio ist in 4 Panes unterteilt.
+<img src="Figures/RStudio.png" style="width:90%;height:90%;">
 
 
 # R, eine erste Einführung

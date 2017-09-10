@@ -11,7 +11,13 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, message = TRUE, error = TRUE, fig.height = 3)
+knitr::opts_chunk$set(
+	echo = TRUE,
+	error = TRUE,
+	fig.height = 3,
+	message = FALSE,
+	warning = FALSE
+)
 library(tidyverse)
 ```
 
@@ -313,6 +319,7 @@ Die meisten Tests für metrische Variablen sind parametrisch und stellen daher A
 
 >- Die Daten müssen **normalverteilt** sein.
 >- Die Daten müssen **homoskedastisch** sein, also die gleiche Standardabweichung besitzen.
+>- Die Beobachtungen müssen unabhängig voneinander sein.
 >- Die zu vergleichenden Gruppen müssen gleich groß sein.
 
 
@@ -376,6 +383,9 @@ Man hat eine metrische Variable und möchte sie mit einem vorgegebenen Wert test
 t.test(NHANES$BMI_Log, mu = 4.69)
 ```
 
+
+
+
 ## Alternativen
 
 Alternativ kann man testen, ob der Beobachtete Mittelwert höher oder geringer ist als der vorgegebene.
@@ -389,6 +399,7 @@ t.test(NHANES$BMI_Log, mu = 4.69, alternative = "less")
 ```{r}
 t.test(NHANES$BMI_Log, mu = 4.69, alternative = "greater")
 ```
+
 
 
 ## Two-Sample T-Test
@@ -406,8 +417,28 @@ ggplot(NHANES, aes(BMI_Log)) +
 Für den Two-Sample T-Test wählt man ebenfalls `t.test`, benutzt allerdings das formula-Interface der Funktion.
 
 ```{r}
+t.test(BMI_Log ~ Gender, NHANES, var.equal = TRUE)
+```
+
+***
+
+```{r}
 t.test(BMI_Log ~ Gender, NHANES)
 ```
+
+
+## Paired Two-Sample T-Test
+
+Man kann für den `t.test` das Argument `paired` auch auf `TRUE` setzen. Einen gepaarten T-Test für zwei Stichproben führt man durch, wenn die Beobachtungen gepaart sind.
+
+Dies ist z.B. der Fall, wenn man Blutwerte von Patienten vor und nach Behandlung misst und miteinander vergleicht, anstatt zwei unabhängige Patientengruppen miteinander zu vergleichen.
+
+Hierbei muss der erste Wert in der ersten Gruppe dem ersten Wert in der zweiten Gruppe entsprechen. In unserem Beispiel müssen sie also vom gleichen Patienten stammen.
+
+
+## Wilcoxon-Signed-Rank-Test
+
+Hat man gepaarte Daten, sind die Differenzen zwischen den Paaren aber nicht normalverteilt, nutzt man statt des Paired Two-Sample T-Test den Wilcoxon-Signed-Rank-Test.
 
 
 ## One-Way ANOVA
@@ -505,5 +536,70 @@ Ist der Kruskal-Wallis-Test signifikant, führt man einen Dunn-Test für multipl
 
 ```{r}
 FSA::dunnTest(BMI ~ Education, NHANES, method = "bh")
+```
+
+
+## Lineare Regression und Korelation
+
+Gibt es einen Zusammenhang zwischen Alter und Puls? Das Alter ist hierbei die unabhängige Variable und der Puls die abhängige Variable.
+
+## Erstmal die Verteilung betrachten
+
+```{r}
+ggplot(NHANES, aes(Age, Pulse)) +
+  geom_point(alpha = .2)
+```
+
+***
+
+```{r}
+ggplot(NHANES, aes(Age, Pulse)) +
+  geom_point(alpha = .2) +
+  geom_smooth(method = "lm")
+```
+
+## Lineare Regression
+
+Nun kann man eine lineare Regression durchführen.
+
+```{r}
+Regression <- lm(Pulse ~ Age, NHANES)
+```
+
+***
+
+```{r}
+summary(Regression)
+```
+
+
+
+***
+
+Es lohnt ein Blick auf die Verteilung der Residuals.
+
+```{r}
+ggplot(mapping = aes(residuals(Regression))) +
+  geom_histogram(bins = 100)
+
+shapiro.test(sample(residuals(Regression), 5000))
+```
+
+
+## Korrelation
+
+
+```{r}
+Correlation <- cor.test(~ Age + Pulse, data = NHANES, method = "pearson")
+Correlation
+```
+
+
+# Session-Infos
+
+***
+
+```{r}
+sessionInfo()
 ```
 

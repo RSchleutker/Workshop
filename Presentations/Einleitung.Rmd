@@ -15,35 +15,13 @@ knitr::opts_chunk$set(echo = TRUE, message = TRUE, error = TRUE)
 ```
 
 
-# Was ihr heute (nicht) lernen werdet
-
-***
+# Zeitplan
 
 <!-- In kurzen Stichpunkten erklären, welche Themen in dem Workshop genau
 behandelt werden. Zusätzlich die allgemeine Struktur und Ablauf klären sowie auf
 die Übungsaufgaben hinweisen -->
 
-## Was ihr lernen werdet!
-
->- Kurze Einführung in die Nutzung von RStudio
->- Einführung in die Programmiersprache R
->- Prinzipien von Datenmanagement
->- Datensätze strukturieren und aufbereiten
->- Datensätze visualisieren
->- Und zwischendurch immerwieder: Good Practice
-
-
-## Was ihr nicht lernen werdet!
-
->- Programmieren.
->- Zeitreihenanalysen.
->- Relationales Datenmanagement.
->- Netzwerke.
->- Räumliche Daten und Karten.
->- Reguläre Ausdrücke.
->- Modellierung.
->- Animierte Diagramme.
->- Wann man welche umfangreichen statistischen Tests durchführen muss.
+***
 
 
 
@@ -102,17 +80,12 @@ a <- 15
 b <- 2
 
 a * b
-```
 
-***
-
-```{r}
 c <- a * b
 
 c
 ```
 
-Das ist ein ziemlich interessantes Prinzip!
 
 
 ## Vektore
@@ -177,17 +150,6 @@ c(1, "A")
 
 
 Wir werden später sehen, wie man diese Einschränkung umgeht.
-
-
-## Numerische Datentypen
-
-<!-- Sollte man diese Auftrennung der Einfachheit lieber raushalten, weil in R sowieso fast alles nur mit Doubles gelöst wird? -->
-
-In R gibt es drei Datentypen, die numerische Werte darstellen:
-
->- **Integer** sind ganzzahlige Werte.
->- **Numeric** sind Dezimalzahlen mit 7 bis 8 Nachkommastellen.
->- **Double** sind Dezimalzahlen mit 15 bis 16 Nachkommastellen.
 
 
 ## Weitere Datentypen
@@ -334,12 +296,20 @@ Jede Funktion hat einen Namen und Argumente, die in Klammern dahinter stehen und
 function_name(argument_1 = value1, argument_2 = value2, ...)
 ```
 
+***
+
+Das ist analog zu Funktionen aus der Mathematik.
+
+$$ f(x) = x^2 $$
+$$ f(x, y) = x^2 + y $$
+
+
 ## Die Argumente
 
 Jedes Argument hat einen Namen, eine Position und i.d.R. einen Standardwert.
 
 ```{r eval=FALSE}
-help(t.test)
+help(mean)
 ```
 
 

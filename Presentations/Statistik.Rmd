@@ -95,99 +95,30 @@ head(DiameterAnalysis)
 
 Die Statistik sollte nicht erst **nach** einem Experiment beginnen, sondern bereits **davor**.
 
-## Stelle eine biologische Fragestellung auf!
+>- Stelle eine biologische Fragestellung auf
+>- Formuliere eine biologische Nullhypothese
+>- Formuliere eine statistische Nullhypothese
+>- Stelle heraus, welche Variablen für das Experiment von Bedeutung sind und welchen Typus sie haben.
+>- Designe das Experiment!
+>- Wähle einen statistischen Test
+>- Führe das Experiment durch
+>- Überprüfe deine Messergebnisse
+>- Führe den statistischen Test durch
 
-> Hat der Polymorphimus im *Pgm*-Locus einen Einfluss auf den Glycogen-Haushalt?
-
-
-## Formuliere eine biologische Nullhypothese!
-
-> Verschiedene Aminosäuren-Sequenzen beeinflussen **nicht** die biochemischen Eigenschaften der Phosphoglyceratmutase, sodass der Glycogen-Gehalt nicht beeinflusst wird.
-
-**Biologische Alternativ-Hypothese:**
-
-> Verschiedene Aminosäure-Sequenzen beeinflussen die biochemischen Eigenschaften der Phosphoglyceratmutase, sodass der Glycogen-Gehalt beeinflusst wird.
-
-Im Mittelpunkt steht ein **biologische Prozess**.
-
-
-## Formuliere eine statistische Nullhypothese
-
-> Fliegen mit unterschiedlichen Aminosäure-Sequenzen in der Phosphoglyceratmutase haben den gleichen mittleren Glycogen-Gehalt.
-
-**Statistische Alternativ-Hypothese:**
-
-> Fliegen mit unterschiedlichen Aminosäure-Sequenzen in der Phosphoglyceratmutase haben unterschiedliche mittlere Glycogen-Gehalte.
-
-Im Mittelpunkt stehen hier die **Zahlen**.
-
-
-## Stelle heraus, welche Variablen für das Experiment von Bedeutung sind
-
-In unserem Fall gibt es zwei Variablen:
-
->1. Der Glycogen-Gehalt
->2. Die Aminosäure-Sequenz.
-
-
-## Welchen Typus haben die Variablen?
-
->1. Der Glycogen-Gehalt ist **metrisch**.
->2. Die Aminosäure-Sequenz ist **nominal**.
-
-
-## Designe das Experiment!
-
->- Sollen alle Fliegen das gleiche Alter haben?
->- Sollen alle Fliegen das gleiche Geschlecht haben?
->- Ergeben sich hierdurch weitere gruppierende Variablen?
->- Mehr Variablen machen die statistische Auswertung komplizierter und die biologische Aussagekraft i.d.R. schwächer.
-
-
-## Wähle einen statistischen Test
-
-Basierend auf der Anzahl an Variablen, dem Typus der Variablen, der Erfüllung parametrischer Annahmen (gleiche Gruppengrößen, Normalität, homoskedastisch), sollte der bestmögliche Test ausgesucht werden.
-
-**One-Way Anova**
-
-
-## Wenn möglich, führe eine Power-Analyse durch!
-
-Eine Power-Analyse berechnet, wie groß die untersuchten Gruppen mindestens sein müssen, um ein aussagekräftiges Ergebnis zu erhalten.
-
-
-## Führe das Experiment durch
-
-
-
-## Überprüfe deine Messergebnisse
-
-Nachdem die Werte gemessen wurde, sollte man überprüfen, ob sie die Annahmen des gewählten statistischen Tests tatsächlich erfüllen.
-
-Möglicherweise muss man einen anderen, passenderen Test wählen.
-
-
-## Führe den statistischen Test durch
+***
 
 Erst im letzten Schritt geht es darum, den statistischen Test auf seine Daten anzuwenden und die Ergebnisse zu interpretieren.
 
->- Unterscheiden sich die Glycogen-Gehalte?
->- Wenn ja, wie stark unterscheiden sie sich?
->- Ist der Unterschied überhaupt biologisch relevant?
+>- Ist der Befund überhaupt biologisch relevant?
 
 
 
 ## Den richtigen statistischen Test finden
 
-
-## Was gilt es zu beachten?
-
 >- Welcher Variablentyp soll getestet werden? **Nominal**, **Ordinal** oder **Metrisch**
 >- Wie viele Gruppen sollen miteinander verglichen werden?
 >- Sind die Beobachtungen unabhängig voneinander?
 >- Falls die Variablen metrisch sind: Sind die Daten **normalverteilt**? Sind die Daten **homoskedastisch** (gleiche SD)? Sind die zu vergleichenden Gruppen **gleich groß**?
-
-
 
 
 
@@ -537,69 +468,3 @@ Ist der Kruskal-Wallis-Test signifikant, führt man einen Dunn-Test für multipl
 ```{r}
 FSA::dunnTest(BMI ~ Education, NHANES, method = "bh")
 ```
-
-
-## Lineare Regression und Korelation
-
-Gibt es einen Zusammenhang zwischen Alter und Puls? Das Alter ist hierbei die unabhängige Variable und der Puls die abhängige Variable.
-
-## Erstmal die Verteilung betrachten
-
-```{r}
-ggplot(NHANES, aes(Age, Pulse)) +
-  geom_point(alpha = .2)
-```
-
-***
-
-```{r}
-ggplot(NHANES, aes(Age, Pulse)) +
-  geom_point(alpha = .2) +
-  geom_smooth(method = "lm")
-```
-
-## Lineare Regression
-
-Nun kann man eine lineare Regression durchführen.
-
-```{r}
-Regression <- lm(Pulse ~ Age, NHANES)
-```
-
-***
-
-```{r}
-summary(Regression)
-```
-
-
-
-***
-
-Es lohnt ein Blick auf die Verteilung der Residuals.
-
-```{r}
-ggplot(mapping = aes(residuals(Regression))) +
-  geom_histogram(bins = 100)
-
-shapiro.test(sample(residuals(Regression), 5000))
-```
-
-
-## Korrelation
-
-
-```{r}
-Correlation <- cor.test(~ Age + Pulse, data = NHANES, method = "pearson")
-Correlation
-```
-
-
-# Session-Infos
-
-***
-
-```{r}
-sessionInfo()
-```
-

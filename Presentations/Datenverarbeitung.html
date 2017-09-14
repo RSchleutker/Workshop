@@ -366,6 +366,25 @@ head(qPCRA)</pre>
 ## 5    A5       3h         -   CDH1 24.61910  9.558548 -1.4289713 2.692547
 ## 6    A6       4h         -   CDH1 24.76295  9.470646 -1.5168734 2.861702</pre>
 
+</article></slide><slide class=''><hgroup><h2></h2></hgroup><article >
+
+<pre class = 'prettyprint lang-r'>qPCRA[qPCRA$Target == &quot;RPL3&quot;, ]</pre>
+
+<pre >## # A tibble: 24 x 8
+##     Well Duration Treatment Target       Ct   dCt  ddCt    RQ
+##    &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;  &lt;chr&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+##  1    D1       0h         -   RPL3 15.29825     0     0     1
+##  2    D2     0.5h         -   RPL3 15.00502     0     0     1
+##  3    D3       1h         -   RPL3 14.67434     0     0     1
+##  4    D4       2h         -   RPL3 15.20005     0     0     1
+##  5    D5       3h         -   RPL3 15.06055     0     0     1
+##  6    D6       4h         -   RPL3 15.29231     0     0     1
+##  7    D7       5h         -   RPL3 14.96121     0     0     1
+##  8    D8       6h         -   RPL3 15.53528     0     0     1
+##  9    D9       7h         -   RPL3 15.85312     0     0     1
+## 10   D10       8h         -   RPL3 15.57670     0     0     1
+## # ... with 14 more rows</pre>
+
 </article></slide><slide class=''><hgroup><h2>Beobachtungen entfernen - filter()</h2></hgroup><article  id="beobachtungen-entfernen---filter">
 
 <p>RPL3 ist das Housekeeping-Gen. Es sollte daher zum Schluss herausgefiltert werden.</p>

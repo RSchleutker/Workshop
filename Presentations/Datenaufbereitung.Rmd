@@ -67,7 +67,7 @@ Saubere Daten sind durch drei Merkmale gekennzeichnet:
 
 >- Eine Spalte enthält mehrere Variablen. Unter Biologen besonders beliebt: Alter und Geschlecht in eine Spalte schreiben.
 >- Eine Variable ist über mehrere Spalten verstreut. Vergleichsweise selten. Kommt z.B. bei Datumsangaben vor (Tag, Monat, Jahr).
->- Spaltennamen sind eigentlich Werte. Häufig z.B. bei Jahren. Kann als Zusammenfassung für Menschen hilfreich sein, ist für die Analyse aber störend.
+>- Spaltennamen sind eigentlich Werte. Häufig z.B. bei Jahren. Kann als Zusammenfassung für Menschen hilfreich sein (Kontingenztabelle), ist für die Analyse aber störend.
 >- Eine Beobachtung ist über mehrere Zeilen verstreut. Kommt z.B. vor, wenn man zwei Parameter von einem Objekt misst und dafür zwei Zeilen anlegt.
 
 
@@ -100,7 +100,9 @@ head(Tumor_Raw)
 Die Funktion `separate()` trennt eine Spalte in zwei Spalten auf. Standardmäßig wird jedes nicht-alphanumerische Zeichen als Separator interpretiert.
 
 ```{r}
-Tumor <- separate(Tumor_Raw, `Age/Gender`, c("Age", "Gender"), convert = TRUE)
+Tumor <- separate(data = Tumor_Raw,
+                  col = `Age/Gender`, into = c("Age", "Gender"),
+                  convert = TRUE)
 
 head(Tumor)
 ```
@@ -124,7 +126,10 @@ head(AirqualityDirty)
 Variablen kann man mit der `unite()` Funktion miteinander verbinden.
 
 ```{r}
-AirqualityTidy <- unite(AirqualityDirty, Date, Day, Month, Year, sep = "-")
+AirqualityTidy <- unite(data = AirqualityDirty,
+                        col = Date,
+                        Day, Month, Year,
+                        sep = "-")
 
 head(AirqualityTidy)
 ```
@@ -156,7 +161,9 @@ head(Leishmaniose_Raw)
 Dies kann man mit der `gather()` Funktion erreichen.
 
 ```{r}
-Leishmaniose <- gather(Leishmaniose_Raw, "Year", "Cases", 2:13)
+Leishmaniose <- gather(data = Leishmaniose_Raw, 
+                       key = "Year", value = "Cases",
+                       2:13)
 
 head(Leishmaniose)
 ```
@@ -177,13 +184,19 @@ MyeloidSpread <- survival::myeloid %>%
 head(MyeloidSpread)
 ```
 
+* *txtime*: time to hematropetic stem cell transplant
+* *crtime*: time to complete response
+* *rltime*: time to relapse of disease
+
 
 ***
 
 Die `spread()` Funktion macht aus einer Variable mehrere Spalten.
 
 ```{r}
-MyeloidTidy <- spread(MyeloidSpread, Type, Days, convert = TRUE)
+MyeloidTidy <- spread(data = MyeloidSpread,
+                      key = Type, value = Days,
+                      convert = TRUE)
 
 head(MyeloidTidy)
 ```

@@ -70,10 +70,9 @@ Man kann selbstverständlich auch komplexere Ausdrücke eingeben.
 15 * 31 - 4^3
 ```
 
+Einen Taschenrechner hat aber schon jeder.
 
 ## Objekte
-
-Einen Taschenrechner hat aber schon jeder.
 
 ```{r}
 a <- 15

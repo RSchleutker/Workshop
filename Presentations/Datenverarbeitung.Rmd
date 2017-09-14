@@ -233,6 +233,12 @@ qPCRA <- qPCRA_Raw %>%
 head(qPCRA)
 ```
 
+***
+
+```{r}
+qPCRA[qPCRA$Target == "RPL3", ]
+```
+
 
 ## Beobachtungen entfernen - filter()
 

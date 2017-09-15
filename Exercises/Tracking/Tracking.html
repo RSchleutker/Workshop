@@ -288,239 +288,38 @@ text-align: justify}
 <div id="aufgaben" class="section level2">
 <h2>Aufgaben</h2>
 <ol style="list-style-type: decimal">
-<li>Lies die Datei <em>Tracking.csv</em> ein. Schau dir die Strukturierung der Daten an. Wie sind die Daten organisiert? Formuliere die Schritte, die du zum aufbereiten der Daten brauchst.</li>
+<li>Erstelle für diese Aufgabe mit RStudio ein neues Projekt. Wähle den bestehenden Ordner <em>Tracking</em> als Projektordner aus. Dieser ist nun der sog. Root-Ordner.</li>
+<li>Lies die Datei <em>Tracking.csv</em> ein. Schau dir die Strukturierung der Daten an. Wie sind die Daten organisiert? Formuliere die Schritte, die du zum aufbereiten der Daten brauchst!</li>
+<li>Sobald du die Schritte zum aufbereiten des Datensatzes hast, setze dies in R um!</li>
+<li>Die Variable <code>Larva</code> ist nach der Beispiellösung als numerische Variable gespeichert. Macht dies Sinn? Wandle die Variable in einen Faktor um! Um auf eine bestimmte Spalte eines Datensatzes zuzugreifen und nur diese zu bearbeiten, kann man <code>$</code> direkt nach dem Namen des Datensatzes schreiben und dann die entsprechende Spalte auswählen: <code>TrackingData$Larva</code></li>
+<li>Stört dich etwas an dem Skript? Erscheint es dir elegant genug oder würdest du dir ein übersichtlicheres Skript wünschen?</li>
 </ol>
 </div>
 <div id="losungen" class="section level2">
 <h2>Lösungen</h2>
 <div id="aufgabe-1" class="section level3">
 <h3>Aufgabe 1</h3>
+<p>Gehe auf <em>File &gt; New Project… &gt; Existing Directory</em> und wähle dann über <em>Browse</em> den Ordner <em>Tracking</em> im Aufgabenordner aus. Sobald du auf <em>Create Project</em> geklickt hast, wechselt RStudio direkt in den ausgewählten Ordner. Beachte, dass dies nun der Root-Ordner für dein Projekt ist. Alle Dateipfade sollten nun ausgehend von diesem Ordner mit <code>./</code> gesetzt werden.</p>
+</div>
+<div id="aufgabe-2" class="section level3">
+<h3>Aufgabe 2</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(readr)
 
 RawTracking &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;./Tracking.csv&quot;</span>)
 
-pander<span class="op">::</span><span class="kw">pander</span>(<span class="kw">head</span>(RawTracking))</code></pre></div>
-<table style="width:100%;">
-<caption>Table continues below</caption>
-<colgroup>
-<col width="23%"></col>
-<col width="7%"></col>
-<col width="7%"></col>
-<col width="7%"></col>
-<col width="7%"></col>
-<col width="7%"></col>
-<col width="7%"></col>
-<col width="7%"></col>
-<col width="7%"></col>
-<col width="7%"></col>
-<col width="7%"></col>
-</colgroup>
-<thead>
-<tr class="header">
-<th align="center">Time_Param</th>
-<th align="center">0</th>
-<th align="center">1</th>
-<th align="center">2</th>
-<th align="center">3</th>
-<th align="center">4</th>
-<th align="center">5</th>
-<th align="center">6</th>
-<th align="center">7</th>
-<th align="center">8</th>
-<th align="center">9</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="center">0:acc_dst</td>
-<td align="center">0</td>
-<td align="center">0</td>
-<td align="center">0</td>
-<td align="center">0</td>
-<td align="center">0</td>
-<td align="center">0</td>
-<td align="center">0</td>
-<td align="center">0</td>
-<td align="center">0</td>
-<td align="center">0</td>
-</tr>
-<tr class="even">
-<td align="center">0:acceleration</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-</tr>
-<tr class="odd">
-<td align="center">0:area</td>
-<td align="center">342</td>
-<td align="center">NA</td>
-<td align="center">363</td>
-<td align="center">295</td>
-<td align="center">NA</td>
-<td align="center">395</td>
-<td align="center">334</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-</tr>
-<tr class="even">
-<td align="center">0:bending</td>
-<td align="center">180</td>
-<td align="center">180</td>
-<td align="center">180</td>
-<td align="center">180</td>
-<td align="center">180</td>
-<td align="center">180</td>
-<td align="center">NA</td>
-<td align="center">180</td>
-<td align="center">180</td>
-<td align="center">NA</td>
-</tr>
-<tr class="odd">
-<td align="center">0:dst_to_origin</td>
-<td align="center">0</td>
-<td align="center">0</td>
-<td align="center">0</td>
-<td align="center">0</td>
-<td align="center">0</td>
-<td align="center">0</td>
-<td align="center">0</td>
-<td align="center">0</td>
-<td align="center">0</td>
-<td align="center">0</td>
-</tr>
-<tr class="even">
-<td align="center">0:go_phase</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-</tr>
-</tbody>
-</table>
-<table style="width:76%;">
-<colgroup>
-<col width="6%"></col>
-<col width="6%"></col>
-<col width="6%"></col>
-<col width="6%"></col>
-<col width="6%"></col>
-<col width="6%"></col>
-<col width="6%"></col>
-<col width="6%"></col>
-<col width="6%"></col>
-<col width="6%"></col>
-<col width="6%"></col>
-</colgroup>
-<thead>
-<tr class="header">
-<th align="center">10</th>
-<th align="center">11</th>
-<th align="center">12</th>
-<th align="center">13</th>
-<th align="center">14</th>
-<th align="center">15</th>
-<th align="center">16</th>
-<th align="center">17</th>
-<th align="center">18</th>
-<th align="center">19</th>
-<th align="center">20</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-</tr>
-<tr class="even">
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-</tr>
-<tr class="odd">
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-</tr>
-<tr class="even">
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-</tr>
-<tr class="odd">
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-</tr>
-<tr class="even">
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-</tr>
-</tbody>
-</table>
+<span class="kw">head</span>(RawTracking)
+## # A tibble: 6 x 22
+##        Time_Param   `0`   `1`   `2`   `3`   `4`   `5`   `6`   `7`   `8`
+##             &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;
+## 1       0:acc_dst     0     0     0     0     0     0     0     0     0
+## 2  0:acceleration    NA    NA    NA    NA    NA    NA    NA    NA    NA
+## 3          0:area   342    NA   363   295    NA   395   334    NA    NA
+## 4       0:bending   180   180   180   180   180   180    NA   180   180
+## 5 0:dst_to_origin     0     0     0     0     0     0     0     0     0
+## 6      0:go_phase    NA    NA    NA    NA    NA    NA    NA    NA    NA
+## # ... with 12 more variables: `9` &lt;int&gt;, `10` &lt;chr&gt;, `11` &lt;chr&gt;,
+## #   `12` &lt;chr&gt;, `13` &lt;chr&gt;, `14` &lt;chr&gt;, `15` &lt;chr&gt;, `16` &lt;chr&gt;,
+## #   `17` &lt;chr&gt;, `18` &lt;chr&gt;, `19` &lt;int&gt;, `20` &lt;chr&gt;</code></pre></div>
 <p>Die Struktur des originalen Datensatzes ist bereits in der Einleitung beschrieben. Wie soll der aufbereitete Datensatz aussehen? Jede Beobachtung besteht aus einem Zeitpunkt, einer Larve sowie die Werte für jeden betrachteten Parameter. Außerdem macht es Sinn, Larven, die keine Werte haben, von vornherein wegzulassen.</p>
 <ol style="list-style-type: decimal">
 <li>Zunächst sollte man nur die Spalten in dem Datensatz behalten, die auch tatsächlich Werte für die Larven beinhalten. Dies trifft in diesem Fall nur für die Larven <strong>0</strong> bis <strong>8</strong>.</li>
@@ -530,412 +329,51 @@ pander<span class="op">::</span><span class="kw">pander</span>(<span class="kw">
 </ol>
 <p>Es wäre nicht unbedingt nötig, gleich am Anfang die Larven <strong>9</strong> bis <strong>20</strong> rauszuschmeißen. Allerdings ist das sinnvoll, da dies den Umfang des Datensatzes stark verringert und dies gerade bei sehr großen Datensätzen enorm viel Rechenzeit spart.</p>
 </div>
-<div id="aufgabe-2" class="section level3">
-<h3>Aufgabe 2</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr)
-<span class="kw">library</span>(tidyr)
-<span class="kw">library</span>(stringr)
+<div id="aufgabe-3" class="section level3">
+<h3>Aufgabe 3</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyr)
 
-TrackingData &lt;-<span class="st"> </span>RawTracking <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">select</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">separate</span>(Time_Param, <span class="kw">c</span>(<span class="st">&quot;Time&quot;</span>, <span class="st">&quot;Parameter&quot;</span>), <span class="dt">sep =</span> <span class="st">&quot;:&quot;</span>, <span class="dt">convert =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">gather</span>(<span class="st">&quot;Larva&quot;</span>, <span class="st">&quot;Value&quot;</span>, <span class="dv">3</span><span class="op">:</span><span class="dv">11</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">spread</span>(Parameter, Value)
+TrackingData &lt;-<span class="st"> </span>RawTracking
+TrackingData &lt;-<span class="st"> </span><span class="kw">separate</span>(TrackingData,
+                         <span class="dt">col =</span> Time_Param, <span class="dt">into =</span> <span class="kw">c</span>(<span class="st">&quot;Time&quot;</span>, <span class="st">&quot;Parameter&quot;</span>),
+                         <span class="dt">sep =</span> <span class="st">&quot;:&quot;</span>, <span class="dt">convert =</span> <span class="ot">TRUE</span>)
+TrackingData &lt;-<span class="st"> </span><span class="kw">gather</span>(TrackingData,
+                       <span class="dt">key =</span> <span class="st">&quot;Larva&quot;</span>, <span class="dt">value =</span> <span class="st">&quot;Value&quot;</span>,
+                       <span class="st">`</span><span class="dt">0</span><span class="st">`</span><span class="op">:</span><span class="st">`</span><span class="dt">20</span><span class="st">`</span>,
+                       <span class="dt">convert =</span> <span class="ot">TRUE</span>)
+TrackingData &lt;-<span class="st"> </span><span class="kw">spread</span>(TrackingData,
+                       <span class="dt">key =</span> Parameter, <span class="dt">value =</span> Value,
+                       <span class="dt">convert =</span> <span class="ot">TRUE</span>)
 
-pander<span class="op">::</span><span class="kw">pander</span>(<span class="kw">head</span>(TrackingData))</code></pre></div>
-<table>
-<caption>Table continues below</caption>
-<colgroup>
-<col width="9%"></col>
-<col width="11%"></col>
-<col width="13%"></col>
-<col width="20%"></col>
-<col width="9%"></col>
-<col width="13%"></col>
-<col width="20%"></col>
-</colgroup>
-<thead>
-<tr class="header">
-<th align="center">Time</th>
-<th align="center">Larva</th>
-<th align="center">acc_dst</th>
-<th align="center">acceleration</th>
-<th align="center">area</th>
-<th align="center">bending</th>
-<th align="center">dst_to_origin</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="center">0</td>
-<td align="center">0</td>
-<td align="center">0</td>
-<td align="center">NA</td>
-<td align="center">342</td>
-<td align="center">180</td>
-<td align="center">0</td>
-</tr>
-<tr class="even">
-<td align="center">0</td>
-<td align="center">1</td>
-<td align="center">0</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">180</td>
-<td align="center">0</td>
-</tr>
-<tr class="odd">
-<td align="center">0</td>
-<td align="center">2</td>
-<td align="center">0</td>
-<td align="center">NA</td>
-<td align="center">363</td>
-<td align="center">180</td>
-<td align="center">0</td>
-</tr>
-<tr class="even">
-<td align="center">0</td>
-<td align="center">3</td>
-<td align="center">0</td>
-<td align="center">NA</td>
-<td align="center">295</td>
-<td align="center">180</td>
-<td align="center">0</td>
-</tr>
-<tr class="odd">
-<td align="center">0</td>
-<td align="center">4</td>
-<td align="center">0</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">180</td>
-<td align="center">0</td>
-</tr>
-<tr class="even">
-<td align="center">0</td>
-<td align="center">5</td>
-<td align="center">0</td>
-<td align="center">NA</td>
-<td align="center">395</td>
-<td align="center">180</td>
-<td align="center">0</td>
-</tr>
-</tbody>
-</table>
-<table>
-<caption>Table continues below</caption>
-<colgroup>
-<col width="15%"></col>
-<col width="12%"></col>
-<col width="12%"></col>
-<col width="16%"></col>
-<col width="26%"></col>
-<col width="17%"></col>
-</colgroup>
-<thead>
-<tr class="header">
-<th align="center">go_phase</th>
-<th align="center">head_x</th>
-<th align="center">head_y</th>
-<th align="center">is_coiled</th>
-<th align="center">is_well_oriented</th>
-<th align="center">left_bended</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="center">NA</td>
-<td align="center">927</td>
-<td align="center">1203</td>
-<td align="center">0</td>
-<td align="center">1</td>
-<td align="center">0</td>
-</tr>
-<tr class="even">
-<td align="center">NA</td>
-<td align="center">1247</td>
-<td align="center">1178</td>
-<td align="center">0</td>
-<td align="center">1</td>
-<td align="center">0</td>
-</tr>
-<tr class="odd">
-<td align="center">NA</td>
-<td align="center">890</td>
-<td align="center">1090</td>
-<td align="center">0</td>
-<td align="center">1</td>
-<td align="center">0</td>
-</tr>
-<tr class="even">
-<td align="center">NA</td>
-<td align="center">598</td>
-<td align="center">1097</td>
-<td align="center">0</td>
-<td align="center">1</td>
-<td align="center">0</td>
-</tr>
-<tr class="odd">
-<td align="center">NA</td>
-<td align="center">1316</td>
-<td align="center">869</td>
-<td align="center">0</td>
-<td align="center">1</td>
-<td align="center">0</td>
-</tr>
-<tr class="even">
-<td align="center">NA</td>
-<td align="center">867</td>
-<td align="center">901</td>
-<td align="center">0</td>
-<td align="center">1</td>
-<td align="center">0</td>
-</tr>
-</tbody>
-</table>
-<table>
-<caption>Table continues below</caption>
-<colgroup>
-<col width="13%"></col>
-<col width="10%"></col>
-<col width="10%"></col>
-<col width="21%"></col>
-<col width="15%"></col>
-<col width="14%"></col>
-<col width="14%"></col>
-</colgroup>
-<thead>
-<tr class="header">
-<th align="center">mom_dst</th>
-<th align="center">mom_x</th>
-<th align="center">mom_y</th>
-<th align="center">mov_direction</th>
-<th align="center">perimeter</th>
-<th align="center">radius_1</th>
-<th align="center">radius_2</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="center">0</td>
-<td align="center">935</td>
-<td align="center">1184</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-</tr>
-<tr class="even">
-<td align="center">0</td>
-<td align="center">1231</td>
-<td align="center">1162</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-</tr>
-<tr class="odd">
-<td align="center">0</td>
-<td align="center">909</td>
-<td align="center">1086</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-</tr>
-<tr class="even">
-<td align="center">0</td>
-<td align="center">614</td>
-<td align="center">1084</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-</tr>
-<tr class="odd">
-<td align="center">0</td>
-<td align="center">1302</td>
-<td align="center">882</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-</tr>
-<tr class="even">
-<td align="center">0</td>
-<td align="center">871</td>
-<td align="center">877</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-</tr>
-</tbody>
-</table>
-<table>
-<caption>Table continues below</caption>
-<colgroup>
-<col width="14%"></col>
-<col width="20%"></col>
-<col width="20%"></col>
-<col width="22%"></col>
-<col width="22%"></col>
-</colgroup>
-<thead>
-<tr class="header">
-<th align="center">radius_3</th>
-<th align="center">right_bended</th>
-<th align="center">spine_length</th>
-<th align="center">spinepoint_1_x</th>
-<th align="center">spinepoint_1_y</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="center">NA</td>
-<td align="center">0</td>
-<td align="center">NA</td>
-<td align="center">933</td>
-<td align="center">1193</td>
-</tr>
-<tr class="even">
-<td align="center">NA</td>
-<td align="center">0</td>
-<td align="center">NA</td>
-<td align="center">1239</td>
-<td align="center">1170</td>
-</tr>
-<tr class="odd">
-<td align="center">NA</td>
-<td align="center">0</td>
-<td align="center">NA</td>
-<td align="center">900</td>
-<td align="center">1089</td>
-</tr>
-<tr class="even">
-<td align="center">NA</td>
-<td align="center">0</td>
-<td align="center">NA</td>
-<td align="center">607</td>
-<td align="center">1090</td>
-</tr>
-<tr class="odd">
-<td align="center">NA</td>
-<td align="center">0</td>
-<td align="center">NA</td>
-<td align="center">1309</td>
-<td align="center">877</td>
-</tr>
-<tr class="even">
-<td align="center">NA</td>
-<td align="center">0</td>
-<td align="center">NA</td>
-<td align="center">869</td>
-<td align="center">888</td>
-</tr>
-</tbody>
-</table>
-<table>
-<caption>Table continues below</caption>
-<colgroup>
-<col width="22%"></col>
-<col width="22%"></col>
-<col width="22%"></col>
-<col width="22%"></col>
-<col width="10%"></col>
-</colgroup>
-<thead>
-<tr class="header">
-<th align="center">spinepoint_2_x</th>
-<th align="center">spinepoint_2_y</th>
-<th align="center">spinepoint_3_x</th>
-<th align="center">spinepoint_3_y</th>
-<th align="center">tail_x</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="center">936</td>
-<td align="center">1184</td>
-<td align="center">941</td>
-<td align="center">1176</td>
-<td align="center">944</td>
-</tr>
-<tr class="even">
-<td align="center">1232</td>
-<td align="center">1161</td>
-<td align="center">1225</td>
-<td align="center">1154</td>
-<td align="center">1219</td>
-</tr>
-<tr class="odd">
-<td align="center">910</td>
-<td align="center">1087</td>
-<td align="center">919</td>
-<td align="center">1085</td>
-<td align="center">927</td>
-</tr>
-<tr class="even">
-<td align="center">615</td>
-<td align="center">1085</td>
-<td align="center">624</td>
-<td align="center">1080</td>
-<td align="center">630</td>
-</tr>
-<tr class="odd">
-<td align="center">1302</td>
-<td align="center">885</td>
-<td align="center">1295</td>
-<td align="center">891</td>
-<td align="center">1288</td>
-</tr>
-<tr class="even">
-<td align="center">870</td>
-<td align="center">877</td>
-<td align="center">875</td>
-<td align="center">865</td>
-<td align="center">879</td>
-</tr>
-</tbody>
-</table>
-<table style="width:26%;">
-<colgroup>
-<col width="12%"></col>
-<col width="13%"></col>
-</colgroup>
-<thead>
-<tr class="header">
-<th align="center">tail_y</th>
-<th align="center">velocity</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="center">1168</td>
-<td align="center">NA</td>
-</tr>
-<tr class="even">
-<td align="center">1147</td>
-<td align="center">NA</td>
-</tr>
-<tr class="odd">
-<td align="center">1082</td>
-<td align="center">NA</td>
-</tr>
-<tr class="even">
-<td align="center">1076</td>
-<td align="center">NA</td>
-</tr>
-<tr class="odd">
-<td align="center">896</td>
-<td align="center">NA</td>
-</tr>
-<tr class="even">
-<td align="center">856</td>
-<td align="center">NA</td>
-</tr>
-</tbody>
-</table>
+<span class="kw">head</span>(TrackingData)
+## # A tibble: 6 x 32
+##    Time Larva acc_dst acceleration  area bending dst_to_origin go_phase
+##   &lt;int&gt; &lt;int&gt;   &lt;int&gt;        &lt;int&gt; &lt;int&gt;   &lt;int&gt;         &lt;int&gt;    &lt;int&gt;
+## 1     0     0       0           NA   342     180             0       NA
+## 2     0     1       0           NA    NA     180             0       NA
+## 3     0     2       0           NA   363     180             0       NA
+## 4     0     3       0           NA   295     180             0       NA
+## 5     0     4       0           NA    NA     180             0       NA
+## 6     0     5       0           NA   395     180             0       NA
+## # ... with 24 more variables: head_x &lt;int&gt;, head_y &lt;int&gt;, is_coiled &lt;int&gt;,
+## #   is_well_oriented &lt;int&gt;, left_bended &lt;int&gt;, mom_dst &lt;int&gt;, mom_x &lt;int&gt;,
+## #   mom_y &lt;int&gt;, mov_direction &lt;int&gt;, perimeter &lt;lgl&gt;, radius_1 &lt;int&gt;,
+## #   radius_2 &lt;int&gt;, radius_3 &lt;int&gt;, right_bended &lt;int&gt;,
+## #   spine_length &lt;int&gt;, spinepoint_1_x &lt;int&gt;, spinepoint_1_y &lt;int&gt;,
+## #   spinepoint_2_x &lt;int&gt;, spinepoint_2_y &lt;int&gt;, spinepoint_3_x &lt;int&gt;,
+## #   spinepoint_3_y &lt;int&gt;, tail_x &lt;int&gt;, tail_y &lt;int&gt;, velocity &lt;int&gt;</code></pre></div>
+</div>
+<div id="aufgabe-4" class="section level3">
+<h3>Aufgabe 4</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">TrackingData<span class="op">$</span>Larva &lt;-<span class="st"> </span><span class="kw">factor</span>(TrackingData<span class="op">$</span>Larva)
+
+<span class="kw">head</span>(TrackingData<span class="op">$</span>Larva)
+## [1] 0 1 2 3 4 5
+## Levels: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20</code></pre></div>
+</div>
+<div id="aufgabe-5" class="section level3">
+<h3>Aufgabe 5</h3>
+<p>Ehrlich gesagt, ist es doch etwas nervig, dass man zu Beginn jeder Zeile dem Variablennamen <code>TrackingData</code> den neuen, modifizierten Datensatz zuweisen muss, um dann diesen modifizierten Datensatz wieder in die nächsten Funktion einzusetzen. Das bedeutet viel Tipperei und Wiederholung und macht das Skript außerdem zunehmend unübersichtlicher. Nach der Mittagspause wird es daher darum gehen, wie man ein solches Skript wesentlich eleganter schreiben kann.</p>
 </div>
 </div>
 

@@ -37,19 +37,27 @@ Bei dem Datensatz handelt es sich um Tracking-Daten, die von *Drosophila*-Larven
 
 ## Aufgaben
 
-1. Lies die Datei *Tracking.csv* ein. Schau dir die Strukturierung der Daten an. Wie sind die Daten organisiert? Formuliere die Schritte, die du zum aufbereiten der Daten brauchst.
+1. Erstelle für diese Aufgabe mit RStudio ein neues Projekt. Wähle den bestehenden Ordner *Tracking* als Projektordner aus. Dieser ist nun der sog. Root-Ordner.
+2. Lies die Datei *Tracking.csv* ein. Schau dir die Strukturierung der Daten an. Wie sind die Daten organisiert? Formuliere die Schritte, die du zum aufbereiten der Daten brauchst!
+3. Sobald du die Schritte zum aufbereiten des Datensatzes hast, setze dies in R um!
+4. Die Variable `Larva` ist nach der Beispiellösung als numerische Variable gespeichert. Macht dies Sinn? Wandle die Variable in einen Faktor um! Um auf eine bestimmte Spalte eines Datensatzes zuzugreifen und nur diese zu bearbeiten, kann man `$` direkt nach dem Namen des Datensatzes schreiben und dann die entsprechende Spalte auswählen: `TrackingData$Larva`
+5. Stört dich etwas an dem Skript? Erscheint es dir elegant genug oder würdest du dir ein übersichtlicheres Skript wünschen?
 
 
 ## Lösungen
 
 ### Aufgabe 1
 
+Gehe auf *File > New Project... > Existing Directory* und wähle dann über *Browse* den Ordner *Tracking* im Aufgabenordner aus. Sobald du auf *Create Project* geklickt hast, wechselt RStudio direkt in den ausgewählten Ordner. Beachte, dass dies nun der Root-Ordner für dein Projekt ist. Alle Dateipfade sollten nun ausgehend von diesem Ordner mit `./` gesetzt werden.
+
+### Aufgabe 2
+
 ```{r}
 library(readr)
 
 RawTracking <- read_csv("./Tracking.csv")
 
-pander::pander(head(RawTracking))
+head(RawTracking)
 ```
 
 Die Struktur des originalen Datensatzes ist bereits in der Einleitung beschrieben. Wie soll der aufbereitete Datensatz aussehen? Jede Beobachtung besteht aus einem Zeitpunkt, einer Larve sowie die Werte für jeden betrachteten Parameter. Außerdem macht es Sinn, Larven, die keine Werte haben, von vornherein wegzulassen.
@@ -61,19 +69,36 @@ Die Struktur des originalen Datensatzes ist bereits in der Einleitung beschriebe
 
 Es wäre nicht unbedingt nötig, gleich am Anfang die Larven **9** bis **20** rauszuschmeißen. Allerdings ist das sinnvoll, da dies den Umfang des Datensatzes stark verringert und dies gerade bei sehr großen Datensätzen enorm viel Rechenzeit spart.
 
-### Aufgabe 2
+### Aufgabe 3
 
 ```{r}
-library(dplyr)
 library(tidyr)
-library(stringr)
 
-TrackingData <- RawTracking %>%
-  select(1:10) %>%
-  separate(Time_Param, c("Time", "Parameter"), sep = ":", convert = TRUE) %>%
-  gather("Larva", "Value", 3:11) %>%
-  spread(Parameter, Value)
+TrackingData <- RawTracking
+TrackingData <- separate(TrackingData,
+                         col = Time_Param, into = c("Time", "Parameter"),
+                         sep = ":", convert = TRUE)
+TrackingData <- gather(TrackingData,
+                       key = "Larva", value = "Value",
+                       `0`:`20`,
+                       convert = TRUE)
+TrackingData <- spread(TrackingData,
+                       key = Parameter, value = Value,
+                       convert = TRUE)
 
-pander::pander(head(TrackingData))
+head(TrackingData)
 ```
 
+### Aufgabe 4
+
+```{r}
+TrackingData$Larva <- factor(TrackingData$Larva)
+
+head(TrackingData$Larva)
+```
+
+
+
+### Aufgabe 5
+
+Ehrlich gesagt, ist es doch etwas nervig, dass man zu Beginn jeder Zeile dem Variablennamen `TrackingData` den neuen, modifizierten Datensatz zuweisen muss, um dann diesen modifizierten Datensatz wieder in die nächsten Funktion einzusetzen. Das bedeutet viel Tipperei und Wiederholung und macht das Skript außerdem zunehmend unübersichtlicher. Nach der Mittagspause wird es daher darum gehen, wie man ein solches Skript wesentlich eleganter schreiben kann.

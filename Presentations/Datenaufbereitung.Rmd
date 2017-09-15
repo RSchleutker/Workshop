@@ -25,7 +25,7 @@ Mittlere und große Analysen sollte man als Projekte strukturieren. RStudio biet
 
 Man kann sich nun entscheiden, einen neuen Ordner zu erstellen oder einen bereits existierenden zu nehmen.
 
-Für Versions-Kontrolle haben wir in diesem Workshop leider keine Zeit :(
+Für Versionskontrolle haben wir in diesem Workshop leider keine Zeit :(
 
 
 ## Worauf man achten sollte.

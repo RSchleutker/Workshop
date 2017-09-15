@@ -23,6 +23,12 @@ die Übungsaufgaben hinweisen -->
 
 ***
 
+* **09:45** Einführung in R mit Übungsaufgaben.
+* **11:00** Datenaufbereitung mit Übungsaufgaben.
+* **12:00** Mittagspause.
+* **13:00** Datenverarbeitung.
+* **14:00** Datenvisualisierung mit Übungsaufgaben.
+* **16:20** Statistik.
 
 
 # RStudio, eine IDE

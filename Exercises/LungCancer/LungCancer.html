@@ -343,10 +343,10 @@ text-align: justify}
 </div>
 <div id="aufgabe-2" class="section level3">
 <h3>Aufgabe 2</h3>
+<p>Fügt man zuerst das teiltransparente Konfidenzintervall hinzu, werden die nachfolgenden Geome darüber gelegt. So werden sie nicht durch das Konfidenzintervall ‘ausgegraut’.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)
 <span class="kw">library</span>(ggkm)
 
-<span class="co"># Fügt man zuerst das teiltransparente Konfidenzintervall hinzu, werden die nachfolgenden Geome darüber gelegt. So werden sie nicht durch das Konfidenzintervall 'ausgegraut'.</span>
 
 <span class="kw">ggplot</span>(lung, <span class="kw">aes</span>(<span class="dt">time =</span> time<span class="op">/</span><span class="dv">365</span>, <span class="dt">status =</span> status)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_kmband</span>() <span class="op">+</span>

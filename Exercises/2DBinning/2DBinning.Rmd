@@ -37,7 +37,7 @@ Fluoreszenz-Durchflusszytometrie basiert auf einer extrem schmalen Kapillare, du
 
 ## Die Aufgaben
 
-1. Lies den Datensatz *FACS.csv* aus dem Aufgabenordner ein und wähle anschließend der Übersicht halber nur die Variablen `FSC` und `SSC` aus. FACS-Daten enthalten häufig extrem viele Randwerte. Filtere daher alle Werte aus, bei denen der Forward-Scatter oder der Side-Scatter kleiner als 1 ist.
+1. Lies den Datensatz *FACS.csv* aus dem Aufgabenordner ein und wähle anschließend der Übersicht halber nur die Variablen `FSC` und `SSC` aus. FACS-Daten enthalten häufig extrem viele Randwerte. Filtere daher alle Werte raus, bei denen der Forward-Scatter oder der Side-Scatter kleiner als 1 ist.
 2. Stelle die Daten zunächst als normales Punktdiagramm dar, indem du `FSC` auf die x-Achse und `SSC` auf die y-Achse mappest. Was hälst du von dem Diagramm?
 3. Rechteckige 2D-Bins werden durch das Geom `geom_bin2d()` bereitgestellt. Hierbei wird die Anzahl an Beobachtungen automatisch auf die Farbe gemapped. Dies muss also nicht explizit angegeben werden. Setze die Anzahl an Bins auf **200**.
 4. Um hexagonale Bins zu erzeugen, wird das Geom `geom_hex()` verwendet, welches ebenso benutzt wird, wie `geom_bin2d()`. Nutze dieses Geom, um hexagonale Bins zu erzeugen. Außerdem ist die Standardmäßige Farbpalette nicht die aussagekräftigste. Verwende stattdessen `scale_fill_viridis()` aus dem `viridis`-Paket.

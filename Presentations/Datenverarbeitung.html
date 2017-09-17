@@ -123,10 +123,17 @@
 
 <p>Wenn man mehrere Funktionen kombinieren muss, um einen Datensatz aufzubereiten, kann das schnell viel Tipperei und Unübersichtlichkeit bedeuten.</p>
 
-<pre class = 'prettyprint lang-r'>Data &lt;- gather(RawData, key = &quot;Type&quot;, value = &quot;Wert&quot;, Spalte1, Spalte2, Spalte3)
-Data &lt;- separate(Data, col = &quot;Spalte&quot;, into = c(&quot;Teil 1&quot;, &quot;Teil 2&quot;))
-
-# ...</pre>
+<pre class = 'prettyprint lang-r'>TrackingData &lt;- RawTracking
+TrackingData &lt;- separate(TrackingData,
+                         col = Time_Param, into = c(&quot;Time&quot;, &quot;Parameter&quot;),
+                         sep = &quot;:&quot;, convert = TRUE)
+TrackingData &lt;- gather(TrackingData,
+                       key = &quot;Larva&quot;, value = &quot;Value&quot;,
+                       `0`:`20`,
+                       convert = TRUE)
+TrackingData &lt;- spread(TrackingData,
+                       key = Parameter, value = Value,
+                       convert = TRUE)</pre>
 
 <ul class = 'build'>
 <li>Dabei hat man viel Wiederholung.</li>
@@ -137,9 +144,10 @@ Data &lt;- separate(Data, col = &quot;Spalte&quot;, into = c(&quot;Teil 1&quot;,
 
 <p>Das Paket <code>magrittr</code> bietet einige Funktionen, um dies zu vereinfachen.</p>
 
-<pre class = 'prettyprint lang-r'>Data &lt;- RawData %&gt;%
-  gather(&quot;Type&quot;, &quot;Wert&quot;, Spalte1, Spalte2, Spalte3) %&gt;%
-  separate(&quot;Spalte&quot;, c(&quot;Teil 1&quot;, &quot;Teil 2&quot;))</pre>
+<pre class = 'prettyprint lang-r'>TrackingData &lt;- RawTracking %&gt;%
+  separate(Time_Param, c(&quot;Time&quot;, &quot;Parameter&quot;), sep = &quot;:&quot;, convert = TRUE) %&gt;%
+  gather(&quot;Larva&quot;, &quot;Value&quot;, `0`:`20`, convert = TRUE) %&gt;%
+  spread(Parameter, Value, convert = TRUE)</pre>
 
 <blockquote>
 <p><code>%&gt;%</code> ist eine sog. <strong>Infix</strong>-Funktion.</p>
@@ -192,9 +200,10 @@ Data &lt;- separate(Data, col = &quot;Spalte&quot;, into = c(&quot;Teil 1&quot;,
 
 </article></slide><slide class=''><hgroup><h2></h2></hgroup><article >
 
-<pre class = 'prettyprint lang-r'>Data &lt;- RawData %&gt;%
-  gather(&quot;Type&quot;, &quot;Wert&quot;, Spalte1, Spalte2, Spalte3) %&gt;%
-  separate(&quot;Spalte&quot;, c(&quot;Teil 1&quot;, &quot;Teil 2&quot;))</pre>
+<pre class = 'prettyprint lang-r'>TrackingData &lt;- RawTracking %&gt;%
+  separate(Time_Param, c(&quot;Time&quot;, &quot;Parameter&quot;), sep = &quot;:&quot;, convert = TRUE) %&gt;%
+  gather(&quot;Larva&quot;, &quot;Value&quot;, `0`:`20`, convert = TRUE) %&gt;%
+  spread(Parameter, Value, convert = TRUE)</pre>
 
 </article></slide><slide class='segue dark nobackground level1'><hgroup class = 'auto-fadein'><h2>dplyr - Wie man mit seinen Daten rechnet und sie analysiert</h2></hgroup><article  id="dplyr---wie-man-mit-seinen-daten-rechnet-und-sie-analysiert">
 
@@ -227,8 +236,7 @@ Data &lt;- separate(Data, col = &quot;Spalte&quot;, into = c(&quot;Teil 1&quot;,
 </article></slide><slide class=''><hgroup><h2>Den Datensatz einlesen</h2></hgroup><article  id="den-datensatz-einlesen">
 
 <pre class = 'prettyprint lang-r'>qPCRA_Raw &lt;- read_delim(&quot;../Exercises/qPCR/PlateA.csv&quot;,
-                        &quot;;&quot;, escape_double = FALSE,
-                        comment = &quot;#&quot;, trim_ws = TRUE)
+                        &quot;;&quot;, comment = &quot;#&quot;, trim_ws = TRUE)
 
 head(qPCRA_Raw)</pre>
 
@@ -274,19 +282,21 @@ head(qPCRA)</pre>
 <pre class = 'prettyprint lang-r'>qPCRA &lt;- qPCRA_Raw %&gt;%
   select(1:3, Ct) %&gt;%
   rename(Target = `Target Name`) %&gt;%
-  separate(`Sample Name`, c(&quot;Duration&quot;, &quot;Treatment&quot;), sep = &quot; &quot;)
+  separate(`Sample Name`, c(&quot;Duration&quot;, &quot;Treatment&quot;), sep = &quot; &quot;)</pre>
 
-head(qPCRA)</pre>
+<pre >## Error in loadNamespace(name): there is no package called &#39;tidyselect&#39;</pre>
 
-<pre >## # A tibble: 6 x 5
-##    Well Duration Treatment Target       Ct
-##   &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;  &lt;chr&gt;    &lt;dbl&gt;
-## 1    A1       0h         -   CDH1 26.28577
-## 2    A2     0.5h         -   CDH1 25.28917
-## 3    A3       1h         -   CDH1 25.00560
-## 4    A4       2h         -   CDH1 24.63022
-## 5    A5       3h         -   CDH1 24.61910
-## 6    A6       4h         -   CDH1 24.76295</pre>
+<pre class = 'prettyprint lang-r'>head(qPCRA)</pre>
+
+<pre >## # A tibble: 6 x 4
+##    Well `Sample Name` `Target Name`       Ct
+##   &lt;chr&gt;         &lt;chr&gt;         &lt;chr&gt;    &lt;dbl&gt;
+## 1    A1          0h -          CDH1 26.28577
+## 2    A2        0.5h -          CDH1 25.28917
+## 3    A3          1h -          CDH1 25.00560
+## 4    A4          2h -          CDH1 24.63022
+## 5    A5          3h -          CDH1 24.61910
+## 6    A6          4h -          CDH1 24.76295</pre>
 
 </article></slide><slide class=''><hgroup><h2>Beobachtungen gruppieren - group_by()</h2></hgroup><article  id="beobachtungen-gruppieren---group_by">
 
@@ -298,20 +308,21 @@ head(qPCRA)</pre>
   separate(`Sample Name`, c(&quot;Duration&quot;, &quot;Treatment&quot;), sep = &quot; &quot;) %&gt;%
   group_by(Duration, Treatment)</pre>
 
+<pre >## Error in loadNamespace(name): there is no package called &#39;tidyselect&#39;</pre>
+
 </article></slide><slide class=''><hgroup><h2></h2></hgroup><article >
 
 <pre class = 'prettyprint lang-r'>head(qPCRA)</pre>
 
-<pre >## # A tibble: 6 x 5
-## # Groups:   Duration, Treatment [6]
-##    Well Duration Treatment Target       Ct
-##   &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;  &lt;chr&gt;    &lt;dbl&gt;
-## 1    A1       0h         -   CDH1 26.28577
-## 2    A2     0.5h         -   CDH1 25.28917
-## 3    A3       1h         -   CDH1 25.00560
-## 4    A4       2h         -   CDH1 24.63022
-## 5    A5       3h         -   CDH1 24.61910
-## 6    A6       4h         -   CDH1 24.76295</pre>
+<pre >## # A tibble: 6 x 4
+##    Well `Sample Name` `Target Name`       Ct
+##   &lt;chr&gt;         &lt;chr&gt;         &lt;chr&gt;    &lt;dbl&gt;
+## 1    A1          0h -          CDH1 26.28577
+## 2    A2        0.5h -          CDH1 25.28917
+## 3    A3          1h -          CDH1 25.00560
+## 4    A4          2h -          CDH1 24.63022
+## 5    A5          3h -          CDH1 24.61910
+## 6    A6          4h -          CDH1 24.76295</pre>
 
 </article></slide><slide class=''><hgroup><h2>Eine neue Variable berechnen und hinzufügen - mutate()</h2></hgroup><article  id="eine-neue-variable-berechnen-und-hinzufugen---mutate">
 
@@ -324,20 +335,21 @@ head(qPCRA)</pre>
   group_by(Duration, Treatment) %&gt;%
   mutate(dCt = Ct - Ct[Target == &quot;RPL3&quot;])</pre>
 
+<pre >## Error in loadNamespace(name): there is no package called &#39;tidyselect&#39;</pre>
+
 </article></slide><slide class=''><hgroup><h2></h2></hgroup><article >
 
 <pre class = 'prettyprint lang-r'>head(qPCRA)</pre>
 
-<pre >## # A tibble: 6 x 6
-## # Groups:   Duration, Treatment [6]
-##    Well Duration Treatment Target       Ct       dCt
-##   &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;  &lt;chr&gt;    &lt;dbl&gt;     &lt;dbl&gt;
-## 1    A1       0h         -   CDH1 26.28577 10.987519
-## 2    A2     0.5h         -   CDH1 25.28917 10.284153
-## 3    A3       1h         -   CDH1 25.00560 10.331256
-## 4    A4       2h         -   CDH1 24.63022  9.430170
-## 5    A5       3h         -   CDH1 24.61910  9.558548
-## 6    A6       4h         -   CDH1 24.76295  9.470646</pre>
+<pre >## # A tibble: 6 x 4
+##    Well `Sample Name` `Target Name`       Ct
+##   &lt;chr&gt;         &lt;chr&gt;         &lt;chr&gt;    &lt;dbl&gt;
+## 1    A1          0h -          CDH1 26.28577
+## 2    A2        0.5h -          CDH1 25.28917
+## 3    A3          1h -          CDH1 25.00560
+## 4    A4          2h -          CDH1 24.63022
+## 5    A5          3h -          CDH1 24.61910
+## 6    A6          4h -          CDH1 24.76295</pre>
 
 </article></slide><slide class=''><hgroup><h2></h2></hgroup><article >
 
@@ -352,38 +364,31 @@ head(qPCRA)</pre>
   ungroup() %&gt;%
   mutate(RQ = 2^(-ddCt))</pre>
 
+<pre >## Error in loadNamespace(name): there is no package called &#39;tidyselect&#39;</pre>
+
 </article></slide><slide class=''><hgroup><h2></h2></hgroup><article >
 
 <pre class = 'prettyprint lang-r'>head(qPCRA)</pre>
 
-<pre >## # A tibble: 6 x 8
-##    Well Duration Treatment Target       Ct       dCt       ddCt       RQ
-##   &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;  &lt;chr&gt;    &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt;    &lt;dbl&gt;
-## 1    A1       0h         -   CDH1 26.28577 10.987519  0.0000000 1.000000
-## 2    A2     0.5h         -   CDH1 25.28917 10.284153 -0.7033663 1.628300
-## 3    A3       1h         -   CDH1 25.00560 10.331256 -0.6562633 1.575995
-## 4    A4       2h         -   CDH1 24.63022  9.430170 -1.5573492 2.943126
-## 5    A5       3h         -   CDH1 24.61910  9.558548 -1.4289713 2.692547
-## 6    A6       4h         -   CDH1 24.76295  9.470646 -1.5168734 2.861702</pre>
+<pre >## # A tibble: 6 x 4
+##    Well `Sample Name` `Target Name`       Ct
+##   &lt;chr&gt;         &lt;chr&gt;         &lt;chr&gt;    &lt;dbl&gt;
+## 1    A1          0h -          CDH1 26.28577
+## 2    A2        0.5h -          CDH1 25.28917
+## 3    A3          1h -          CDH1 25.00560
+## 4    A4          2h -          CDH1 24.63022
+## 5    A5          3h -          CDH1 24.61910
+## 6    A6          4h -          CDH1 24.76295</pre>
 
 </article></slide><slide class=''><hgroup><h2></h2></hgroup><article >
 
 <pre class = 'prettyprint lang-r'>qPCRA[qPCRA$Target == &quot;RPL3&quot;, ]</pre>
 
-<pre >## # A tibble: 24 x 8
-##     Well Duration Treatment Target       Ct   dCt  ddCt    RQ
-##    &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;  &lt;chr&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-##  1    D1       0h         -   RPL3 15.29825     0     0     1
-##  2    D2     0.5h         -   RPL3 15.00502     0     0     1
-##  3    D3       1h         -   RPL3 14.67434     0     0     1
-##  4    D4       2h         -   RPL3 15.20005     0     0     1
-##  5    D5       3h         -   RPL3 15.06055     0     0     1
-##  6    D6       4h         -   RPL3 15.29231     0     0     1
-##  7    D7       5h         -   RPL3 14.96121     0     0     1
-##  8    D8       6h         -   RPL3 15.53528     0     0     1
-##  9    D9       7h         -   RPL3 15.85312     0     0     1
-## 10   D10       8h         -   RPL3 15.57670     0     0     1
-## # ... with 14 more rows</pre>
+<pre >## Warning: Unknown or uninitialised column: &#39;Target&#39;.</pre>
+
+<pre >## # A tibble: 0 x 4
+## # ... with 4 variables: Well &lt;chr&gt;, Sample Name &lt;chr&gt;, Target Name &lt;chr&gt;,
+## #   Ct &lt;dbl&gt;</pre>
 
 </article></slide><slide class=''><hgroup><h2>Beobachtungen entfernen - filter()</h2></hgroup><article  id="beobachtungen-entfernen---filter">
 
@@ -401,19 +406,21 @@ head(qPCRA)</pre>
   mutate(RQ = 2^(-ddCt)) %&gt;%
   dplyr::filter(Target != &quot;RPL3&quot;)</pre>
 
+<pre >## Error in loadNamespace(name): there is no package called &#39;tidyselect&#39;</pre>
+
 </article></slide><slide class=''><hgroup><h2></h2></hgroup><article >
 
 <pre class = 'prettyprint lang-r'>head(qPCRA)</pre>
 
-<pre >## # A tibble: 6 x 8
-##    Well Duration Treatment Target       Ct       dCt       ddCt       RQ
-##   &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;  &lt;chr&gt;    &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt;    &lt;dbl&gt;
-## 1    A1       0h         -   CDH1 26.28577 10.987519  0.0000000 1.000000
-## 2    A2     0.5h         -   CDH1 25.28917 10.284153 -0.7033663 1.628300
-## 3    A3       1h         -   CDH1 25.00560 10.331256 -0.6562633 1.575995
-## 4    A4       2h         -   CDH1 24.63022  9.430170 -1.5573492 2.943126
-## 5    A5       3h         -   CDH1 24.61910  9.558548 -1.4289713 2.692547
-## 6    A6       4h         -   CDH1 24.76295  9.470646 -1.5168734 2.861702</pre>
+<pre >## # A tibble: 6 x 4
+##    Well `Sample Name` `Target Name`       Ct
+##   &lt;chr&gt;         &lt;chr&gt;         &lt;chr&gt;    &lt;dbl&gt;
+## 1    A1          0h -          CDH1 26.28577
+## 2    A2        0.5h -          CDH1 25.28917
+## 3    A3          1h -          CDH1 25.00560
+## 4    A4          2h -          CDH1 24.63022
+## 5    A5          3h -          CDH1 24.61910
+## 6    A6          4h -          CDH1 24.76295</pre>
 
 <p>Nun haben wir einen sauberen Datensatz mit allen berechneten Werten. Allerdings ist der Datensatz auf mehrere Dateien aufgesplittet und jeder muss exakt gleich bearbeitet werden.</p>
 
@@ -442,19 +449,31 @@ str(qPCR)</pre>
 
 <pre class = 'prettyprint lang-r'>qPCR &lt;- list.files(&quot;../Exercises/qPCR/&quot;, pattern = &quot;^[Plate]&quot;)
 
-str(qPCR)</pre>
+qPCR</pre>
 
-<pre >##  chr [1:3] &quot;PlateA.csv&quot; &quot;PlateB.csv&quot; &quot;PlateC.csv&quot;</pre>
+<pre >## [1] &quot;PlateA.csv&quot; &quot;PlateB.csv&quot; &quot;PlateC.csv&quot;</pre>
 
 <p>Mehr zu regulären Ausdrücken unter <a href='http://stringr.tidyverse.org/articles/regular-expressions.html' title=''>http://stringr.tidyverse.org/articles/regular-expressions.html</a>.</p>
+
+</article></slide><slide class=''><hgroup><h2></h2></hgroup><article >
+
+<p><code>map_chr()</code> nimmt einen Character-Vektor, wendet auf jedes Element eine Funktion an und gibt einen Character-Vektor zurück.</p>
+
+<pre class = 'prettyprint lang-r'>qPCR &lt;- list.files(&quot;../Exercises/qPCR/&quot;, pattern = &quot;^[Plate]&quot;) %&gt;%
+  map_chr(~ paste(&quot;../Exercises/qPCR/&quot;, .x, sep = &quot;&quot;))
+
+qPCR</pre>
+
+<pre >## [1] &quot;../Exercises/qPCR/PlateA.csv&quot; &quot;../Exercises/qPCR/PlateB.csv&quot;
+## [3] &quot;../Exercises/qPCR/PlateC.csv&quot;</pre>
 
 </article></slide><slide class=''><hgroup><h2>Jede Datei einlesen</h2></hgroup><article  id="jede-datei-einlesen">
 
 <p><code>map()</code> nimmt einen Vektor und eine Funktion. Die Funktion wird auf jedes Vektor-Element angewandt. Zurück kommt eine Liste mit dem Ergebnis.</p>
 
 <pre class = 'prettyprint lang-r'>qPCR &lt;- list.files(&quot;../Exercises/qPCR/&quot;, pattern = &quot;^[Plate]&quot;) %&gt;%
-  map(~ read_delim(paste(&quot;../Exercises/qPCR/&quot;, .x, sep = &quot;&quot;),
-                   &quot;;&quot;, comment = &quot;#&quot;, trim_ws = TRUE))
+  map_chr(~ paste(&quot;../Exercises/qPCR/&quot;, .x, sep = &quot;&quot;)) %&gt;%
+  map(~ read_delim(.x, &quot;;&quot;, comment = &quot;#&quot;, trim_ws = TRUE))
 
 str(qPCR)</pre>
 
@@ -714,8 +733,8 @@ str(qPCR)</pre>
 <p>Mit der Funktion <code>bind_rows()</code> aus <code>dplyr</code> kann man Datensätze zeilenweise zusammenfügen.</p>
 
 <pre class = 'prettyprint lang-r'>qPCR &lt;- list.files(&quot;../Exercises/qPCR/&quot;, pattern = &quot;^[Plate]&quot;) %&gt;%
-  map(~ read_delim(paste(&quot;../Exercises/qPCR/&quot;, .x, sep = &quot;&quot;),
-                   &quot;;&quot;, comment = &quot;#&quot;, trim_ws = TRUE)) %&gt;%
+  map_chr(~ paste(&quot;../Exercises/qPCR/&quot;, .x, sep = &quot;&quot;)) %&gt;%
+  map(~ read_delim(.x, &quot;;&quot;, comment = &quot;#&quot;, trim_ws = TRUE)) %&gt;%
   bind_rows()
 
 head(qPCR)</pre>

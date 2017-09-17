@@ -31,6 +31,15 @@ die Übungsaufgaben hinweisen -->
 * **16:20** Statistik.
 
 
+## Literatur
+
+* [R for Data Science](http://r4ds.had.co.nz/): Sollte unbedingt jeder lesen, der/die mit R Datenanalyse machen möchte.
+* [ggplot2: Elegant Graphics for Data Analysis](https://www.amazon.de/ggplot2-Elegant-Graphics-Data-Analysis/dp/331924275X/ref=sr_1_1?ie=UTF8&qid=1505585504&sr=8-1&keywords=ggplot2): Gibt einen wesentlich detaillierteren Einblick, wie die Datenvisualisierung mit ggplot2 funktioniert. Nicht unbedingt notwendig, aber dennoch sehr empfehlenswert! Gibt es auch als PDF im Internet, enfach googlen ;).
+* [Reproducible Research with R and R Studio](https://www.amazon.de/Reproducible-Research-Studio-Second-Chapman/dp/1498715370/ref=sr_1_1?s=books-intl-de&ie=UTF8&qid=1505585637&sr=1-1&keywords=reproducible+research+with+r): Möchte man ernsthafte bzw. umfangreichere Datenanalyse mit R betreiben, ist dieses Buch ajf lesenswert. Gibt es auch als PDF im Internet. Einfach googlen.
+* [Handbook of Biological Statistics](http://www.biostathandbook.com/): Gibt einen sehr guten Überblick über Statistik in der Biologie und viele nützliche Informationen.
+* http://rcompanion.org/handbook/ baut praktisch auf dem vorherigen Buch auf und zeigt die Anwendung in R.
+
+
 # RStudio, eine IDE
 
 <!-- Erklären, was RStudio eigentlich ist (Integrierte Entwicklungsumgebung),
@@ -156,15 +165,6 @@ c(1, "A")
 
 Wir werden später sehen, wie man diese Einschränkung umgeht.
 
-
-## Weitere Datentypen
-
-Neben numersichen Daten und Character Strings gibt es noch sog. **Booleans** oder auch **Logische Werte**.
-
->- Diese nehmen einen der beiden Werte TRUE oder FALSE bzw. 1 oder 0 an.
->- Diese logischen Werten sind später interessant, wenn man z.B. das Vorgehen an Bedingungen knüpft.
-
-
 ## Datentypen
 
 Interessiert einen der Datentyp eines Objekts, kann man dies mit `typeof()` herausfinden:
@@ -207,8 +207,6 @@ Measurement <- factor(x = Measurement, levels = BodyColours)
 Measurement
 ```
 
-Übergibt man keinen Parameter für `levels`, wird der Wert für `x` hierfür genommen.
-
 ***
 
 ```{r}
@@ -224,6 +222,51 @@ ggplot(mapping = aes(Measurement)) +
   geom_bar() +
   scale_x_discrete(drop = FALSE)
 ```
+
+
+## Weitere Datentypen
+
+Neben numersichen Daten und Character Strings gibt es noch sog. **Booleans** oder auch **Logische Werte**.
+
+>- Diese nehmen einen der beiden Werte TRUE oder FALSE bzw. 1 oder 0 an.
+>- Diese logischen Werten sind später interessant, wenn man z.B. das Vorgehen an Bedingungen knüpft.
+>- Mit Logicals kann man aus einem Vektor bestimmte Werte extrahieren.
+
+
+## Subsetting
+
+Man kann Elemente eines Vektors mit `[]` und der Positionsangabe bekommen.
+
+```{r}
+Measurement
+
+Measurement[2]
+
+Measurement[c(2, 5, 7)]
+```
+
+## Logical Subsetting
+
+Alternativ kann man auch Logicals nutzen, um bestimmte Werte eines Vektors zu bekommen.
+
+```{r}
+Measurement
+
+Measurement[c(TRUE, FALSE)]
+```
+
+***
+
+Logical Subsetting ist vor allem dann interessant, wenn man nicht ein festes Muster, sondern eine Bedingung vorgibt.
+
+```{r}
+Measurement
+
+Measurement == "Wildtype"
+
+Measurement[Measurement == "Wildtype"]
+```
+
 
 
 ## Listen

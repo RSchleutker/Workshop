@@ -14,58 +14,79 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Vektoren
+## Einleitung
 
-### Aufgaben
+### Der iris-Datensatz
 
-1. Weise einer Variable mit dem Namen **SomeData** einen Vektor mit den Werten von **1** bis **99** zu. Nutze dabei den RStudio-Shortcut für den Assignment-Operator. Außerdem solltest du versuchen, die Werte nicht einzeln und per Hand einzugeben.
-2. Multipliziere jeden Wert aus **SomeData** mit **6,25** und speichere das Ergebnis ebenfalls als **SomeData**.
-3. Lass dir  den **49.** Wert des Vektors ausgeben.
-4. Lass dir **jeden dritten** Wert ausgeben.
-5. Was erwartest du bei dem Ausdruck `TRUE + FALSE` als Antwort von R?
-6. Was erwartest du bei `c(TRUE, 1.23, "Wort")` als Antwort von R? Welchen Datentyp hat der Vektor? Welchen Datentyp hätte ein Vektor bei `c(TRUE, 1.23)`?
+R bietet in dem Kern-Paket `datasets` eine Reihen von Datensätzen, die man zur Übung oder Veranschaulichung nutzen kann. Ein besonders beliebter Datensatz, der häufig in Beispielen genutzt wird, ist der Datensatz `iris`. In diesem sind Breite und Länge der Kelch- und Blütenblätter verschiedener Schwertlilienarten aufgeführt. Bei `iris` handelt es sich um einen data frame.
 
 
-### Lösungen
+### Variablennamen
 
-```{r}
-# 1 Nutze die `:`-Funktion, um eine Datenreihe zu erstellen.
-SomeData <- 1:99
-```
+In R ist man sehr frei bei der Benennung von Variablen, dennoch gibt es einige Einschränkungen. Variablennamen können aus Buchstaben, Zahlen sowie Punkten und Unterstrichen bestehen. Die Namen müssen immer mit einem Buchstaben oder einem Punkt gefolgt von einem Buchstaben beginnen. Leerzeichen sind mit einem Trick zwar möglich, sollten aber unbedingt vermieden werden. Um einen Variablennamen aus mehreren Wörtern zu nutzen, gibt es daher andere Varianten. Entweder man benutzt den sog. **Camelcase**, bei der man die Wörter zusammen und groß schreibt (`irisCopy`). Oder man verwendet statt des Leerzeichens den Unterstrich (`iris_copy`). In R benutzen viele Personen den Camelcase für Datensätze und die Variante mit Unterstrichen für Funktionen.
 
-```{r}
-# 2 Achte darauf, dass Dezimalzahlen durch einen Punkt getrennt werden.
-SomeData <- SomeData * 6.25
-```
 
-```{r}
-# 3 Nutze eckige Klammern, um bestimmte Elemente zu bekommen.
-SomeData[49]
-```
+## Aufgaben
+
+1. Erstelle eine Kopie des `iris`-Datensatzes, indem du einer Variable den Datensatz als Wert zuweist. Benutze den Shortcut von RStudio, um den Zuweisungsoperator `<-` zu schreiben.
+2. Schaue dir den Datensatz an.
+3. Tippe den Variablennamen ein und setze direkt dahinter ein `$`. Was passiert? Wähle ein Element aus der Liste aus und drücke Enter.
+4. Da data frames Spalten und Zeilen haben, benötigt man zum Subsetting auch zwei Werte, die durch ein Komma getrennt sind: `irisCopy[Zeile, Spalte]`. Lässt man einen der Werte leer, erhält man alle Zeilen bzw. Spalten. Für die Spalte kann man anstatt der Position auch den Namen eingeben. Nutze dies, um dir die 49. Zeile anzuzeigen.
+5. Nutze Logical Subsetting, um dir ausschließlich die Daten für die Spezies `versicolor` anzeigen zu lassen.
+6. Berechne mit den Funktionen `mean` und `sd` das arithmetische Mittel und die Standardabweichung der Sepalbreite von `versicolor` und speichere die Ergebnisse jeweils in einer Variable.
+
+
+## Lösungen
+
+### Aufgabe 1
 
 ```{r}
-# 4 Man kann mit logischen Werten ein Muster erstellen, um sich Werte zurückgeben zu lassen. Der Vektor wird so oft wiederholt, bis alle Werte von **SomeData** abgehandelt wurden. Statt `TRUE` und `FALSE` kann man auch kurz `T` und `F` schreiben.
-SomeData[c(T, F, F)]
-```
-
-```{r}
-# 5 `TRUE` wird auch als 1 repräsentiert, `FALSE` hingegen als 0. Daher ist die Rechnung tatsächlich möglich und gibt `1` als Wert zurück.
-TRUE + FALSE
-```
-
-```{r}
-# 6 Der erste Vektor ist ein Character-Vektor, da dies der allgemeinste der drei vorliegenden Elemente ist und die beiden anderen umfasst.
-typeof(c(TRUE, 1.23, "Wort"))
-
-# Der zweite Vektor ist numerisch, da `TRUE` in eine `1` umgewandelt werden kann.
-c(TRUE, 1.23)
-typeof(c(TRUE, 1.23))
+irisCopy <- iris
 ```
 
 
+### Aufgabe 2
 
-## Listen
+Man kann den Datensatz aufrufen, indem man den Variablennamen eintippt und auf Enter drückt. In RStudio bietet es sich aber eher an, im oberen rechten Fenster auf den Namen zu klicken. Alternativ kann man auch die Funktion `View` benutzen.
 
-### Aufgaben
+```{r}
+irisCopy
 
-1. Was ist der Unterschied zwischen Listen zu Vektoren?
+View(irisCopy)
+```
+
+
+### Aufgabe 3
+
+Mit `$` kann man die Spalten eines Datensatzes extrahieren. Man bekommt dann den entsprechenden Vektor als Ergebnis. Dies ist neben `[]` eine weitere Möglichkeit des Subsettings.
+
+```{r}
+irisCopy$Sepal.Width
+```
+
+
+### Aufgabe 4
+
+```{r}
+irisCopy[49, ]
+```
+
+
+### Aufgabe 5
+
+```{r}
+irisCopy[irisCopy$Species == "versicolor", ]
+```
+
+
+### Aufgabe 6
+
+```{r}
+meanSepalVersicolor <- mean(irisCopy[irisCopy$Species == "versicolor", "Sepal.Width"])
+
+sdSepalVersicolor <- sd(irisCopy[irisCopy$Species == "versicolor", "Sepal.Width"])
+
+meanSepalVersicolor
+sdSepalVersicolor
+```
+

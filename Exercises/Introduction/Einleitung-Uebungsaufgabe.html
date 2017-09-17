@@ -266,54 +266,276 @@ div.tocify {
 </div>
 
 
-<div id="vektoren" class="section level2">
-<h2>Vektoren</h2>
-<div id="aufgaben" class="section level3">
-<h3>Aufgaben</h3>
+<div id="einleitung" class="section level2">
+<h2>Einleitung</h2>
+<div id="der-iris-datensatz" class="section level3">
+<h3>Der iris-Datensatz</h3>
+<p>R bietet in dem Kern-Paket <code>datasets</code> eine Reihen von Datensätzen, die man zur Übung oder Veranschaulichung nutzen kann. Ein besonders beliebter Datensatz, der häufig in Beispielen genutzt wird, ist der Datensatz <code>iris</code>. In diesem sind Breite und Länge der Kelch- und Blütenblätter verschiedener Schwertlilienarten aufgeführt. Bei <code>iris</code> handelt es sich um einen data frame.</p>
+</div>
+<div id="variablennamen" class="section level3">
+<h3>Variablennamen</h3>
+<p>In R ist man sehr frei bei der Benennung von Variablen, dennoch gibt es einige Einschränkungen. Variablennamen können aus Buchstaben, Zahlen sowie Punkten und Unterstrichen bestehen. Die Namen müssen immer mit einem Buchstaben oder einem Punkt gefolgt von einem Buchstaben beginnen. Leerzeichen sind mit einem Trick zwar möglich, sollten aber unbedingt vermieden werden. Um einen Variablennamen aus mehreren Wörtern zu nutzen, gibt es daher andere Varianten. Entweder man benutzt den sog. <strong>Camelcase</strong>, bei der man die Wörter zusammen und groß schreibt (<code>irisCopy</code>). Oder man verwendet statt des Leerzeichens den Unterstrich (<code>iris_copy</code>). In R benutzen viele Personen den Camelcase für Datensätze und die Variante mit Unterstrichen für Funktionen.</p>
+</div>
+</div>
+<div id="aufgaben" class="section level2">
+<h2>Aufgaben</h2>
 <ol style="list-style-type: decimal">
-<li>Weise einer Variable mit dem Namen <strong>SomeData</strong> einen Vektor mit den Werten von <strong>1</strong> bis <strong>99</strong> zu. Nutze dabei den RStudio-Shortcut für den Assignment-Operator. Außerdem solltest du versuchen, die Werte nicht einzeln und per Hand einzugeben.</li>
-<li>Multipliziere jeden Wert aus <strong>SomeData</strong> mit <strong>6,25</strong> und speichere das Ergebnis ebenfalls als <strong>SomeData</strong>.</li>
-<li>Lass dir den <strong>49.</strong> Wert des Vektors ausgeben.</li>
-<li>Lass dir <strong>jeden dritten</strong> Wert ausgeben.</li>
-<li>Was erwartest du bei dem Ausdruck <code>TRUE + FALSE</code> als Antwort von R?</li>
-<li>Was erwartest du bei <code>c(TRUE, 1.23, &quot;Wort&quot;)</code> als Antwort von R? Welchen Datentyp hat der Vektor? Welchen Datentyp hätte ein Vektor bei <code>c(TRUE, 1.23)</code>?</li>
+<li>Erstelle eine Kopie des <code>iris</code>-Datensatzes, indem du einer Variable den Datensatz als Wert zuweist. Benutze den Shortcut von RStudio, um den Zuweisungsoperator <code>&lt;-</code> zu schreiben.</li>
+<li>Schaue dir den Datensatz an.</li>
+<li>Tippe den Variablennamen ein und setze direkt dahinter ein <code>$</code>. Was passiert? Wähle ein Element aus der Liste aus und drücke Enter.</li>
+<li>Da data frames Spalten und Zeilen haben, benötigt man zum Subsetting auch zwei Werte, die durch ein Komma getrennt sind: <code>irisCopy[Zeile, Spalte]</code>. Lässt man einen der Werte leer, erhält man alle Zeilen bzw. Spalten. Für die Spalte kann man anstatt der Position auch den Namen eingeben. Nutze dies, um dir die 49. Zeile anzuzeigen.</li>
+<li>Nutze Logical Subsetting, um dir ausschließlich die Daten für die Spezies <code>versicolor</code> anzeigen zu lassen.</li>
+<li>Berechne mit den Funktionen <code>mean</code> und <code>sd</code> das arithmetische Mittel und die Standardabweichung der Sepalbreite von <code>versicolor</code> und speichere die Ergebnisse jeweils in einer Variable.</li>
 </ol>
 </div>
-<div id="losungen" class="section level3">
-<h3>Lösungen</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 1 Nutze die `:`-Funktion, um eine Datenreihe zu erstellen.</span>
-SomeData &lt;-<span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="dv">99</span></code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 2 Achte darauf, dass Dezimalzahlen durch einen Punkt getrennt werden.</span>
-SomeData &lt;-<span class="st"> </span>SomeData <span class="op">*</span><span class="st"> </span><span class="fl">6.25</span></code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 3 Nutze eckige Klammern, um bestimmte Elemente zu bekommen.</span>
-SomeData[<span class="dv">49</span>]</code></pre></div>
-<pre><code>## [1] 306.25</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 4 Man kann mit logischen Werten ein Muster erstellen, um sich Werte zurückgeben zu lassen. Der Vektor wird so oft wiederholt, bis alle Werte von **SomeData** abgehandelt wurden. Statt `TRUE` und `FALSE` kann man auch kurz `T` und `F` schreiben.</span>
-SomeData[<span class="kw">c</span>(T, F, F)]</code></pre></div>
-<pre><code>##  [1]   6.25  25.00  43.75  62.50  81.25 100.00 118.75 137.50 156.25 175.00
-## [11] 193.75 212.50 231.25 250.00 268.75 287.50 306.25 325.00 343.75 362.50
-## [21] 381.25 400.00 418.75 437.50 456.25 475.00 493.75 512.50 531.25 550.00
-## [31] 568.75 587.50 606.25</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 5 `TRUE` wird auch als 1 repräsentiert, `FALSE` hingegen als 0. Daher ist die Rechnung tatsächlich möglich und gibt `1` als Wert zurück.</span>
-<span class="ot">TRUE</span> <span class="op">+</span><span class="st"> </span><span class="ot">FALSE</span></code></pre></div>
-<pre><code>## [1] 1</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 6 Der erste Vektor ist ein Character-Vektor, da dies der allgemeinste der drei vorliegenden Elemente ist und die beiden anderen umfasst.</span>
-<span class="kw">typeof</span>(<span class="kw">c</span>(<span class="ot">TRUE</span>, <span class="fl">1.23</span>, <span class="st">&quot;Wort&quot;</span>))</code></pre></div>
-<pre><code>## [1] &quot;character&quot;</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Der zweite Vektor ist numerisch, da `TRUE` in eine `1` umgewandelt werden kann.</span>
-<span class="kw">c</span>(<span class="ot">TRUE</span>, <span class="fl">1.23</span>)</code></pre></div>
-<pre><code>## [1] 1.00 1.23</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">typeof</span>(<span class="kw">c</span>(<span class="ot">TRUE</span>, <span class="fl">1.23</span>))</code></pre></div>
-<pre><code>## [1] &quot;double&quot;</code></pre>
+<div id="losungen" class="section level2">
+<h2>Lösungen</h2>
+<div id="aufgabe-1" class="section level3">
+<h3>Aufgabe 1</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">irisCopy &lt;-<span class="st"> </span>iris</code></pre></div>
 </div>
+<div id="aufgabe-2" class="section level3">
+<h3>Aufgabe 2</h3>
+<p>Man kann den Datensatz aufrufen, indem man den Variablennamen eintippt und auf Enter drückt. In RStudio bietet es sich aber eher an, im oberen rechten Fenster auf den Namen zu klicken. Alternativ kann man auch die Funktion <code>View</code> benutzen.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">irisCopy</code></pre></div>
+<pre><code>##     Sepal.Length Sepal.Width Petal.Length Petal.Width    Species
+## 1            5.1         3.5          1.4         0.2     setosa
+## 2            4.9         3.0          1.4         0.2     setosa
+## 3            4.7         3.2          1.3         0.2     setosa
+## 4            4.6         3.1          1.5         0.2     setosa
+## 5            5.0         3.6          1.4         0.2     setosa
+## 6            5.4         3.9          1.7         0.4     setosa
+## 7            4.6         3.4          1.4         0.3     setosa
+## 8            5.0         3.4          1.5         0.2     setosa
+## 9            4.4         2.9          1.4         0.2     setosa
+## 10           4.9         3.1          1.5         0.1     setosa
+## 11           5.4         3.7          1.5         0.2     setosa
+## 12           4.8         3.4          1.6         0.2     setosa
+## 13           4.8         3.0          1.4         0.1     setosa
+## 14           4.3         3.0          1.1         0.1     setosa
+## 15           5.8         4.0          1.2         0.2     setosa
+## 16           5.7         4.4          1.5         0.4     setosa
+## 17           5.4         3.9          1.3         0.4     setosa
+## 18           5.1         3.5          1.4         0.3     setosa
+## 19           5.7         3.8          1.7         0.3     setosa
+## 20           5.1         3.8          1.5         0.3     setosa
+## 21           5.4         3.4          1.7         0.2     setosa
+## 22           5.1         3.7          1.5         0.4     setosa
+## 23           4.6         3.6          1.0         0.2     setosa
+## 24           5.1         3.3          1.7         0.5     setosa
+## 25           4.8         3.4          1.9         0.2     setosa
+## 26           5.0         3.0          1.6         0.2     setosa
+## 27           5.0         3.4          1.6         0.4     setosa
+## 28           5.2         3.5          1.5         0.2     setosa
+## 29           5.2         3.4          1.4         0.2     setosa
+## 30           4.7         3.2          1.6         0.2     setosa
+## 31           4.8         3.1          1.6         0.2     setosa
+## 32           5.4         3.4          1.5         0.4     setosa
+## 33           5.2         4.1          1.5         0.1     setosa
+## 34           5.5         4.2          1.4         0.2     setosa
+## 35           4.9         3.1          1.5         0.2     setosa
+## 36           5.0         3.2          1.2         0.2     setosa
+## 37           5.5         3.5          1.3         0.2     setosa
+## 38           4.9         3.6          1.4         0.1     setosa
+## 39           4.4         3.0          1.3         0.2     setosa
+## 40           5.1         3.4          1.5         0.2     setosa
+## 41           5.0         3.5          1.3         0.3     setosa
+## 42           4.5         2.3          1.3         0.3     setosa
+## 43           4.4         3.2          1.3         0.2     setosa
+## 44           5.0         3.5          1.6         0.6     setosa
+## 45           5.1         3.8          1.9         0.4     setosa
+## 46           4.8         3.0          1.4         0.3     setosa
+## 47           5.1         3.8          1.6         0.2     setosa
+## 48           4.6         3.2          1.4         0.2     setosa
+## 49           5.3         3.7          1.5         0.2     setosa
+## 50           5.0         3.3          1.4         0.2     setosa
+## 51           7.0         3.2          4.7         1.4 versicolor
+## 52           6.4         3.2          4.5         1.5 versicolor
+## 53           6.9         3.1          4.9         1.5 versicolor
+## 54           5.5         2.3          4.0         1.3 versicolor
+## 55           6.5         2.8          4.6         1.5 versicolor
+## 56           5.7         2.8          4.5         1.3 versicolor
+## 57           6.3         3.3          4.7         1.6 versicolor
+## 58           4.9         2.4          3.3         1.0 versicolor
+## 59           6.6         2.9          4.6         1.3 versicolor
+## 60           5.2         2.7          3.9         1.4 versicolor
+## 61           5.0         2.0          3.5         1.0 versicolor
+## 62           5.9         3.0          4.2         1.5 versicolor
+## 63           6.0         2.2          4.0         1.0 versicolor
+## 64           6.1         2.9          4.7         1.4 versicolor
+## 65           5.6         2.9          3.6         1.3 versicolor
+## 66           6.7         3.1          4.4         1.4 versicolor
+## 67           5.6         3.0          4.5         1.5 versicolor
+## 68           5.8         2.7          4.1         1.0 versicolor
+## 69           6.2         2.2          4.5         1.5 versicolor
+## 70           5.6         2.5          3.9         1.1 versicolor
+## 71           5.9         3.2          4.8         1.8 versicolor
+## 72           6.1         2.8          4.0         1.3 versicolor
+## 73           6.3         2.5          4.9         1.5 versicolor
+## 74           6.1         2.8          4.7         1.2 versicolor
+## 75           6.4         2.9          4.3         1.3 versicolor
+## 76           6.6         3.0          4.4         1.4 versicolor
+## 77           6.8         2.8          4.8         1.4 versicolor
+## 78           6.7         3.0          5.0         1.7 versicolor
+## 79           6.0         2.9          4.5         1.5 versicolor
+## 80           5.7         2.6          3.5         1.0 versicolor
+## 81           5.5         2.4          3.8         1.1 versicolor
+## 82           5.5         2.4          3.7         1.0 versicolor
+## 83           5.8         2.7          3.9         1.2 versicolor
+## 84           6.0         2.7          5.1         1.6 versicolor
+## 85           5.4         3.0          4.5         1.5 versicolor
+## 86           6.0         3.4          4.5         1.6 versicolor
+## 87           6.7         3.1          4.7         1.5 versicolor
+## 88           6.3         2.3          4.4         1.3 versicolor
+## 89           5.6         3.0          4.1         1.3 versicolor
+## 90           5.5         2.5          4.0         1.3 versicolor
+## 91           5.5         2.6          4.4         1.2 versicolor
+## 92           6.1         3.0          4.6         1.4 versicolor
+## 93           5.8         2.6          4.0         1.2 versicolor
+## 94           5.0         2.3          3.3         1.0 versicolor
+## 95           5.6         2.7          4.2         1.3 versicolor
+## 96           5.7         3.0          4.2         1.2 versicolor
+## 97           5.7         2.9          4.2         1.3 versicolor
+## 98           6.2         2.9          4.3         1.3 versicolor
+## 99           5.1         2.5          3.0         1.1 versicolor
+## 100          5.7         2.8          4.1         1.3 versicolor
+## 101          6.3         3.3          6.0         2.5  virginica
+## 102          5.8         2.7          5.1         1.9  virginica
+## 103          7.1         3.0          5.9         2.1  virginica
+## 104          6.3         2.9          5.6         1.8  virginica
+## 105          6.5         3.0          5.8         2.2  virginica
+## 106          7.6         3.0          6.6         2.1  virginica
+## 107          4.9         2.5          4.5         1.7  virginica
+## 108          7.3         2.9          6.3         1.8  virginica
+## 109          6.7         2.5          5.8         1.8  virginica
+## 110          7.2         3.6          6.1         2.5  virginica
+## 111          6.5         3.2          5.1         2.0  virginica
+## 112          6.4         2.7          5.3         1.9  virginica
+## 113          6.8         3.0          5.5         2.1  virginica
+## 114          5.7         2.5          5.0         2.0  virginica
+## 115          5.8         2.8          5.1         2.4  virginica
+## 116          6.4         3.2          5.3         2.3  virginica
+## 117          6.5         3.0          5.5         1.8  virginica
+## 118          7.7         3.8          6.7         2.2  virginica
+## 119          7.7         2.6          6.9         2.3  virginica
+## 120          6.0         2.2          5.0         1.5  virginica
+## 121          6.9         3.2          5.7         2.3  virginica
+## 122          5.6         2.8          4.9         2.0  virginica
+## 123          7.7         2.8          6.7         2.0  virginica
+## 124          6.3         2.7          4.9         1.8  virginica
+## 125          6.7         3.3          5.7         2.1  virginica
+## 126          7.2         3.2          6.0         1.8  virginica
+## 127          6.2         2.8          4.8         1.8  virginica
+## 128          6.1         3.0          4.9         1.8  virginica
+## 129          6.4         2.8          5.6         2.1  virginica
+## 130          7.2         3.0          5.8         1.6  virginica
+## 131          7.4         2.8          6.1         1.9  virginica
+## 132          7.9         3.8          6.4         2.0  virginica
+## 133          6.4         2.8          5.6         2.2  virginica
+## 134          6.3         2.8          5.1         1.5  virginica
+## 135          6.1         2.6          5.6         1.4  virginica
+## 136          7.7         3.0          6.1         2.3  virginica
+## 137          6.3         3.4          5.6         2.4  virginica
+## 138          6.4         3.1          5.5         1.8  virginica
+## 139          6.0         3.0          4.8         1.8  virginica
+## 140          6.9         3.1          5.4         2.1  virginica
+## 141          6.7         3.1          5.6         2.4  virginica
+## 142          6.9         3.1          5.1         2.3  virginica
+## 143          5.8         2.7          5.1         1.9  virginica
+## 144          6.8         3.2          5.9         2.3  virginica
+## 145          6.7         3.3          5.7         2.5  virginica
+## 146          6.7         3.0          5.2         2.3  virginica
+## 147          6.3         2.5          5.0         1.9  virginica
+## 148          6.5         3.0          5.2         2.0  virginica
+## 149          6.2         3.4          5.4         2.3  virginica
+## 150          5.9         3.0          5.1         1.8  virginica</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">View</span>(irisCopy)</code></pre></div>
 </div>
-<div id="listen" class="section level2">
-<h2>Listen</h2>
-<div id="aufgaben-1" class="section level3">
-<h3>Aufgaben</h3>
-<ol style="list-style-type: decimal">
-<li>Was ist der Unterschied von Listen zu Vektoren?</li>
-</ol>
+<div id="aufgabe-3" class="section level3">
+<h3>Aufgabe 3</h3>
+<p>Mit <code>$</code> kann man die Spalten eines Datensatzes extrahieren. Man bekommt dann den entsprechenden Vektor als Ergebnis. Dies ist neben <code>[]</code> eine weitere Möglichkeit des Subsettings.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">irisCopy<span class="op">$</span>Sepal.Width</code></pre></div>
+<pre><code>##   [1] 3.5 3.0 3.2 3.1 3.6 3.9 3.4 3.4 2.9 3.1 3.7 3.4 3.0 3.0 4.0 4.4 3.9
+##  [18] 3.5 3.8 3.8 3.4 3.7 3.6 3.3 3.4 3.0 3.4 3.5 3.4 3.2 3.1 3.4 4.1 4.2
+##  [35] 3.1 3.2 3.5 3.6 3.0 3.4 3.5 2.3 3.2 3.5 3.8 3.0 3.8 3.2 3.7 3.3 3.2
+##  [52] 3.2 3.1 2.3 2.8 2.8 3.3 2.4 2.9 2.7 2.0 3.0 2.2 2.9 2.9 3.1 3.0 2.7
+##  [69] 2.2 2.5 3.2 2.8 2.5 2.8 2.9 3.0 2.8 3.0 2.9 2.6 2.4 2.4 2.7 2.7 3.0
+##  [86] 3.4 3.1 2.3 3.0 2.5 2.6 3.0 2.6 2.3 2.7 3.0 2.9 2.9 2.5 2.8 3.3 2.7
+## [103] 3.0 2.9 3.0 3.0 2.5 2.9 2.5 3.6 3.2 2.7 3.0 2.5 2.8 3.2 3.0 3.8 2.6
+## [120] 2.2 3.2 2.8 2.8 2.7 3.3 3.2 2.8 3.0 2.8 3.0 2.8 3.8 2.8 2.8 2.6 3.0
+## [137] 3.4 3.1 3.0 3.1 3.1 3.1 2.7 3.2 3.3 3.0 2.5 3.0 3.4 3.0</code></pre>
+</div>
+<div id="aufgabe-4" class="section level3">
+<h3>Aufgabe 4</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">irisCopy[<span class="dv">49</span>, ]</code></pre></div>
+<pre><code>##    Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+## 49          5.3         3.7          1.5         0.2  setosa</code></pre>
+</div>
+<div id="aufgabe-5" class="section level3">
+<h3>Aufgabe 5</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">irisCopy[irisCopy<span class="op">$</span>Species <span class="op">==</span><span class="st"> &quot;versicolor&quot;</span>, ]</code></pre></div>
+<pre><code>##     Sepal.Length Sepal.Width Petal.Length Petal.Width    Species
+## 51           7.0         3.2          4.7         1.4 versicolor
+## 52           6.4         3.2          4.5         1.5 versicolor
+## 53           6.9         3.1          4.9         1.5 versicolor
+## 54           5.5         2.3          4.0         1.3 versicolor
+## 55           6.5         2.8          4.6         1.5 versicolor
+## 56           5.7         2.8          4.5         1.3 versicolor
+## 57           6.3         3.3          4.7         1.6 versicolor
+## 58           4.9         2.4          3.3         1.0 versicolor
+## 59           6.6         2.9          4.6         1.3 versicolor
+## 60           5.2         2.7          3.9         1.4 versicolor
+## 61           5.0         2.0          3.5         1.0 versicolor
+## 62           5.9         3.0          4.2         1.5 versicolor
+## 63           6.0         2.2          4.0         1.0 versicolor
+## 64           6.1         2.9          4.7         1.4 versicolor
+## 65           5.6         2.9          3.6         1.3 versicolor
+## 66           6.7         3.1          4.4         1.4 versicolor
+## 67           5.6         3.0          4.5         1.5 versicolor
+## 68           5.8         2.7          4.1         1.0 versicolor
+## 69           6.2         2.2          4.5         1.5 versicolor
+## 70           5.6         2.5          3.9         1.1 versicolor
+## 71           5.9         3.2          4.8         1.8 versicolor
+## 72           6.1         2.8          4.0         1.3 versicolor
+## 73           6.3         2.5          4.9         1.5 versicolor
+## 74           6.1         2.8          4.7         1.2 versicolor
+## 75           6.4         2.9          4.3         1.3 versicolor
+## 76           6.6         3.0          4.4         1.4 versicolor
+## 77           6.8         2.8          4.8         1.4 versicolor
+## 78           6.7         3.0          5.0         1.7 versicolor
+## 79           6.0         2.9          4.5         1.5 versicolor
+## 80           5.7         2.6          3.5         1.0 versicolor
+## 81           5.5         2.4          3.8         1.1 versicolor
+## 82           5.5         2.4          3.7         1.0 versicolor
+## 83           5.8         2.7          3.9         1.2 versicolor
+## 84           6.0         2.7          5.1         1.6 versicolor
+## 85           5.4         3.0          4.5         1.5 versicolor
+## 86           6.0         3.4          4.5         1.6 versicolor
+## 87           6.7         3.1          4.7         1.5 versicolor
+## 88           6.3         2.3          4.4         1.3 versicolor
+## 89           5.6         3.0          4.1         1.3 versicolor
+## 90           5.5         2.5          4.0         1.3 versicolor
+## 91           5.5         2.6          4.4         1.2 versicolor
+## 92           6.1         3.0          4.6         1.4 versicolor
+## 93           5.8         2.6          4.0         1.2 versicolor
+## 94           5.0         2.3          3.3         1.0 versicolor
+## 95           5.6         2.7          4.2         1.3 versicolor
+## 96           5.7         3.0          4.2         1.2 versicolor
+## 97           5.7         2.9          4.2         1.3 versicolor
+## 98           6.2         2.9          4.3         1.3 versicolor
+## 99           5.1         2.5          3.0         1.1 versicolor
+## 100          5.7         2.8          4.1         1.3 versicolor</code></pre>
+</div>
+<div id="aufgabe-6" class="section level3">
+<h3>Aufgabe 6</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">meanSepalVersicolor &lt;-<span class="st"> </span><span class="kw">mean</span>(irisCopy[irisCopy<span class="op">$</span>Species <span class="op">==</span><span class="st"> &quot;versicolor&quot;</span>, <span class="st">&quot;Sepal.Width&quot;</span>])
+
+sdSepalVersicolor &lt;-<span class="st"> </span><span class="kw">sd</span>(irisCopy[irisCopy<span class="op">$</span>Species <span class="op">==</span><span class="st"> &quot;versicolor&quot;</span>, <span class="st">&quot;Sepal.Width&quot;</span>])
+
+meanSepalVersicolor</code></pre></div>
+<pre><code>## [1] 2.77</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sdSepalVersicolor</code></pre></div>
+<pre><code>## [1] 0.3137983</code></pre>
 </div>
 </div>
 

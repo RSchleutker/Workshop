@@ -52,6 +52,12 @@ Das Paket `dplyr` bietet neben der Funktion `mutate` noch Derivate dieser Funkti
 Manchmal möchte man, wie in diesem Fall, alle Kombinationen zweier Faktoren betrachten. In diesem Datensatz ist es z.B. notwendig, alle Kombinationen der Spalten `Stimulant_1` und `Stimulant_2` zu betrachten. Zu diesem Zweck gibt es die Funktion `interaction`. In diese Funktion werden einfach die Variablen eingesetzt: `interaction(Stimulant_1, Stimulant_2)`. Dieses Konstrukt kann man dann für ein Diagramm auf eine Achse mappen.
 
 
+
+### mapping vs. setting
+
+Bisher haben wir immer davon gesprochen, eine Variable auf eine Achse des Diagramms zu **mappen**. Das bedeutet, dass die Darstellung der geometrischen Objekte, also Punkte, Linien, Boxplots, sich dynamisch mit den Werten der Variable ändert. Dem mapping gegenüber steht das **setting**. Hierbei setzt man einfach einen festen Wert bzw. mehrere feste Werte für eine Achse. Im Gegensatz zum mapping werden diese Befehle nicht innerhalb von `mapping = aes()` gesetzt, sondern als normales Argument für ein Geom. `geom_point(alpha = 0.15)` **setzt** z.B. die Deckkraft für alle Punkte auf 15%. `geom_point(mapping = aes(alpha = Variable)` hingegen **mapped** die Variable `Variable` auf die Achse Transparenz.
+
+
 ## Die Aufgaben
 
 1. Lies den Datensatz zunächst mit dem `readr`-Paket bzw. dem grafischen Interface von RStudio ein.

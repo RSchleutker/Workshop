@@ -289,39 +289,31 @@ Man hat zwei Möglichkeiten, wenn die Daten den Vorgaben absolut nicht entsprech
 >- Man transformiert seine Daten, z.B. logarithmisch. Meist besser als nicht-parametrische Tests aber schwieriger in der Auswertung.
 
 
+## Der Datensatz
+
+```{r}
+head(PlantGrowth)
+```
+
+
+
 ## Normalität
 
 Durch Histogramm zu erkennen oder mit einem Test wie dem Shapiro-Wilk-Test.
+
+* H~0~, dass die Daten normalverteilt sind.
 
 ```{r}
 shapiro.test(PlantGrowth$weight)
 ```
 
-## BMI transformieren
-
-```{r}
-NHANES <- NHANES %>%
-  mutate(BMI_Log = log2(BMI))
-
-ggplot(NHANES, aes(BMI_Log)) +
-  geom_histogram(bins = 50, aes(y = ..density..))
-```
-
-***
-
-```{r}
-shapiro.test(sample(NHANES$BMI_Log, 5000))
-```
-
-Test ist zwar negativ, aber die Daten können wir dennoch nehmen.
-
 
 ## T-Tests
 
 ```{r, echo=FALSE, fig.height=5}
-data <- data.frame(x = seq(-5, 5, 0.001), y = dt(seq(-5, 5, 0.001), 5))
-shade1 <- subset(data, x < qt(0.025, 5))
-shade2 <- subset(data, x > qt(0.975, 5))
+data <- data.frame(x = seq(-5, 5, 0.001), y = dt(seq(-5, 5, 0.001), 29))
+shade1 <- subset(data, x < qt(0.025, 29))
+shade2 <- subset(data, x > qt(0.975, 29))
 
 ggplot(data, aes(x, y)) +
   geom_area(data = shade1, aes(y = y), fill = "grey") +
@@ -336,9 +328,18 @@ ggplot(data, aes(x, y)) +
 Man hat eine metrische Variable und möchte sie mit einem vorgegebenen Wert testen.
 
 ```{r}
-t.test(NHANES$BMI_Log, mu = 4.69)
+t.test(PlantGrowth$weight, mu = 4.85)
 ```
 
+***
+
+```{r, echo=FALSE, fig.height=5}
+ggplot(data, aes(x, y)) +
+  geom_area(data = shade1, aes(y = y), fill = "grey") +
+  geom_area(data = shade2, aes(y = y), fill = "grey") +
+  geom_line() +
+  geom_vline(xintercept = 1.742)
+```
 
 
 ## Alternativen
@@ -346,25 +347,26 @@ t.test(NHANES$BMI_Log, mu = 4.69)
 Alternativ kann man testen, ob der Beobachtete Mittelwert höher oder geringer ist als der vorgegebene (einseitiger Test).
 
 ```{r}
-t.test(NHANES$BMI_Log, mu = 4.69, alternative = "less")
+t.test(PlantGrowth$weight, mu = 4.85, alternative = "less")
 ```
 
 ***
 
 ```{r}
-t.test(NHANES$BMI_Log, mu = 4.69, alternative = "greater")
+t.test(PlantGrowth$weight, mu = 4.85, alternative = "greater")
 ```
 
 ***
 
 ```{r, echo=FALSE, fig.height=5}
-shade3 <- subset(data, x > qt(0.95, 5))
+shade3 <- subset(data, x > qt(0.95, df = 29))
 
 ggplot(data, aes(x, y)) +
   geom_area(data = shade3, aes(y = y), fill = "red", alpha = .5) +
   geom_area(data = shade1, aes(y = y), fill = "grey") +
   geom_area(data = shade2, aes(y = y), fill = "grey") +
-  geom_line()
+  geom_line() +
+  geom_vline(xintercept = 1.742)
 ```
 
 
@@ -373,17 +375,25 @@ ggplot(data, aes(x, y)) +
 
 Häufiger möchte man eine metrische Variable zwischen zwei Gruppen miteinander vergleichen.
 
+## Varianzgleichheit
+
+Mithilfe des Bartlett-Tests kann man die Varianzgleichheit zweier oder mehrerer Gruppen überprüfen.
+
+* H~0~, dass die Gruppen die gleiche Varianz haben.
+
 ```{r}
-ggplot(NHANES, aes(BMI_Log, colour = Gender)) +
-  geom_density()
+bartlett.test(weight ~ group, PlantGrowth)
 ```
 
-***
+
+
+## Der Test
 
 Für den Two-Sample T-Test wählt man ebenfalls `t.test`, benutzt allerdings das formula-Interface der Funktion.
 
 ```{r}
-t.test(BMI_Log ~ Gender, NHANES, var.equal = TRUE)
+t.test(weight ~ group, PlantGrowth, var.equal = TRUE,
+       subset = group != "trt2")
 ```
 
 ***
@@ -391,7 +401,8 @@ t.test(BMI_Log ~ Gender, NHANES, var.equal = TRUE)
 Sind die Varianzen in den beiden Gruppen unterschiedlichen, wählt man den Welch two-sample T-Test.
 
 ```{r}
-t.test(BMI_Log ~ Gender, NHANES)
+t.test(weight ~ group, PlantGrowth,
+       subset = group != "trt2")
 ```
 
 
@@ -434,34 +445,17 @@ Hat man aus vorherigen Experimenten eine verlässliche Schätzung für die Stand
 
 >- Typischerweise sollte die Power eines Tests bei 80% - 90% liegen.
 
-## Beispiel: Power-Analyse
-
->- Der BMI zwischen der Kontroll- und Experimentalgruppe soll mindestens 5 betragen. Da die Standardabweichung in der Bevölkerung bekannt ist und etwa 7 beträgt, ergibt dies eine Effect Size von etwa 0,7.
->- $\alpha$ beträgt 0,05.
->- Die Power soll 90% betragen.
-
 ***
 
 ```{r}
-power.t.test(delta = 0.7, sig.level = 0.05, power = 0.9,
+power.t.test(n = 10, delta = 0.371, sig.level = 0.05, sd = 0.7,
              type = "two.sample", alternative = "two.sided")
 ```
 
 ***
 
-Grundsätzlich ist es schwieriger, kleinere Unterschied festzustellen.
-
 ```{r}
-power.t.test(delta = 0.4, sig.level = 0.05, power = 0.9,
-             type = "two.sample", alternative = "two.sided")
-```
-
-***
-
-Im Umkehrschluss lässt sich auch die Power berechnen, wenn der Stichprobenumfang festliegt und nicht vergrößert werden kann.
-
-```{r}
-power.t.test(n = 28, delta = 0.7, sig.level = 0.05,
+power.t.test(delta = 0.371, sig.level = 0.05, sd = 0.7, power = 0.9,
              type = "two.sample", alternative = "two.sided")
 ```
 

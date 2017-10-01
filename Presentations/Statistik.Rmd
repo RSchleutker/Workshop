@@ -294,16 +294,7 @@ Man hat zwei Möglichkeiten, wenn die Daten den Vorgaben absolut nicht entsprech
 Durch Histogramm zu erkennen oder mit einem Test wie dem Shapiro-Wilk-Test.
 
 ```{r}
-library(ggplot2)
-
-ggplot(NHANES, aes(BMI)) +
-  geom_histogram(bins = 50, aes(y = ..density..))
-```
-
-***
-
-```{r}
-shapiro.test(sample(NHANES$BMI, 5000))
+shapiro.test(PlantGrowth$weight)
 ```
 
 ## BMI transformieren
@@ -323,6 +314,21 @@ shapiro.test(sample(NHANES$BMI_Log, 5000))
 ```
 
 Test ist zwar negativ, aber die Daten können wir dennoch nehmen.
+
+
+## T-Tests
+
+```{r, echo=FALSE, fig.height=5}
+data <- data.frame(x = seq(-5, 5, 0.001), y = dt(seq(-5, 5, 0.001), 5))
+shade1 <- subset(data, x < qt(0.025, 5))
+shade2 <- subset(data, x > qt(0.975, 5))
+
+ggplot(data, aes(x, y)) +
+  geom_area(data = shade1, aes(y = y), fill = "grey") +
+  geom_area(data = shade2, aes(y = y), fill = "grey") +
+  geom_line()
+```
+
 
 
 ## One-Sample T-Test
@@ -349,6 +355,18 @@ t.test(NHANES$BMI_Log, mu = 4.69, alternative = "less")
 t.test(NHANES$BMI_Log, mu = 4.69, alternative = "greater")
 ```
 
+***
+
+```{r, echo=FALSE, fig.height=5}
+shade3 <- subset(data, x > qt(0.95, 5))
+
+ggplot(data, aes(x, y)) +
+  geom_area(data = shade3, aes(y = y), fill = "red", alpha = .5) +
+  geom_area(data = shade1, aes(y = y), fill = "grey") +
+  geom_area(data = shade2, aes(y = y), fill = "grey") +
+  geom_line()
+```
+
 
 
 ## Two-Sample T-Test
@@ -356,9 +374,8 @@ t.test(NHANES$BMI_Log, mu = 4.69, alternative = "greater")
 Häufiger möchte man eine metrische Variable zwischen zwei Gruppen miteinander vergleichen.
 
 ```{r}
-ggplot(NHANES, aes(BMI_Log)) +
-  geom_histogram(bins = 50, aes(y = ..density..)) +
-  facet_wrap(~ Gender)
+ggplot(NHANES, aes(BMI_Log, colour = Gender)) +
+  geom_density()
 ```
 
 ***

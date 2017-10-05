@@ -271,7 +271,7 @@ Wenn es interessiert: [ggmosaic](https://cran.r-project.org/web/packages/ggmosai
 
 # Metrische Variablen testen
 
-## Die Idee
+## Annahmen
 
 Die meisten Tests für metrische Variablen sind parametrisch und stellen daher Anforderungen an die zu untersuchenden Daten:
 
@@ -286,7 +286,6 @@ Die meisten Tests für metrische Variablen sind parametrisch und stellen daher A
 Man hat zwei Möglichkeiten, wenn die Daten den Vorgaben absolut nicht entsprechen.
 
 >- Man wählt einen nicht-parametrischen Test.
->- Man transformiert seine Daten, z.B. logarithmisch. Meist besser als nicht-parametrische Tests aber schwieriger in der Auswertung.
 
 
 ## Der Datensatz
@@ -308,37 +307,72 @@ shapiro.test(PlantGrowth$weight)
 ```
 
 
-## T-Tests
+## Standardfehler
 
-```{r, echo=FALSE, fig.height=5}
+Der **Standardfehler** ist ein Maß für die Streuung **zwischen** den Stichproben.
+
+$$ \frac{\sigma}{\sqrt{n}} $$
+
+* $\sigma$ ist die Standardabweichung der Grundgesamtheit und muss von der Stichprobe geschätzt werden ($s$).
+* $n$ ist der Stichprobenumfang.
+
+
+## t-Tests
+
+t-Tests überprüfen, wie viele Standardfehler der Stichprobenmittelwert von einem Erwartungswert abweicht.
+
+* Als Ergebnis erhält man eine sogenannte t-Statistik.
+
+$$ t = \frac{\overline{X} - \mu}{\frac{\sigma}{\sqrt{n}}} $$
+
+
+## t-Verteilung
+
+```{r, echo=FALSE, fig.height=4}
 data <- data.frame(x = seq(-5, 5, 0.001), y = dt(seq(-5, 5, 0.001), 29))
 shade1 <- subset(data, x < qt(0.025, 29))
 shade2 <- subset(data, x > qt(0.975, 29))
 
-ggplot(data, aes(x, y)) +
+tplot <- ggplot(data, aes(x, y)) +
   geom_area(data = shade1, aes(y = y), fill = "grey") +
   geom_area(data = shade2, aes(y = y), fill = "grey") +
-  geom_line()
+  geom_line() +
+  scale_x_continuous(name = "Standardfehler")
+
+tplot
 ```
 
 
 
-## One-Sample T-Test
+## One-Sample t-Test
 
-Man hat eine metrische Variable und möchte sie mit einem vorgegebenen Wert testen.
+$$ \frac{\overline{X} - \mu}{\frac{\sigma}{\sqrt{n}}} $$
 
 ```{r}
-t.test(PlantGrowth$weight, mu = 4.85)
+(5.073 - 4.85) / (0.7012 / sqrt(30))
 ```
 
 ***
 
-```{r, echo=FALSE, fig.height=5}
-ggplot(data, aes(x, y)) +
-  geom_area(data = shade1, aes(y = y), fill = "grey") +
-  geom_area(data = shade2, aes(y = y), fill = "grey") +
-  geom_line() +
+```{r, echo=FALSE, fig.height=4}
+tplot +
   geom_vline(xintercept = 1.742)
+```
+
+***
+
+```{r, echo=FALSE, fig.height=4}
+tplot +
+  stat_function(data = data.frame(x = c(-5,5)), fun = dt, args = list(df = 1),
+                inherit.aes = FALSE, colour = "red")
+```
+
+
+
+***
+
+```{r}
+t.test(PlantGrowth$weight, mu = 4.85)
 ```
 
 
@@ -371,7 +405,7 @@ ggplot(data, aes(x, y)) +
 
 
 
-## Two-Sample T-Test
+## Two-Sample t-Test
 
 Häufiger möchte man eine metrische Variable zwischen zwei Gruppen miteinander vergleichen.
 
@@ -389,19 +423,19 @@ bartlett.test(weight ~ group, PlantGrowth)
 
 ## Der Test
 
-Für den Two-Sample T-Test wählt man ebenfalls `t.test`, benutzt allerdings das formula-Interface der Funktion.
+Für den Two-Sample t-Test wählt man ebenfalls `t.test`, benutzt allerdings das formula-Interface der Funktion.
 
 ```{r}
 t.test(weight ~ group, PlantGrowth, var.equal = TRUE,
        subset = group != "trt2")
 ```
 
-***
+## Welch Two Sample-t-Test
 
-Sind die Varianzen in den beiden Gruppen unterschiedlichen, wählt man den Welch two-sample T-Test.
+Sind die Varianzen in den beiden Gruppen unterschiedlichen, unbekannt oder sind die Stichprobengrößer deutlich kleiner als 30, wählt man den Welch two-sample T-Test.
 
 ```{r}
-t.test(weight ~ group, PlantGrowth,
+t.test(weight ~ group, PlantGrowth, var.equal = FALSE,
        subset = group != "trt2")
 ```
 

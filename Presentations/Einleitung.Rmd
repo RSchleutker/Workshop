@@ -34,16 +34,19 @@ die Übungsaufgaben hinweisen -->
 ## Literatur
 
 * [R for Data Science](http://r4ds.had.co.nz/): Sollte unbedingt jeder lesen, der/die mit R Datenanalyse machen möchte.
-* [ggplot2: Elegant Graphics for Data Analysis](https://www.amazon.de/ggplot2-Elegant-Graphics-Data-Analysis/dp/331924275X/ref=sr_1_1?ie=UTF8&qid=1505585504&sr=8-1&keywords=ggplot2): Gibt einen wesentlich detaillierteren Einblick, wie die Datenvisualisierung mit ggplot2 funktioniert. Nicht unbedingt notwendig, aber dennoch sehr empfehlenswert! Gibt es auch als PDF im Internet, enfach googlen ;).
-* [Reproducible Research with R and R Studio](https://www.amazon.de/Reproducible-Research-Studio-Second-Chapman/dp/1498715370/ref=sr_1_1?s=books-intl-de&ie=UTF8&qid=1505585637&sr=1-1&keywords=reproducible+research+with+r): Möchte man ernsthafte bzw. umfangreichere Datenanalyse mit R betreiben, ist dieses Buch ajf lesenswert. Gibt es auch als PDF im Internet. Einfach googlen.
+* [ggplot2: Elegant Graphics for Data Analysis](https://www.amazon.de/ggplot2-Elegant-Graphics-Data-Analysis/dp/331924275X/ref=sr_1_1?ie=UTF8&qid=1505585504&sr=8-1&keywords=ggplot2): Gibt einen wesentlich detaillierteren Einblick, wie die Datenvisualisierung mit ggplot2 funktioniert. Nicht unbedingt notwendig, aber dennoch sehr empfehlenswert!
+* [Reproducible Research with R and R Studio](https://www.amazon.de/Reproducible-Research-Studio-Second-Chapman/dp/1498715370/ref=sr_1_1?s=books-intl-de&ie=UTF8&qid=1505585637&sr=1-1&keywords=reproducible+research+with+r): Möchte man ernsthafte bzw. umfangreichere Datenanalyse mit R betreiben, ist dieses Buch ajf lesenswert.
 * [Handbook of Biological Statistics](http://www.biostathandbook.com/): Gibt einen sehr guten Überblick über Statistik in der Biologie und viele nützliche Informationen.
 * http://rcompanion.org/handbook/ baut praktisch auf dem vorherigen Buch auf und zeigt die Anwendung in R.
 
+## Literatur II
+
+* [Statistics in a Nutshell](https://www.amazon.de/Statistics-Nutshell-OReilly-Sarah-Boslaugh/dp/1449316824/ref=sr_1_1?ie=UTF8&qid=1506966944&sr=8-1&keywords=statistics+in+a+nutshell): Sehr gutes Statistik-Buch, das alle grundlegenden Kenntnisse für Nicht-Mathematiker verständlich erklärt. Absolut lesenswert.
+* [Hands-On Programming with R](https://www.amazon.de/Hands-Programming-Write-Functions-Simulations/dp/1449359019): Für etwas ambitioniertere Personen, die bereits etwas Erfahrung mit R haben. Hilft dabei, mehr aus R herauszuholen. Programmieren klingt schlimmer als es gibt, mit etwas Fleiß kann das jeder.
+* [R Packages](https://www.amazon.de/R-Packages-Hadley-Wickham/dp/1491910593/ref=pd_sim_14_6?_encoding=UTF8&psc=1&refRID=5PXK1NE2B1ZTPNE4FR7X): Wer selbstgeschriebene Funktionen immer wieder braucht, kann diese in ein eigenes Paket packen und so für sich selbst und u.U. auch andere verfügbar machen.
+
 
 # RStudio, eine IDE
-
-<!-- Erklären, was RStudio eigentlich ist (Integrierte Entwicklungsumgebung),
-seine Vorteile vorstellen und die Benutzeroberfläche erklären. -->
 
 ## ID... Was?
 
@@ -59,15 +62,10 @@ RStudio ist ein Editor, der speziell für die Nutzung mit R entwickelt wurde und
 
 ## Die Oberfläche
 
-
-<!-- Oberfläche interaktiv am Beamer zeigen und erklären. -->
-
 <img src="Figures/RStudio.png" style="width:90%;height:90%;">
 
 
 # R, eine erste Einführung
-
-<!-- -->
 
 ## Die Konsole
 
@@ -178,52 +176,6 @@ typeof(c(TRUE, FALSE))
 ```
 
 
-## factors - Kategorische Variablen
-
-Nicht-numerische Variablen in der Datenanalyse sind i.d.R. kategorische Variablen mit einer begrenzten Anzahl an möglichen Ausprägungen. Diese werden in R durch `factors` dargestellt.
-
->- `factors` sind in R als Integer repräsentiert, welche zusätzlich ein *Label*, also einen Namen haben.
->- Die Kategorien, die ein `factor` haben kann, werden `levels` genannt. Dies ist also im Prinzip ein anderes Wort für **Kategorie**.
-
-
-## Vorteile von factors
-
-`factors` haben in einigen Situationen Vorteile gegenüber *Character-Strings*:
-
->- Da `factors` in R als Zahlen repräsentiert werden, haben sie eine Reihenfolge und werden nicht zwangsläufig alphabetisch sortiert.
->- Eine Kategorische Variable hat mehrere mögliche Ausprägungen (`levels`). Allerdings kommen in einer realen Messung nicht zwangsläufig auch alle Kategorien vor. Dennoch möchte man manchmal auch fehlende Kategorien in einem Diagramm darstellen.
-
-***
-
-`factors` werden durch `factor(x, levels)` erstellt.
-
-```{r}
-BodyColours <- c("Wildtype", "Yellow", "Ebony")
-
-Measurement <- c("Wildtype", "Unknown", "Ebony", "Wildtype", "Ebony", "Ebony", "Ebony")
-Measurement
-
-Measurement <- factor(x = Measurement, levels = BodyColours)
-Measurement
-```
-
-***
-
-```{r}
-table(Measurement, useNA = "always")
-
-typeof(Measurement)
-```
-
-```{r, echo=FALSE, fig.height=2.5}
-library(ggplot2)
-
-ggplot(mapping = aes(Measurement)) +
-  geom_bar() +
-  scale_x_discrete(drop = FALSE)
-```
-
-
 ## Weitere Datentypen
 
 Neben numersichen Daten und Character Strings gibt es noch sog. **Booleans** oder auch **Logische Werte**.
@@ -238,7 +190,7 @@ Neben numersichen Daten und Character Strings gibt es noch sog. **Booleans** ode
 Man kann Elemente eines Vektors mit `[]` und der Positionsangabe bekommen.
 
 ```{r}
-Measurement
+Measurement <- c("Wildtype", "Unknown", "Ebony", "Wildtype", "Ebony", "Ebony", "Ebony")
 
 Measurement[2]
 
@@ -358,6 +310,12 @@ Jedes Argument hat einen Namen, eine Position und i.d.R. einen Standardwert.
 
 ```{r eval=FALSE}
 help(mean)
+
+mean(x = dataset, trim = 0, na.rm = TRUE)
+
+mean(dataset, 0, TRUE)
+
+mean(dataset, na.rm = TRUE)
 ```
 
 
@@ -383,3 +341,48 @@ plot(a)
 ## Die Idee
 
 Die Idee ist, dass wir ein oder mehrere Objekte (Daten) haben. Auf diese Objekte wenden wir sukzessive Funktionen an, bis wir das gewünschte Ergebnis haben.
+
+
+## factors - Kategorische Variablen
+
+Nicht-numerische Variablen in der Datenanalyse sind i.d.R. kategorische Variablen mit einer begrenzten Anzahl an möglichen Ausprägungen. Diese werden in R durch `factors` dargestellt.
+
+>- `factors` sind in R als Integer repräsentiert, welche zusätzlich ein *Label*, also einen Namen haben.
+>- Die Kategorien, die ein `factor` haben kann, werden `levels` genannt. Dies ist also im Prinzip ein anderes Wort für **Kategorie**.
+
+
+## Vorteile von factors
+
+`factors` haben in einigen Situationen Vorteile gegenüber *Character-Strings*:
+
+>- Da `factors` in R als Zahlen repräsentiert werden, haben sie eine Reihenfolge und werden nicht zwangsläufig alphabetisch sortiert.
+>- Eine Kategorische Variable hat mehrere mögliche Ausprägungen (`levels`). Allerdings kommen in einer realen Messung nicht zwangsläufig auch alle Kategorien vor. Dennoch möchte man manchmal auch fehlende Kategorien in einem Diagramm darstellen.
+
+***
+
+`factors` werden durch `factor(x, levels)` erstellt.
+
+```{r}
+BodyColours <- c("Wildtype", "Yellow", "Ebony")
+
+Measurement
+
+Measurement <- factor(x = Measurement, levels = BodyColours)
+Measurement
+```
+
+***
+
+```{r}
+table(Measurement, useNA = "always")
+
+typeof(Measurement)
+```
+
+```{r, echo=FALSE, fig.height=2.5}
+library(ggplot2)
+
+ggplot(mapping = aes(Measurement)) +
+  geom_bar() +
+  scale_x_discrete(drop = FALSE)
+```

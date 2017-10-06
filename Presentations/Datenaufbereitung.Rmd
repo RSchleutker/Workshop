@@ -28,7 +28,7 @@ Man kann sich nun entscheiden, einen neuen Ordner zu erstellen oder einen bereit
 Für Versionskontrolle haben wir in diesem Workshop leider keine Zeit :(
 
 
-## Worauf man achten sollte.
+## Worauf man achten sollte
 
 >- Projekte sollten in sich geschlossen sein.
 >- Der Projektordner mit der *.Rproj*-Datei ist der Root-Ordner und damit die höchste Ordner-Ebene die es in dem Projekt gibt.
@@ -93,7 +93,6 @@ Tumor_Raw <- read_delim("../Exercises/Tumor/Tumor.csv",
 ```{r}
 head(Tumor_Raw)
 ```
-
 
 ***
 

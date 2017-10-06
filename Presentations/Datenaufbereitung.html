@@ -175,7 +175,7 @@
 <ul class = 'build'>
 <li>Eine Spalte enthält mehrere Variablen. Unter Biologen besonders beliebt: Alter und Geschlecht in eine Spalte schreiben.</li>
 <li>Eine Variable ist über mehrere Spalten verstreut. Vergleichsweise selten. Kommt z.B. bei Datumsangaben vor (Tag, Monat, Jahr).</li>
-<li>Spaltennamen sind eigentlich Werte. Häufig z.B. bei Jahren. Kann als Zusammenfassung für Menschen hilfreich sein, ist für die Analyse aber störend.</li>
+<li>Spaltennamen sind eigentlich Werte. Häufig z.B. bei Jahren. Kann als Zusammenfassung für Menschen hilfreich sein (Kontingenztabelle), ist für die Analyse aber störend.</li>
 <li>Eine Beobachtung ist über mehrere Zeilen verstreut. Kommt z.B. vor, wenn man zwei Parameter von einem Objekt misst und dafür zwei Zeilen anlegt.</li>
 </ul>
 
@@ -210,7 +210,9 @@
 
 <p>Die Funktion <code>separate()</code> trennt eine Spalte in zwei Spalten auf. Standardmäßig wird jedes nicht-alphanumerische Zeichen als Separator interpretiert.</p>
 
-<pre class = 'prettyprint lang-r'>Tumor &lt;- separate(Tumor_Raw, `Age/Gender`, c(&quot;Age&quot;, &quot;Gender&quot;), convert = TRUE)
+<pre class = 'prettyprint lang-r'>Tumor &lt;- separate(data = Tumor_Raw,
+                  col = `Age/Gender`, into = c(&quot;Age&quot;, &quot;Gender&quot;),
+                  convert = TRUE)
 
 head(Tumor)</pre>
 
@@ -242,7 +244,10 @@ head(Tumor)</pre>
 
 <p>Variablen kann man mit der <code>unite()</code> Funktion miteinander verbinden.</p>
 
-<pre class = 'prettyprint lang-r'>AirqualityTidy &lt;- unite(AirqualityDirty, Date, Day, Month, Year, sep = &quot;-&quot;)
+<pre class = 'prettyprint lang-r'>AirqualityTidy &lt;- unite(data = AirqualityDirty,
+                        col = Date,
+                        Day, Month, Year,
+                        sep = &quot;-&quot;)
 
 head(AirqualityTidy)</pre>
 
@@ -276,7 +281,9 @@ head(AirqualityTidy)</pre>
 
 <p>Dies kann man mit der <code>gather()</code> Funktion erreichen.</p>
 
-<pre class = 'prettyprint lang-r'>Leishmaniose &lt;- gather(Leishmaniose_Raw, &quot;Year&quot;, &quot;Cases&quot;, 2:13)
+<pre class = 'prettyprint lang-r'>Leishmaniose &lt;- gather(data = Leishmaniose_Raw, 
+                       key = &quot;Year&quot;, value = &quot;Cases&quot;,
+                       2:13)
 
 head(Leishmaniose)</pre>
 
@@ -302,11 +309,19 @@ head(Leishmaniose)</pre>
 ## 5  2   A    286     1 crtime   NA
 ## 6  2   A    286     1 rltime   NA</pre>
 
+<ul>
+<li><em>txtime</em>: time to hematropetic stem cell transplant</li>
+<li><em>crtime</em>: time to complete response</li>
+<li><em>rltime</em>: time to relapse of disease</li>
+</ul>
+
 </article></slide><slide class=''><hgroup><h2></h2></hgroup><article >
 
 <p>Die <code>spread()</code> Funktion macht aus einer Variable mehrere Spalten.</p>
 
-<pre class = 'prettyprint lang-r'>MyeloidTidy &lt;- spread(MyeloidSpread, Type, Days, convert = TRUE)
+<pre class = 'prettyprint lang-r'>MyeloidTidy &lt;- spread(data = MyeloidSpread,
+                      key = Type, value = Days,
+                      convert = TRUE)
 
 head(MyeloidTidy)</pre>
 

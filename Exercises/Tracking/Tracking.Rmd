@@ -1,0 +1,104 @@
+---
+title: 'Übungsaufgaben: Tracking-Daten'
+author: "Raphael Schleutker und Hannah Schmitz"
+date: "7. Oktober 2017"
+output: 
+  html_document: 
+    code_folding: hide
+    highlight: haddock
+    toc: yes
+    toc_float: yes
+---
+
+<style>
+body {
+text-align: justify}
+</style>
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, collapse = TRUE, message = FALSE, warning = FALSE)
+```
+
+## Einleitung
+
+In diesem Beispiel geht es um die Aufbereitung eines sehr großen Datensatzes. Die Aufbereitung eines Datensatzes ist häufig einer der kompliziertesten Aspekte der Datenanalyse. Glücklicherweise steigt die Schwierigkeit der Aufbereitung bei Verwendung einer Sprache wie **R** nicht mit der Größe des Datensatzes. Es ist im Grunde vollkommen egal, ob ein Datensatz 10 oder 100.000 Zeilen beinhaltet oder ob 4 oder 40 Variablen betrachtet werden. Und der komplizierte Aspekt bei der Datenaufbereitung ist nicht das Schreiben des Skripts, sondern herauszufinden, welche Aspekte an einem Datensatz nicht sauber sind und welche Schritte in welcher Reihenfolge unternommen werden müssen, um einen Datensatz sauber zu bekommen. Hat man diese Schritte ersteinmal identifiziert, ist das Schreiben des Skripts schnell gemacht. Und dies trifft insbesondere zu, wenn man nach etwas Übung die wenigen Funktionen, die man hierzu braucht, verinnerlicht hat.
+
+Ist ein Datensatz also soweit unsauber, dass nicht auf den ersten Blick klar ist, was man tun muss, ist es immer sinnvoll, die Aufbereitung in mehrere Schritte zu unterteilen:
+
+1. Man muss die Struktur des Original-Datensatzes verstehen. 
+2. Man muss sich klar machen, wie der aufbereitete Datensatz aussehen soll, sodass die drei Kriterien eines sauberen Datensatzes erfüllt sind. Was sind die Variablen/Spalten? Was ist eine Beobachtung/Zeile? Was ist ein Wert?
+3. Man muss die Schritte formulieren, die nötig sind, um den Datensatz aufzubereiten. Meist braucht man auch für sehr große Datensätze, die zunächst ziemlich unsauber wirken, nur eine handvoll Schritte.
+4. Anhand der zuvor formulierten Schritte schreibt man ein Skript.
+
+### Der Datensatz
+
+Bei dem Datensatz handelt es sich um Tracking-Daten, die von *Drosophila*-Larven auf einem Glastisch gemacht wurden. Eine Kamera hat von unten die Larven gefilmt und ein speziell dafür entwickeltes Programm hat die Larven in den Bilddaten identifiziert und über einen gewissen Zeitraum die Bewegung sowie eine Reihe weiterer Parameter von jeder Larve berechnet. Der Datensatz liegt nun so vor, wie er von der Software ausgegeben wurde. In der ersten Spalte `Time_Param` befindet sich der Zeitpunkt sowie der betrachtete Parameter, getrennt durch einen Doppelpunkt. Anschließend folgen 21 Spalten, je eine für jede Larve.
+
+
+## Aufgaben
+
+1. Erstelle für diese Aufgabe mit RStudio ein neues Projekt. Wähle den bestehenden Ordner *Tracking* als Projektordner aus. Dieser ist nun der sog. Root-Ordner.
+2. Lies die Datei *Tracking.csv* ein. Schau dir die Strukturierung der Daten an. Wie sind die Daten organisiert? Formuliere die Schritte, die du zum aufbereiten der Daten brauchst!
+3. Sobald du die Schritte zum aufbereiten des Datensatzes hast, setze dies in R um!
+4. Die Variable `Larva` ist nach der Beispiellösung als numerische Variable gespeichert. Macht dies Sinn? Wandle die Variable in einen Faktor um! Um auf eine bestimmte Spalte eines Datensatzes zuzugreifen und nur diese zu bearbeiten, kann man `$` direkt nach dem Namen des Datensatzes schreiben und dann die entsprechende Spalte auswählen: `TrackingData$Larva`
+5. Stört dich etwas an dem Skript? Erscheint es dir elegant genug oder würdest du dir ein übersichtlicheres Skript wünschen?
+
+
+## Lösungen
+
+### Aufgabe 1
+
+Gehe auf *File > New Project... > Existing Directory* und wähle dann über *Browse* den Ordner *Tracking* im Aufgabenordner aus. Sobald du auf *Create Project* geklickt hast, wechselt RStudio direkt in den ausgewählten Ordner. Beachte, dass dies nun der Root-Ordner für dein Projekt ist. Alle Dateipfade sollten nun ausgehend von diesem Ordner mit `./` gesetzt werden.
+
+### Aufgabe 2
+
+```{r}
+library(readr)
+
+RawTracking <- read_csv("./Tracking.csv")
+
+head(RawTracking)
+```
+
+Die Struktur des originalen Datensatzes ist bereits in der Einleitung beschrieben. Wie soll der aufbereitete Datensatz aussehen? Jede Beobachtung besteht aus einem Zeitpunkt, einer Larve sowie die Werte für jeden betrachteten Parameter. Außerdem macht es Sinn, Larven, die keine Werte haben, von vornherein wegzulassen.
+
+1. Zunächst sollte man nur die Spalten in dem Datensatz behalten, die auch tatsächlich Werte für die Larven beinhalten. Dies trifft in diesem Fall nur für die Larven **0** bis **8**.
+2. Anschließend kann man die Spalte `Time_Param` in zwei Spalten auftrennen (welchen Wert muss man für das Argument `sep` setzen?).
+3. Nun kann man die Larven von der breiten in die Lange Form bringen.
+4. Zuletzt muss man noch die Parameter und die ermittelten Werte in eine breite Form gebracht werden.
+
+Es wäre nicht unbedingt nötig, gleich am Anfang die Larven **9** bis **20** rauszuschmeißen. Allerdings ist das sinnvoll, da dies den Umfang des Datensatzes stark verringert und dies gerade bei sehr großen Datensätzen enorm viel Rechenzeit spart.
+
+### Aufgabe 3
+
+```{r}
+library(tidyr)
+
+TrackingData <- RawTracking
+TrackingData <- separate(TrackingData,
+                         col = Time_Param, into = c("Time", "Parameter"),
+                         sep = ":", convert = TRUE)
+TrackingData <- gather(TrackingData,
+                       key = "Larva", value = "Value",
+                       `0`:`20`,
+                       convert = TRUE)
+TrackingData <- spread(TrackingData,
+                       key = Parameter, value = Value,
+                       convert = TRUE)
+
+head(TrackingData)
+```
+
+### Aufgabe 4
+
+```{r}
+TrackingData$Larva <- factor(TrackingData$Larva)
+
+head(TrackingData$Larva)
+```
+
+
+
+### Aufgabe 5
+
+Ehrlich gesagt, ist es doch etwas nervig, dass man zu Beginn jeder Zeile dem Variablennamen `TrackingData` den neuen, modifizierten Datensatz zuweisen muss, um dann diesen modifizierten Datensatz wieder in die nächsten Funktion einzusetzen. Das bedeutet viel Tipperei und Wiederholung und macht das Skript außerdem zunehmend unübersichtlicher. Nach der Mittagspause wird es daher darum gehen, wie man ein solches Skript wesentlich eleganter schreiben kann.

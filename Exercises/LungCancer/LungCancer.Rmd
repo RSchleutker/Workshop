@@ -90,11 +90,12 @@ ggplot(lung, aes(time = time/365, status = status)) +
 
 ### Aufgabe 2
 
+Fügt man zuerst das teiltransparente Konfidenzintervall hinzu, werden die nachfolgenden Geome darüber gelegt. So werden sie nicht durch das Konfidenzintervall 'ausgegraut'.
+
 ```{r}
 library(ggplot2)
 library(ggkm)
 
-# Fügt man zuerst das teiltransparente Konfidenzintervall hinzu, werden die nachfolgenden Geome darüber gelegt. So werden sie nicht durch das Konfidenzintervall 'ausgegraut'.
 
 ggplot(lung, aes(time = time/365, status = status)) +
   geom_kmband() +

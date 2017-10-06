@@ -22,6 +22,26 @@ library(tidyverse)
 ```
 
 
+# Nomenklatur
+
+## Population vs. Stichprobe
+
+Stellt euch vor, ihr möchtet herausfinden, bei welchem mittlerem Alter Patienten mit Parkinson diagnostiziert werden.
+
+>- Sämtliche Menschen weltweit mit einer Parkinson-Diagnose stellen die Grundgesamtheit oder auch Population dar.
+>- Alle Menschen, die euch für eure Studie zur Verfügung stehen, stellen die Stichprobe dar.
+
+
+## Parameter vs. Statistik
+
+>- Eigenschaften der Population, wie z.B. das mittlere Diagnose-Alter, bezeichnet man als Parameter.
+>- Werte, die ihr von eurer Stichprobe berechnet, bezeichnet man als Statistik. Bei einem guten Design erlauben Statistiken Rückschlüsse auf die Parameter der zugrundeliegende Population.
+>- Parameter werden mit griechischen Buchstaben abgekürzt, Statistiken mit lateinischen.
+>- $\mu$ bzw. $\overline{x}$ bezeichnen das arithmetische Mittel.
+>- $\sigma$ bzw. s bezeichnen die Standardabweichung.
+
+
+
 # Deskriptive Statistik
 
 ## summarise()
@@ -48,7 +68,7 @@ Gegebenenfalls gruppiert man seine Daten und fasst diese dann zusammen.
 
 ```{r}
 DiameterAnalysis <- Diameter %>%
-  group_by(Species, BirdID, Group) %>%
+  group_by(Species, CatID, Group) %>%
   summarise(Count = n(),
             Mean_Diameter = mean(`Length [um]`))
 ```
@@ -66,15 +86,13 @@ Außerdem möglich:
 
 >- `median()`: Der Median.
 >- `DescTools::Mode()`: Der häufigste Wert (sinnvoll für kategorische Werte).
->- `DescTools::Gmean()`: Der geometrische Mittelwert.
->- `DescTools::Hmean()`: Der harmonische Mittelwert.
 
 
 ## Variation
 
 ```{r}
 DiameterAnalysis <- Diameter %>%
-  group_by(Species, BirdID, Group) %>%
+  group_by(Species, CatID, Group) %>%
   summarise(Count = n(),
             Mean_Diameter = mean(`Length [um]`),
             SD_Diameter = sd(`Length [um]`))
@@ -95,99 +113,42 @@ head(DiameterAnalysis)
 
 Die Statistik sollte nicht erst **nach** einem Experiment beginnen, sondern bereits **davor**.
 
-## Stelle eine biologische Fragestellung auf!
+>- Stelle eine biologische Fragestellung auf
+>- Formuliere eine biologische Nullhypothese
+>- Formuliere eine statistische Nullhypothese
+>- Stelle heraus, welche Variablen für das Experiment von Bedeutung sind und welchen Typus sie haben.
+>- Designe das Experiment!
+>- Wähle einen statistischen Test
+>- Führe das Experiment durch
+>- Überprüfe deine Messergebnisse
+>- Führe den statistischen Test durch
 
-> Hat der Polymorphimus im *Pgm*-Locus einen Einfluss auf den Glycogen-Haushalt?
-
-
-## Formuliere eine biologische Nullhypothese!
-
-> Verschiedene Aminosäuren-Sequenzen beeinflussen **nicht** die biochemischen Eigenschaften der Phosphoglyceratmutase, sodass der Glycogen-Gehalt nicht beeinflusst wird.
-
-**Biologische Alternativ-Hypothese:**
-
-> Verschiedene Aminosäure-Sequenzen beeinflussen die biochemischen Eigenschaften der Phosphoglyceratmutase, sodass der Glycogen-Gehalt beeinflusst wird.
-
-Im Mittelpunkt steht ein **biologische Prozess**.
-
-
-## Formuliere eine statistische Nullhypothese
-
-> Fliegen mit unterschiedlichen Aminosäure-Sequenzen in der Phosphoglyceratmutase haben den gleichen mittleren Glycogen-Gehalt.
-
-**Statistische Alternativ-Hypothese:**
-
-> Fliegen mit unterschiedlichen Aminosäure-Sequenzen in der Phosphoglyceratmutase haben unterschiedliche mittlere Glycogen-Gehalte.
-
-Im Mittelpunkt stehen hier die **Zahlen**.
-
-
-## Stelle heraus, welche Variablen für das Experiment von Bedeutung sind
-
-In unserem Fall gibt es zwei Variablen:
-
->1. Der Glycogen-Gehalt
->2. Die Aminosäure-Sequenz.
-
-
-## Welchen Typus haben die Variablen?
-
->1. Der Glycogen-Gehalt ist **metrisch**.
->2. Die Aminosäure-Sequenz ist **nominal**.
-
-
-## Designe das Experiment!
-
->- Sollen alle Fliegen das gleiche Alter haben?
->- Sollen alle Fliegen das gleiche Geschlecht haben?
->- Ergeben sich hierdurch weitere gruppierende Variablen?
->- Mehr Variablen machen die statistische Auswertung komplizierter und die biologische Aussagekraft i.d.R. schwächer.
-
-
-## Wähle einen statistischen Test
-
-Basierend auf der Anzahl an Variablen, dem Typus der Variablen, der Erfüllung parametrischer Annahmen (gleiche Gruppengrößen, Normalität, homoskedastisch), sollte der bestmögliche Test ausgesucht werden.
-
-**One-Way Anova**
-
-
-## Wenn möglich, führe eine Power-Analyse durch!
-
-Eine Power-Analyse berechnet, wie groß die untersuchten Gruppen mindestens sein müssen, um ein aussagekräftiges Ergebnis zu erhalten.
-
-
-## Führe das Experiment durch
-
-
-
-## Überprüfe deine Messergebnisse
-
-Nachdem die Werte gemessen wurde, sollte man überprüfen, ob sie die Annahmen des gewählten statistischen Tests tatsächlich erfüllen.
-
-Möglicherweise muss man einen anderen, passenderen Test wählen.
-
-
-## Führe den statistischen Test durch
+***
 
 Erst im letzten Schritt geht es darum, den statistischen Test auf seine Daten anzuwenden und die Ergebnisse zu interpretieren.
 
->- Unterscheiden sich die Glycogen-Gehalte?
->- Wenn ja, wie stark unterscheiden sie sich?
->- Ist der Unterschied überhaupt biologisch relevant?
+>- Ist der Befund überhaupt biologisch relevant?
+
+
+## Null- und Alternativhypothese
+
+Vor einem Test stellt man immer eine Null- und eine Alternativ-Hypothese auf (damit überhaupt klar ist, worauf man testet).
+
+>- *H~0~*: Da man i.d.R. immer auf einen Unterschied testet, und die Null-Hypothese das Gegenteil darstellt, ist H~0~ die Hypothese, dass es keinen Unterschied zwischen zwei Gruppen gibt / zwei Variablen unabhängig voneinander sind / usw.
+>- *H~A~*: Die Alternativ-Hypothese ist die gegenteilige Annahme der Null-Hypothese: Es gibt einen Unterschied zwischen zwei Gruppen oder zwei Variablen sind abhängig voneinander.
+>- Der *p-Value* gibt die Wahrscheinlichkeit an, dass die Null-Hypothese zutrifft. Bei weniger als 5% verwirft man i.d.R. die Null-Hypothese und akzeptiert stattdessen die Alternativ-Hypothese.
+
+
+
 
 
 
 ## Den richtigen statistischen Test finden
 
-
-## Was gilt es zu beachten?
-
 >- Welcher Variablentyp soll getestet werden? **Nominal**, **Ordinal** oder **Metrisch**
 >- Wie viele Gruppen sollen miteinander verglichen werden?
 >- Sind die Beobachtungen unabhängig voneinander?
 >- Falls die Variablen metrisch sind: Sind die Daten **normalverteilt**? Sind die Daten **homoskedastisch** (gleiche SD)? Sind die zu vergleichenden Gruppen **gleich groß**?
-
-
 
 
 
@@ -200,10 +161,9 @@ Nominale Datenreihen bestehen nicht aus Zahlen, deren Mittelwert und Variation m
 
 ## Goodness-of-Fit Tests
 
-Testen eine beobachtete Häufigkeitsverteilung mit einer theoretischen.
+Testen eine beobachtete Häufigkeitsverteilung mit einer hypothetischen.
 
 >- Exact Test for Goodness-of-Fit (<1000 Beobachtungen)
->- G-Test (>1000 Beobachtungen)
 >- $\chi^2$-Test (>1000 Beobachtungen)
 
 ## Zunächst muss eine Kontingenztabelle erstellt werden
@@ -225,15 +185,12 @@ Gut geeignet für Datensätze mit weniger als 1000 Beobachtungen und nur zwei Au
 binom.test(ContingencyTable, p = 0.5)
 ```
 
-## G-Test und $\chi^2$-Test for Goodness-of-Fit
+## $\chi^2$-Test for Goodness-of-Fit
 
 Für viele Beobachtungen und zwei oder mehr Ausprägungen.
 
 ```{r}
 chisq.test(ContingencyTable, p = c(0.5, 0.5))
-
-library(DescTools)
-GTest(ContingencyTable, p = c(0.5, 0.5))
 ```
 
 ***
@@ -246,19 +203,17 @@ ContingencyTable
 ***
 
 ```{r}
-chisq.test(ContingencyTable)
-GTest(ContingencyTable, p = c(0.06, 0.12, 0.21, 0.31, 0.30))
+chisq.test(ContingencyTable, p = c(0.06, 0.12, 0.21, 0.31, 0.30))
 ```
 
 
 
 ## Independence-Tests
 
-Tested ob die Häufigkeiten einer Variable von einer zweiten Variable abhängt.
+Testet, ob zwei Variablen unabhängig voneiandner sind.
 
->- Fisher's exact Test für 2x2 Tabellen
->- G-Test for Independence
->- $\chi^2$-Test for Independence
+>- Fisher's exact Test.
+>- $\chi^2$-Test for Independence.
 
 
 ## Kontingenztabelle erstellen
@@ -282,12 +237,15 @@ chisq.test(ContingencyTable)
 chisq.test(ContingencyTable, correct = FALSE)
 ```
 
-***
+## Annahmen
 
-```{r}
-GTest(ContingencyTable, correct = "williams")
-GTest(ContingencyTable, correct = "yates")
-```
+Der $\chi^2$-Test hat zwei Annahmen an die Daten:
+
+>- Keine Zelle darf den Wert 0 enthalten.
+>- Mindestens 80% der Zellen müssen einen Wert >= 5 haben.
+>- Trifft eine der Annahmen nicht zu, kann man eine Yates-Korrektur hinzufügen oder man nimmt den Fisher-Test.
+
+
 
 ## Mosaikplots
 
@@ -313,7 +271,7 @@ Wenn es interessiert: [ggmosaic](https://cran.r-project.org/web/packages/ggmosai
 
 # Metrische Variablen testen
 
-## Die Idee
+## Annahmen
 
 Die meisten Tests für metrische Variablen sind parametrisch und stellen daher Anforderungen an die zu untersuchenden Daten:
 
@@ -323,107 +281,162 @@ Die meisten Tests für metrische Variablen sind parametrisch und stellen daher A
 >- Die zu vergleichenden Gruppen müssen gleich groß sein.
 
 
-
-## Abweichungen
-
-Daten weichen häufig von diesen Vorgaben ab, allerdings sind die meisten Tests auch relativ robust dagegen, insbesondere wenn der Stichprobenumfang groß genug ist.
-
->- Leichte Asymmetrie in der Verteilung werden gut toleriert.
->- Die Standardabweichungen sollten um nicht mehr als den Faktor 2 voneinander abweichen.
-
 ## Was tun, wenn die Daten nicht passen?
 
 Man hat zwei Möglichkeiten, wenn die Daten den Vorgaben absolut nicht entsprechen.
 
 >- Man wählt einen nicht-parametrischen Test.
->- Man transformiert seine Daten, z.B. logarithmisch (meist besser als nicht-parametrische Tests).
+
+
+## Der Datensatz
+
+```{r}
+head(PlantGrowth)
+```
+
 
 
 ## Normalität
 
 Durch Histogramm zu erkennen oder mit einem Test wie dem Shapiro-Wilk-Test.
 
-```{r}
-library(ggplot2)
+* H~0~, dass die Daten normalverteilt sind.
 
-ggplot(NHANES, aes(BMI)) +
-  geom_histogram(bins = 50, aes(y = ..density..))
+```{r}
+shapiro.test(PlantGrowth$weight)
+```
+
+
+## Standardfehler
+
+Der **Standardfehler** ist ein Maß für die Streuung **zwischen** den Stichproben.
+
+$$ \frac{\sigma}{\sqrt{n}} $$
+
+* $\sigma$ ist die Standardabweichung der Grundgesamtheit und muss von der Stichprobe geschätzt werden ($s$).
+* $n$ ist der Stichprobenumfang.
+
+
+## t-Tests
+
+t-Tests überprüfen, wie viele Standardfehler der Stichprobenmittelwert von einem Erwartungswert abweicht.
+
+* Als Ergebnis erhält man eine sogenannte t-Statistik.
+
+$$ t = \frac{\overline{X} - \mu}{\frac{\sigma}{\sqrt{n}}} $$
+
+
+## t-Verteilung
+
+```{r, echo=FALSE, fig.height=4}
+data <- data.frame(x = seq(-5, 5, 0.001), y = dt(seq(-5, 5, 0.001), 29))
+shade1 <- subset(data, x < qt(0.025, 29))
+shade2 <- subset(data, x > qt(0.975, 29))
+
+tplot <- ggplot(data, aes(x, y)) +
+  geom_area(data = shade1, aes(y = y), fill = "grey") +
+  geom_area(data = shade2, aes(y = y), fill = "grey") +
+  geom_line() +
+  scale_x_continuous(name = "Standardfehler")
+
+tplot
+```
+
+
+
+## One-Sample t-Test
+
+$$ \frac{\overline{X} - \mu}{\frac{\sigma}{\sqrt{n}}} $$
+
+```{r}
+(5.073 - 4.85) / (0.7012 / sqrt(30))
 ```
 
 ***
 
-```{r}
-shapiro.test(sample(NHANES$BMI, 5000))
-```
-
-## BMI transformieren
-
-```{r}
-NHANES <- NHANES %>%
-  mutate(BMI_Log = log2(BMI))
-
-ggplot(NHANES, aes(BMI_Log)) +
-  geom_histogram(bins = 50, aes(y = ..density..))
+```{r, echo=FALSE, fig.height=4}
+tplot +
+  geom_vline(xintercept = 1.742)
 ```
 
 ***
 
-```{r}
-shapiro.test(sample(NHANES$BMI_Log, 5000))
-```
-
-Test ist zwar negativ, aber die Daten können wir dennoch nehmen.
-
-
-## One-Sample T-Test
-
-Man hat eine metrische Variable und möchte sie mit einem vorgegebenen Wert testen.
-
-```{r}
-t.test(NHANES$BMI_Log, mu = 4.69)
+```{r, echo=FALSE, fig.height=4}
+tplot +
+  stat_function(data = data.frame(x = c(-5,5)), fun = dt, args = list(df = 1),
+                inherit.aes = FALSE, colour = "red")
 ```
 
 
+
+***
+
+```{r}
+t.test(PlantGrowth$weight, mu = 4.85)
+```
 
 
 ## Alternativen
 
-Alternativ kann man testen, ob der Beobachtete Mittelwert höher oder geringer ist als der vorgegebene.
+Alternativ kann man testen, ob der Beobachtete Mittelwert höher oder geringer ist als der vorgegebene (einseitiger Test).
 
 ```{r}
-t.test(NHANES$BMI_Log, mu = 4.69, alternative = "less")
+t.test(PlantGrowth$weight, mu = 4.85, alternative = "less")
 ```
 
 ***
 
 ```{r}
-t.test(NHANES$BMI_Log, mu = 4.69, alternative = "greater")
-```
-
-
-
-## Two-Sample T-Test
-
-Häufiger möchte man aber eine metrische Variable zwischen zwei Gruppen miteinander vergleichen.
-
-```{r}
-ggplot(NHANES, aes(BMI_Log)) +
-  geom_histogram(bins = 50, aes(y = ..density..)) +
-  facet_wrap(~ Gender)
+t.test(PlantGrowth$weight, mu = 4.85, alternative = "greater")
 ```
 
 ***
 
-Für den Two-Sample T-Test wählt man ebenfalls `t.test`, benutzt allerdings das formula-Interface der Funktion.
+```{r, echo=FALSE, fig.height=5}
+shade3 <- subset(data, x > qt(0.95, df = 29))
 
-```{r}
-t.test(BMI_Log ~ Gender, NHANES, var.equal = TRUE)
+ggplot(data, aes(x, y)) +
+  geom_area(data = shade3, aes(y = y), fill = "red", alpha = .5) +
+  geom_area(data = shade1, aes(y = y), fill = "grey") +
+  geom_area(data = shade2, aes(y = y), fill = "grey") +
+  geom_line() +
+  geom_vline(xintercept = 1.742)
 ```
 
-***
+
+
+## Two-Sample t-Test
+
+Häufiger möchte man eine metrische Variable zwischen zwei Gruppen miteinander vergleichen.
+
+## Varianzgleichheit
+
+Mithilfe des Bartlett-Tests kann man die Varianzgleichheit zweier oder mehrerer Gruppen überprüfen.
+
+* H~0~, dass die Gruppen die gleiche Varianz haben.
 
 ```{r}
-t.test(BMI_Log ~ Gender, NHANES)
+bartlett.test(weight ~ group, PlantGrowth)
+```
+
+
+
+## Der Test
+
+Für den Two-Sample t-Test wählt man ebenfalls `t.test`, benutzt allerdings das formula-Interface der Funktion.
+
+```{r}
+t.test(weight ~ group, PlantGrowth, var.equal = TRUE,
+       subset = group != "trt2")
+```
+
+## Welch Two Sample-t-Test
+
+Sind die Varianzen in den beiden Gruppen unterschiedlichen, unbekannt oder sind die Stichprobengrößer deutlich kleiner als 30, wählt man den Welch two-sample T-Test.
+
+```{r}
+t.test(weight ~ group, PlantGrowth, var.equal = FALSE,
+       subset = group != "trt2")
 ```
 
 
@@ -435,171 +448,48 @@ Dies ist z.B. der Fall, wenn man Blutwerte von Patienten vor und nach Behandlung
 
 Hierbei muss der erste Wert in der ersten Gruppe dem ersten Wert in der zweiten Gruppe entsprechen. In unserem Beispiel müssen sie also vom gleichen Patienten stammen.
 
-
-## Wilcoxon-Signed-Rank-Test
-
-Hat man gepaarte Daten, sind die Differenzen zwischen den Paaren aber nicht normalverteilt, nutzt man statt des Paired Two-Sample T-Test den Wilcoxon-Signed-Rank-Test.
+Der paired Two-Sample T-Test ist exakt das gleiche wie ein One-Sample T-Test, bei dem man die Differenzen zwischen den Paaren auf den Wert 0 testet.
 
 
-## One-Way ANOVA
+## Type I und Type II Error und die Power eines Tests
 
-Eine einfaktorielle Varianzanalyse führt man durch, wenn man einen Mittelwert zwischen verschiedenen Gruppen vergleichen möchte. Sogesehen, ist der Two-Sample T-Test eine Sonderform des One-Way ANOVA mit nur zwei Gruppen.
 
-## Grundlegende Statistik
+Error Typen     | H~0~ ist wahr                 | H~0~ ist falsch
+----------------|-------------------------------|-------------------------------
+H~0~ abgelehnt  | Type I Error (False Positive); P = $\alpha$ | Korrekt (True Positive); P = 1 - $\beta$ 
+H~0~ akzeptiert | Korrekt (True Negative); P = 1 - $\alpha$      | Type II Error (False Negative); P = $\beta$
 
-Mit der `summary`-Funktion kann man eine grundlegende Statistik erhalten.
+>- Die Power eines Tests ist die Fähigkeit, zwischen zwei Mittelwerten zu unterscheiden, wenn tatsächlich ein Unterschied vorhanden ist.
+>- Power ist definiert als $1 - \beta$.
+
+
+## Effect Size
+
+Die Effect Size gibt an, um wie viele Standardabweichungen zwei Mittelwerte voneinander abweichen.
+
+$$ \frac{\mu_1 - \mu_2}{\sigma} $$
+
+* $\mu_1$ und $\mu_2$ sind die Mittelwerte der Populationen und können durch die Stichproben-Mittelwerte ersetzt werden.
+* $\sigma$ ist ist die Standardabweichung, welche für beide Stichrpoben glich sein sollte. Ansonsten benutzt man die gepoolte Standardabweichung.
+
+
+## Power-Analyse
+
+Hat man aus vorherigen Experimenten eine verlässliche Schätzung für die Standardabweichung, kann man berechnen, wie groß der Stichprobenumfang sein muss, um für eine gegebene Effect Size ein bestimmtes Power-Level zu erreichen.
+
+>- Typischerweise sollte die Power eines Tests bei 80% - 90% liegen.
+
+***
 
 ```{r}
-FSA::Summarize(BMI_Log ~ Education, NHANES)
+power.t.test(n = 10, delta = 0.371, sig.level = 0.05, sd = 0.7,
+             type = "two.sample", alternative = "two.sided")
 ```
 
 ***
 
 ```{r}
-ggplot(NHANES, aes(BMI_Log)) +
-  geom_histogram(bins = 50, aes(y = ..density..)) +
-  facet_grid(~ Education)
-```
-
-## Den Test durchführen
-
-```{r}
-oneway.test(BMI_Log ~ Education, NHANES)
-```
-
-## Alternative
-
-Alternativ kann man die Funktion `aov` nutzen und diese mit `summary` zusammenfassen.
-
-```{r}
-summary(aov(BMI_Log ~ Education, NHANES))
-```
-
-
-### Post-Hoc-Test
-
-Eine einfaktorielle Varianzanalyse gibt nur Auskunft darüber, **OB** Unterschiede vorliegen, aber nicht zwischen welchen Gruppen.
-
-Hierzu ist eine Post-Hoc-Analyse notwendig.
-
-## Varianzanalyse durchführen
-
-Man führt zunächst die einfaktorielle Varianzanalyse mit `aov` durch.
-
-```{r}
-Test <- aov(BMI_Log ~ Education, NHANES)
-Test
-```
-
-
-## Man führt eine Post-Hoc-Analyse durch
-
-Anschließend nutzt man das Ergebnis, um einen multiplen Vergleich zwischen den Gruppen durchzuführen. Hierbei nutzen wir die *honest significant differences*-Methode von Tukey.
-
-```{r}
-Comparison <- TukeyHSD(Test)
-```
-
-***
-
-```{r}
-Comparison
-```
-
-
-## Das Ergebnis visualisieren
-
-Das Ergebnis dieses Vergleichs kann man grafisch darstellen.
-
-```{r}
-plot(Comparison)
-```
-
-
-## Achtung
-
-Ist eine der Gruppen eine Kontroll-Gruppe, macht es Sinn, die anderen Gruppen nur mit dieser zu vergleichen, nicht aber untereinander.
-
-
-## Kruskal-Wallis-Test
-
-Als Alternative zu einer einfaktoriellen Varianzanalyse kann man den Kruskal-Wallis-Test nutzen, falls die Daten deutlich nicht-normal sind.
-
-```{r}
-kruskal.test(BMI ~ Education, NHANES)
-```
-
-
-## Dunn-Test
-
-Ist der Kruskal-Wallis-Test signifikant, führt man einen Dunn-Test für multiple Vergleiche als Post-Hoc-Test durch.
-
-```{r}
-FSA::dunnTest(BMI ~ Education, NHANES, method = "bh")
-```
-
-
-## Lineare Regression und Korelation
-
-Gibt es einen Zusammenhang zwischen Alter und Puls? Das Alter ist hierbei die unabhängige Variable und der Puls die abhängige Variable.
-
-## Erstmal die Verteilung betrachten
-
-```{r}
-ggplot(NHANES, aes(Age, Pulse)) +
-  geom_point(alpha = .2)
-```
-
-***
-
-```{r}
-ggplot(NHANES, aes(Age, Pulse)) +
-  geom_point(alpha = .2) +
-  geom_smooth(method = "lm")
-```
-
-## Lineare Regression
-
-Nun kann man eine lineare Regression durchführen.
-
-```{r}
-Regression <- lm(Pulse ~ Age, NHANES)
-```
-
-***
-
-```{r}
-summary(Regression)
-```
-
-
-
-***
-
-Es lohnt ein Blick auf die Verteilung der Residuals.
-
-```{r}
-ggplot(mapping = aes(residuals(Regression))) +
-  geom_histogram(bins = 100)
-
-shapiro.test(sample(residuals(Regression), 5000))
-```
-
-
-## Korrelation
-
-
-```{r}
-Correlation <- cor.test(~ Age + Pulse, data = NHANES, method = "pearson")
-Correlation
-```
-
-
-# Session-Infos
-
-***
-
-```{r}
-sessionInfo()
+power.t.test(delta = 0.371, sig.level = 0.05, sd = 0.7, power = 0.9,
+             type = "two.sample", alternative = "two.sided")
 ```
 

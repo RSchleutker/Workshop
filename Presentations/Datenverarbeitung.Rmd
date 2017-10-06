@@ -23,10 +23,17 @@ library(scales)
 Wenn man mehrere Funktionen kombinieren muss, um einen Datensatz aufzubereiten, kann das schnell viel Tipperei und Unübersichtlichkeit bedeuten.
 
 ```{r eval=FALSE}
-Data <- gather(RawData, key = "Type", value = "Wert", Spalte1, Spalte2, Spalte3)
-Data <- separate(Data, col = "Spalte", into = c("Teil 1", "Teil 2"))
-
-# ...
+TrackingData <- RawTracking
+TrackingData <- separate(TrackingData,
+                         col = Time_Param, into = c("Time", "Parameter"),
+                         sep = ":", convert = TRUE)
+TrackingData <- gather(TrackingData,
+                       key = "Larva", value = "Value",
+                       `0`:`20`,
+                       convert = TRUE)
+TrackingData <- spread(TrackingData,
+                       key = Parameter, value = Value,
+                       convert = TRUE)
 ```
 
 >- Dabei hat man viel Wiederholung.
@@ -37,9 +44,10 @@ Data <- separate(Data, col = "Spalte", into = c("Teil 1", "Teil 2"))
 Das Paket `magrittr` bietet einige Funktionen, um dies zu vereinfachen.
 
 ```{r eval=FALSE}
-Data <- RawData %>%
-  gather("Type", "Wert", Spalte1, Spalte2, Spalte3) %>%
-  separate("Spalte", c("Teil 1", "Teil 2"))
+TrackingData <- RawTracking %>%
+  separate(Time_Param, c("Time", "Parameter"), sep = ":", convert = TRUE) %>%
+  gather("Larva", "Value", `0`:`20`, convert = TRUE) %>%
+  spread(Parameter, Value, convert = TRUE)
 ```
 
 > `%>%` ist eine sog. **Infix**-Funktion.
@@ -91,9 +99,10 @@ Viele Funktionen arbeiten mit der Pipe zusammen, da das erste Argument meist der
 ***
 
 ```{r eval=FALSE}
-Data <- RawData %>%
-  gather("Type", "Wert", Spalte1, Spalte2, Spalte3) %>%
-  separate("Spalte", c("Teil 1", "Teil 2"))
+TrackingData <- RawTracking %>%
+  separate(Time_Param, c("Time", "Parameter"), sep = ":", convert = TRUE) %>%
+  gather("Larva", "Value", `0`:`20`, convert = TRUE) %>%
+  spread(Parameter, Value, convert = TRUE)
 ```
 
 
@@ -140,8 +149,7 @@ ggplot(qPCRAmplification, aes(Cycle, dRn, group = Target, colour = Target)) +
 
 ```{r, message=FALSE, warning=FALSE}
 qPCRA_Raw <- read_delim("../Exercises/qPCR/PlateA.csv",
-                        ";", escape_double = FALSE,
-                        comment = "#", trim_ws = TRUE)
+                        ";", comment = "#", trim_ws = TRUE)
 
 head(qPCRA_Raw)
 ```
@@ -233,6 +241,12 @@ qPCRA <- qPCRA_Raw %>%
 head(qPCRA)
 ```
 
+***
+
+```{r}
+qPCRA[qPCRA$Target == "RPL3", ]
+```
+
 
 ## Beobachtungen entfernen - filter()
 
@@ -285,10 +299,22 @@ str(qPCR)
 
 qPCR <- list.files("../Exercises/qPCR/", pattern = "^[Plate]")
 
-str(qPCR)
+qPCR
 ```
 
 Mehr zu regulären Ausdrücken unter http://stringr.tidyverse.org/articles/regular-expressions.html.
+
+***
+
+`map_chr()` nimmt einen Character-Vektor, wendet auf jedes Element eine Funktion an und gibt einen Character-Vektor zurück.
+
+```{r}
+qPCR <- list.files("../Exercises/qPCR/", pattern = "^[Plate]") %>%
+  map_chr(~ paste("../Exercises/qPCR/", .x, sep = ""))
+
+qPCR
+```
+
 
 ## Jede Datei einlesen
 
@@ -296,8 +322,8 @@ Mehr zu regulären Ausdrücken unter http://stringr.tidyverse.org/articles/regul
 
 ```{r, message=FALSE}
 qPCR <- list.files("../Exercises/qPCR/", pattern = "^[Plate]") %>%
-  map(~ read_delim(paste("../Exercises/qPCR/", .x, sep = ""),
-                   ";", comment = "#", trim_ws = TRUE))
+  map_chr(~ paste("../Exercises/qPCR/", .x, sep = "")) %>%
+  map(~ read_delim(.x, ";", comment = "#", trim_ws = TRUE))
 
 str(qPCR)
 ```
@@ -309,8 +335,8 @@ Mit der Funktion `bind_rows()` aus `dplyr` kann man Datensätze zeilenweise zusa
 
 ```{r, message=FALSE}
 qPCR <- list.files("../Exercises/qPCR/", pattern = "^[Plate]") %>%
-  map(~ read_delim(paste("../Exercises/qPCR/", .x, sep = ""),
-                   ";", comment = "#", trim_ws = TRUE)) %>%
+  map_chr(~ paste("../Exercises/qPCR/", .x, sep = "")) %>%
+  map(~ read_delim(.x, ";", comment = "#", trim_ws = TRUE)) %>%
   bind_rows()
 
 head(qPCR)

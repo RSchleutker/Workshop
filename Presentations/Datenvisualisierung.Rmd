@@ -19,7 +19,6 @@ library(gridExtra)
 
 # ggplot2 - Layered Grammar of Graphics
 
-<!-- Erklären, was tidy data ist und an Beispielen aufzeigen, wo Fehler liegen und wie man diese beheben kann (ohne darauf einzugehen, wie dies in R gemacht wird. Das kommt später). -->
 
 ## Die Idee
 

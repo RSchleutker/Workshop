@@ -1,0 +1,108 @@
+---
+title: 'Beispiel: Report'
+author: "Raphael Schleutker und Hannah Schmitz"
+date: "7. Oktober 2017"
+output: 
+  html_document: 
+    code_folding: hide
+    highlight: haddock
+    toc: yes
+    toc_float: yes
+---
+
+<style>
+body {
+text-align: justify}
+</style>
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE
+)
+```
+
+```{r echo=FALSE}
+knitr::read_chunk('./Analysis/Reading.R')
+knitr::read_chunk('./Analysis/Analysis.R')
+knitr::read_chunk('./Analysis/Visualization.R')
+```
+
+
+## Einleitung
+
+Die folgende Analyse beschäftigt sich mit der Größe von Tubuli in unterschiedlichen Katzen. Dazu wurden Paraffinschnitte der Tubuli am Mikroskop aufgenommen und anschließend vermessen. Für jeden Tubulus wurden sowohl der Gesamtdurchmesser als auch die Breite des umgebenden Epithels gemessen. Ausgehend von diesen Daten wurde die Fläche des Epithels sowie die Gesamtfläche des Tubulus gemessen und für jede Spezies ins Verhältnis zueinander gebracht.
+
+Dieser Report fasst die wesentlichen Schritte und das Vorgehen zusammen und erklärt in diesem Zusammenhang die R-Skripte, welche für die Analyse erstellt wurden.
+
+
+### Die Daten
+
+Die Daten bestehen aus 15 Dateien, welche sich im Unterordner *./Data/* befinden. Der Name jeder Datei setzt sich aus der untersuchten Spezies, der jeweiligen Katzen-ID, der Messnummer, sowie einer Spezifizierung der Daten zusammen - jeweils durch ein _ getrennt. In dieser Analyse wurden lediglich die **Lines**-Daten untersucht.
+
+```{r}
+list.files("./Data/", pattern = "[^_]*_[^_]*_[^_]*_Lines.csv")
+```
+
+Jeder Datensatz ist identisch aufgebaut und besteht aus zwei Variablen:
+
+* `Name` ist eine fortlaufende Messnummer.
+* `Length [um]` gibt die gemessene Strecke in Mikrometern an.
+
+Jeweils zwei Zeilen geben den Durchmesser für einen Tubulus an, gefolgt von vier Zeilen für die Epithelbreite. So ergeben sich für jeden Tubulus sechs Beobachtungen. Diese Information muss später durch zwei kategorische Variablen hinzugefügt werden.
+
+```{r}
+readr::read_csv("./Data/Lynx-lynx_ID1_805_Lines.csv", comment = "#", skip = 1)
+```
+
+
+## Daten einlesen und aufbereiten
+
+Der folgende Code stammt aus *./Analysis/Reading.R*.
+
+### Hilfsfunktion zum prozessieren der Daten
+
+Um die Daten aufzubereiten, wurde eine Hilfsfunktion `Process_Line_Data()` geschrieben. Diese nimmt einen Datensatz als Listenelement und fügt auf Grundlage des Dateinamens, welches als `names`-Attribut hinterlegt ist, Die Katzen-ID, die Spezies sowie den Dateinamen des betreffenden Datensatzes hinzu. Außerdem werden zwei Variablen `Measured` und `Group` hinzugefügt, welche die Daten kategorisieren, wie in der Einleitung beschrieben wurde. Zuletzt wird noch die überflüssige `Name`-Variable von den Datensätzen entfernt. Der aufbereitete Datensatz wird als Listenelement zurückgeschickt, sodass die Funktion mit `purrr::lmap()` zusammenarbeitet.
+
+```{r Processing_Helper_Function}
+```
+
+
+### Daten einlesen und aufbereiten
+
+Um das Einlesen möglichst einfach zu halten, wurde zunächst ein Character-Vektor mit den Dateinamen erstellt, welche das vorgegebene Muster erfüllen, sodass von den Daten später nur die richtigen Dateien eingelesen werden. Anschließend bekommt jedes Vektorelement ein `name`-Attribut, sodass es später möglich ist, diesen an die Hilfsfunktion zu übergeben.
+
+Mithilfe der `map()`-Funktion aus dem `purrr`-Paket wird nun jede Datei eingelesen, sodass man eine Liste mit den Datensätzen erhält. Anschließend werden dieser mit der `lmap()`-Funktion an die Hilfsfunktion geschickt. Die aufbereiteten Datensätze werden zusammengefügt und schließlich anhand der `Measured`-Variable in zwei Datensätze aufgetrennt, welche unabhängig voneinander bearbeitet werden können.
+
+```{r Reading_and_Processing_Lines_Data}
+```
+
+
+## Analyse
+
+Der folgende Code stammt aus *./Analysis/Analysis.R*.
+
+```{r Calculate_Statistics_Of_Lines_Data}
+```
+
+
+
+## Grafische Auswertung
+
+Der folgende Code stammt aus *./Analysis/Visualization.R*.
+
+```{r Visualization}
+```
+
+
+```{r Save_Plot}
+```
+
+
+
+## Session-Information
+
+```{r}
+sessionInfo()
+```

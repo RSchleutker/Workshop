@@ -286,7 +286,7 @@ text-align: justify}
 <div id="die-aufgaben" class="section level2">
 <h2>Die Aufgaben</h2>
 <ol style="list-style-type: decimal">
-<li>Lies den Datensatz <em>FACS.csv</em> aus dem Aufgabenordner ein und wähle anschließend der Übersicht halber nur die Variablen <code>FSC</code> und <code>SSC</code> aus. FACS-Daten enthalten häufig extrem viele Randwerte. Filtere daher alle Werte aus, bei denen der Forward-Scatter oder der Side-Scatter kleiner als 1 ist.</li>
+<li>Lies den Datensatz <em>FACS.csv</em> aus dem Aufgabenordner ein und wähle anschließend der Übersicht halber nur die Variablen <code>FSC</code> und <code>SSC</code> aus. FACS-Daten enthalten häufig extrem viele Randwerte. Filtere daher alle Werte raus, bei denen der Forward-Scatter oder der Side-Scatter kleiner als 1 ist.</li>
 <li>Stelle die Daten zunächst als normales Punktdiagramm dar, indem du <code>FSC</code> auf die x-Achse und <code>SSC</code> auf die y-Achse mappest. Was hälst du von dem Diagramm?</li>
 <li>Rechteckige 2D-Bins werden durch das Geom <code>geom_bin2d()</code> bereitgestellt. Hierbei wird die Anzahl an Beobachtungen automatisch auf die Farbe gemapped. Dies muss also nicht explizit angegeben werden. Setze die Anzahl an Bins auf <strong>200</strong>.</li>
 <li>Um hexagonale Bins zu erzeugen, wird das Geom <code>geom_hex()</code> verwendet, welches ebenso benutzt wird, wie <code>geom_bin2d()</code>. Nutze dieses Geom, um hexagonale Bins zu erzeugen. Außerdem ist die Standardmäßige Farbpalette nicht die aussagekräftigste. Verwende stattdessen <code>scale_fill_viridis()</code> aus dem <code>viridis</code>-Paket.</li>

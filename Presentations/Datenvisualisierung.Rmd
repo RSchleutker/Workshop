@@ -196,6 +196,10 @@ ggplot(iris, aes(Sepal.Length, fill = Species)) +
 ```{r}
 head(iris)
 ```
+```{r},eval=FALSE
+View(iris)
+```
+
 
 
 ## Nun kommt der Plot, Schritt für Schritt
@@ -297,7 +301,7 @@ ggsave(filename = "./Results/Plot.png",
        dpi = 600)
 ```
 
-## Was es beim speichern zu beachten gibt
+## Was es beim Speichern zu beachten gibt
 
 >- Wenn möglich, den Plot als Vektorgrafik speichern: `filename = ".../Plot.pdf"` oder `filename = ".../Plot.svg"`.
 >- Soll die Auflösung bei Rastergrafiken erhöht werden, wird dies über das Argument `dpi` gemacht. **NIEMALS** über `width` und/oder `height`.

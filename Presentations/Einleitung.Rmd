@@ -100,7 +100,7 @@ c
 
 
 
-## Vektore
+## Vektoren
 
 Datensätze bestehen aber selten aus nur einer Zahl!
 

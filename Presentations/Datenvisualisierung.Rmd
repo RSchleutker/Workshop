@@ -196,7 +196,8 @@ ggplot(iris, aes(Sepal.Length, fill = Species)) +
 ```{r}
 head(iris)
 ```
-```{r},eval=FALSE
+
+```{r, eval=FALSE}
 View(iris)
 ```
 
